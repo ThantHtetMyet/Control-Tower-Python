@@ -1,0 +1,293 @@
+2025-08-02 00:20:24,354 - ImportProcessor - INFO - Starting ImportProcessor service
+2025-08-02 00:20:24,361 - ImportProcessor - ERROR - Error connecting to database: ('IM002', '[IM002] [Microsoft][ODBC Driver Manager] Data source name not found and no default driver specified (0) (SQLDriverConnect)')
+2025-08-02 00:20:24,362 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-02 00:21:24,363 - ImportProcessor - ERROR - Error connecting to database: ('IM002', '[IM002] [Microsoft][ODBC Driver Manager] Data source name not found and no default driver specified (0) (SQLDriverConnect)')
+2025-08-02 00:21:24,364 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-02 00:22:24,366 - ImportProcessor - ERROR - Error connecting to database: ('IM002', '[IM002] [Microsoft][ODBC Driver Manager] Data source name not found and no default driver specified (0) (SQLDriverConnect)')
+2025-08-02 00:22:24,366 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-02 00:22:25,910 - ImportProcessor - INFO - Service stopped by user
+2025-08-02 00:22:53,796 - ImportProcessor - INFO - Starting ImportProcessor service
+2025-08-02 00:22:53,802 - ImportProcessor - ERROR - Error connecting to database: ('IM002', '[IM002] [Microsoft][ODBC Driver Manager] Data source name not found and no default driver specified (0) (SQLDriverConnect)')
+2025-08-02 00:22:53,803 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-02 00:23:53,805 - ImportProcessor - ERROR - Error connecting to database: ('IM002', '[IM002] [Microsoft][ODBC Driver Manager] Data source name not found and no default driver specified (0) (SQLDriverConnect)')
+2025-08-02 00:23:53,805 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-02 00:24:16,845 - ImportProcessor - INFO - Service stopped by user
+2025-08-02 00:24:20,751 - ImportProcessor - INFO - Starting ImportProcessor service
+2025-08-02 00:24:20,856 - ImportProcessor - ERROR - Error getting processing records: 'tuple' object has no attribute 'ID'
+2025-08-02 00:24:20,857 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-02 00:25:20,893 - ImportProcessor - ERROR - Error getting processing records: 'tuple' object has no attribute 'ID'
+2025-08-02 00:25:20,894 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-02 00:26:20,924 - ImportProcessor - ERROR - Error getting processing records: 'tuple' object has no attribute 'ID'
+2025-08-02 00:26:20,925 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-02 00:26:24,490 - ImportProcessor - INFO - Service stopped by user
+2025-08-02 00:31:35,967 - ImportProcessor - INFO - Starting ImportProcessor service
+2025-08-02 00:31:36,033 - ImportProcessor - INFO - Found 1 records with 'Processing' status
+2025-08-02 00:31:36,034 - ImportProcessor - INFO - Processing record: 20250801_021243_Location.xlsx
+2025-08-02 00:31:36,064 - ImportProcessor - ERROR - Error reading Excel file C:\Users\thanthtet.myet\Documents\01_Willowglen\03_ServiceReportSystem\SRS_FileStorage\Location\566fd088-aa3d-4907-8974-bb07ab1231b9\20250801_021243_Location.xlsx: [Errno 2] No such file or directory: 'C:\\Users\\thanthtet.myet\\Documents\\01_Willowglen\\03_ServiceReportSystem\\SRS_FileStorage\\Location\\566fd088-aa3d-4907-8974-bb07ab1231b9\\20250801_021243_Location.xlsx'
+2025-08-02 00:31:36,065 - ImportProcessor - ERROR - No data found in Excel file: C:\Users\thanthtet.myet\Documents\01_Willowglen\03_ServiceReportSystem\SRS_FileStorage\Location\566fd088-aa3d-4907-8974-bb07ab1231b9\20250801_021243_Location.xlsx
+2025-08-02 00:31:36,095 - ImportProcessor - ERROR - Error updating record status: execute() takes at most 2 positional arguments (3 given)
+2025-08-02 00:31:54,955 - ImportProcessor - INFO - Service stopped by user
+2025-08-02 00:36:41,888 - ImportProcessor - INFO - Starting ImportProcessor service
+2025-08-02 00:36:41,948 - ImportProcessor - INFO - Found 1 records with 'Processing' status
+2025-08-02 00:36:41,948 - ImportProcessor - INFO - Processing record: 20250802_003549_Location.xlsx
+2025-08-02 00:36:42,624 - ImportProcessor - ERROR - Error processing location warehouse: 'tuple' object has no attribute 'Name'
+2025-08-02 00:36:42,626 - ImportProcessor - ERROR - Error processing record 81ae9d5b-8fe7-4e65-a717-60ce1551bb77: 'tuple' object has no attribute 'Name'
+2025-08-02 00:36:42,653 - ImportProcessor - ERROR - Error updating record status: execute() takes at most 2 positional arguments (3 given)
+2025-08-02 00:36:47,578 - ImportProcessor - INFO - Service stopped by user
+2025-08-02 00:40:45,699 - ImportProcessor - INFO - Starting ImportProcessor service
+2025-08-02 00:40:45,759 - ImportProcessor - INFO - Found 1 records with 'Processing' status
+2025-08-02 00:40:45,760 - ImportProcessor - INFO - Processing record: 20250802_003549_Location.xlsx
+2025-08-02 00:40:46,081 - ImportProcessor - ERROR - Error processing location warehouse: execute() takes at most 2 positional arguments (5 given)
+2025-08-02 00:40:46,083 - ImportProcessor - ERROR - Error processing record 81ae9d5b-8fe7-4e65-a717-60ce1551bb77: execute() takes at most 2 positional arguments (5 given)
+2025-08-02 00:40:46,107 - ImportProcessor - ERROR - Error updating record status: execute() takes at most 2 positional arguments (3 given)
+2025-08-02 00:41:46,138 - ImportProcessor - INFO - Found 1 records with 'Processing' status
+2025-08-02 00:41:46,138 - ImportProcessor - INFO - Processing record: 20250802_003549_Location.xlsx
+2025-08-02 00:41:46,181 - ImportProcessor - ERROR - Error processing location warehouse: execute() takes at most 2 positional arguments (5 given)
+2025-08-02 00:41:46,184 - ImportProcessor - ERROR - Error processing record 81ae9d5b-8fe7-4e65-a717-60ce1551bb77: execute() takes at most 2 positional arguments (5 given)
+2025-08-02 00:41:46,223 - ImportProcessor - ERROR - Error updating record status: execute() takes at most 2 positional arguments (3 given)
+2025-08-02 00:41:49,801 - ImportProcessor - INFO - Service stopped by user
+2025-08-02 00:42:30,948 - ImportProcessor - INFO - Starting ImportProcessor service
+2025-08-02 00:42:31,011 - ImportProcessor - INFO - Found 1 records with 'Processing' status
+2025-08-02 00:42:31,012 - ImportProcessor - INFO - Processing record: 20250802_003549_Location.xlsx
+2025-08-02 00:42:31,354 - ImportProcessor - ERROR - Error processing location warehouse: execute() takes at most 2 positional arguments (5 given)
+2025-08-02 00:42:31,360 - ImportProcessor - ERROR - Error processing record 81ae9d5b-8fe7-4e65-a717-60ce1551bb77: execute() takes at most 2 positional arguments (5 given)
+2025-08-02 00:42:38,546 - ImportProcessor - INFO - Service stopped by user
+2025-08-02 00:46:32,970 - ImportProcessor - INFO - Starting ImportProcessor service
+2025-08-02 00:46:33,069 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-02 00:47:10,377 - ImportProcessor - INFO - Service stopped by user
+2025-08-02 00:47:14,218 - ImportProcessor - INFO - Starting ImportProcessor service
+2025-08-02 00:47:14,282 - ImportProcessor - INFO - Found 1 records with 'Processing' status
+2025-08-02 00:47:14,282 - ImportProcessor - INFO - Processing record: 20250802_003549_Location.xlsx
+2025-08-02 00:47:14,750 - ImportProcessor - ERROR - Error processing location warehouse: name 'new_issues' is not defined
+2025-08-02 00:47:14,754 - ImportProcessor - ERROR - Error processing record 81ae9d5b-8fe7-4e65-a717-60ce1551bb77: name 'new_issues' is not defined
+2025-08-02 00:47:26,079 - ImportProcessor - INFO - Service stopped by user
+2025-08-02 00:48:27,983 - ImportProcessor - INFO - Starting ImportProcessor service
+2025-08-02 00:48:28,032 - ImportProcessor - INFO - Found 1 records with 'Processing' status
+2025-08-02 00:48:28,032 - ImportProcessor - INFO - Processing record: 20250802_003549_Location.xlsx
+2025-08-02 00:48:28,489 - ImportProcessor - INFO - Processing result: {'TotalFound': 90, 'ExistingCount': 0, 'NewlyAdded': 90}
+2025-08-02 00:49:07,148 - ImportProcessor - INFO - Service stopped by user
+2025-08-02 01:01:56,957 - ImportProcessor - INFO - Starting ImportProcessor service
+2025-08-02 01:01:57,041 - ImportProcessor - INFO - Found 1 records with 'Processing' status
+2025-08-02 01:01:57,041 - ImportProcessor - INFO - Processing record: 20250802_003549_Location.xlsx
+2025-08-02 01:01:58,111 - ImportProcessor - INFO - Processing result: {'TotalFound': 90, 'ExistingCount': 0, 'NewlyAdded': 90}
+2025-08-02 01:02:12,613 - ImportProcessor - INFO - Service stopped by user
+2025-08-02 01:02:17,060 - ImportProcessor - INFO - Starting ImportProcessor service
+2025-08-02 01:02:17,155 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-02 01:02:22,340 - ImportProcessor - INFO - Service stopped by user
+2025-08-02 01:02:31,885 - ImportProcessor - INFO - Starting ImportProcessor service
+2025-08-02 01:02:31,981 - ImportProcessor - INFO - Found 1 records with 'Processing' status
+2025-08-02 01:02:31,981 - ImportProcessor - INFO - Processing record: 20250802_003549_Location.xlsx
+2025-08-02 01:02:32,914 - ImportProcessor - INFO - Processing result: {'TotalFound': 90, 'ExistingCount': 90, 'NewlyAdded': 0}
+2025-08-02 01:02:46,847 - ImportProcessor - INFO - Service stopped by user
+2025-08-15 23:50:52,470 - ImportProcessor - INFO - Starting ImportProcessor service
+2025-08-15 23:50:52,500 - ImportProcessor - INFO - MQTT client started
+2025-08-15 23:50:52,501 - ImportProcessor - INFO - Connected to MQTT broker
+2025-08-15 23:50:52,502 - ImportProcessor - INFO - Subscribed to servicereport/data/excel/uploaded
+2025-08-15 23:50:52,650 - ImportProcessor - INFO - Found 1 records with 'Processing' status
+2025-08-15 23:50:52,651 - ImportProcessor - INFO - Processing record: 20250815_234817_Issue tracker_June_new.xlsx
+2025-08-15 23:50:53,476 - ImportProcessor - ERROR - Unsupported form type: ServiceReportForm
+2025-08-15 23:50:53,540 - ImportProcessor - ERROR - Error sending status update: Object of type UUID is not JSON serializable
+2025-08-15 23:51:53,583 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-15 23:52:53,655 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-15 23:53:46,855 - ImportProcessor - INFO - Service stopped by user
+2025-08-15 23:53:50,302 - ImportProcessor - INFO - Starting ImportProcessor service
+2025-08-15 23:53:50,317 - ImportProcessor - INFO - MQTT client started
+2025-08-15 23:53:50,410 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-15 23:54:10,183 - ImportProcessor - INFO - Service stopped by user
+2025-08-15 23:54:13,425 - ImportProcessor - INFO - Starting ImportProcessor service
+2025-08-15 23:54:13,454 - ImportProcessor - INFO - MQTT client started
+2025-08-15 23:54:13,541 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-15 23:54:54,522 - ImportProcessor - INFO - Service stopped by user
+2025-08-15 23:54:58,384 - ImportProcessor - INFO - Starting ImportProcessor service
+2025-08-15 23:54:58,393 - ImportProcessor - INFO - MQTT client started
+2025-08-15 23:54:58,393 - ImportProcessor - INFO - Connected to MQTT broker
+2025-08-15 23:54:58,393 - ImportProcessor - INFO - Subscribed to servicereport/data/excel/uploaded
+2025-08-15 23:54:58,468 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-15 23:55:33,613 - ImportProcessor - INFO - Service stopped by user
+2025-08-15 23:55:37,317 - ImportProcessor - INFO - Starting ImportProcessor service
+2025-08-15 23:55:37,326 - ImportProcessor - INFO - MQTT client started
+2025-08-15 23:55:37,326 - ImportProcessor - INFO - Connected to MQTT broker
+2025-08-15 23:55:37,327 - ImportProcessor - INFO - Subscribed to servicereportsystem/upload
+2025-08-15 23:55:37,401 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-15 23:56:30,234 - ImportProcessor - INFO - Received message on topic servicereportsystem/upload
+2025-08-15 23:56:30,235 - ImportProcessor - INFO - Processing file: 20250815_235630_Issue tracker_June_new.xlsx
+2025-08-15 23:56:30,236 - ImportProcessor - INFO - Processing record: 20250815_235630_Issue tracker_June_new.xlsx
+2025-08-15 23:56:31,648 - ImportProcessor - WARNING - Skipping row with missing location: {'Unnamed: 0': nan, 'Unnamed: 1': nan, 'Unnamed: 2': nan, 'Unnamed: 3': nan, 'Unnamed: 4': nan, 'Unnamed: 5': nan}
+2025-08-15 23:56:31,649 - ImportProcessor - WARNING - Skipping row with missing location: {'Unnamed: 0': nan, 'Unnamed: 1': 'Column Labels', 'Unnamed: 2': nan, 'Unnamed: 3': nan, 'Unnamed: 4': nan, 'Unnamed: 5': nan}
+2025-08-15 23:56:31,649 - ImportProcessor - WARNING - Skipping row with missing location: {'Unnamed: 0': nan, 'Unnamed: 1': 'Open', 'Unnamed: 2': 'Pending to close', 'Unnamed: 3': 'Closed and approved', 'Unnamed: 4': 'Pending SP staff', 'Unnamed: 5': 'Grand Total'}
+2025-08-15 23:56:31,650 - ImportProcessor - WARNING - Skipping row with missing location: {'Unnamed: 0': 'Count of Status', 'Unnamed: 1': 17, 'Unnamed: 2': 68, 'Unnamed: 3': 23, 'Unnamed: 4': 48, 'Unnamed: 5': 156}
+2025-08-15 23:56:31,652 - ImportProcessor - INFO - Processing result: {'TotalProcessed': 0, 'Successful': 0, 'Failed': 4}
+2025-08-15 23:56:31,714 - ImportProcessor - INFO - Status update sent: Completed
+2025-08-15 23:56:31,718 - ImportProcessor - INFO - Status update sent: Processing started
+2025-08-15 23:56:37,479 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-15 23:57:37,562 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-15 23:58:37,648 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-15 23:59:37,721 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-16 00:00:37,797 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-16 00:01:35,830 - ImportProcessor - INFO - Service stopped by user
+2025-08-16 00:01:40,410 - ImportProcessor - INFO - Starting ImportProcessor service
+2025-08-16 00:01:40,446 - ImportProcessor - INFO - MQTT client started
+2025-08-16 00:01:40,447 - ImportProcessor - INFO - Connected to MQTT broker
+2025-08-16 00:01:40,448 - ImportProcessor - INFO - Subscribed to servicereportsystem/upload
+2025-08-16 00:01:40,538 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-16 00:02:40,588 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-16 00:03:40,703 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-16 00:04:40,770 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-16 00:05:40,823 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-16 00:06:40,870 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-16 00:07:40,946 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-16 00:08:40,997 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-16 00:09:41,054 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-16 00:09:57,627 - ImportProcessor - INFO - Connected to MQTT broker
+2025-08-16 00:09:57,628 - ImportProcessor - INFO - Subscribed to servicereportsystem/upload
+2025-08-16 00:10:24,681 - ImportProcessor - INFO - Connected to MQTT broker
+2025-08-16 00:10:24,683 - ImportProcessor - INFO - Subscribed to servicereportsystem/upload
+2025-08-16 00:10:41,115 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-16 00:11:41,161 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-16 00:12:34,000 - ImportProcessor - INFO - Connected to MQTT broker
+2025-08-16 00:12:34,002 - ImportProcessor - INFO - Subscribed to servicereportsystem/upload
+2025-08-16 00:12:41,243 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-16 00:12:48,196 - ImportProcessor - INFO - Received message on topic servicereportsystem/upload
+2025-08-16 00:12:48,197 - ImportProcessor - INFO - Processing file: 20250816_001248_Issue tracker_June_new.xlsx
+2025-08-16 00:12:48,197 - ImportProcessor - INFO - Processing record: 20250816_001248_Issue tracker_June_new.xlsx
+2025-08-16 00:12:49,952 - ImportProcessor - ERROR - Error processing row: 'float' object has no attribute 'lower'
+2025-08-16 00:12:50,051 - ImportProcessor - ERROR - Error processing row: (208, b"Invalid object name 'ServiceReportForm'.DB-Lib error message 20018, severity 16:\nGeneral SQL Server error: Check messages from the SQL Server\n")
+2025-08-16 00:12:50,052 - ImportProcessor - ERROR - Error processing row: 'int' object has no attribute 'lower'
+2025-08-16 00:12:50,054 - ImportProcessor - INFO - Processing result: {'TotalProcessed': 3, 'Successful': 0, 'Failed': 3}
+2025-08-16 00:12:50,119 - ImportProcessor - INFO - Status update sent: Completed
+2025-08-16 00:12:50,120 - ImportProcessor - INFO - Status update sent: Processing started
+2025-08-16 00:13:41,397 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-16 00:14:41,457 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-16 00:15:41,600 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-16 00:16:19,616 - ImportProcessor - INFO - Connected to MQTT broker
+2025-08-16 00:16:19,618 - ImportProcessor - INFO - Subscribed to servicereportsystem/upload
+2025-08-16 00:16:41,647 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-16 00:17:41,762 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-16 00:18:41,892 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-16 00:19:41,948 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-16 00:19:51,621 - ImportProcessor - INFO - Received message on topic servicereportsystem/upload
+2025-08-16 00:19:51,622 - ImportProcessor - INFO - Processing file: 20250816_001951_Issue tracker_June_new.xlsx
+2025-08-16 00:19:51,622 - ImportProcessor - INFO - Processing record: 20250816_001951_Issue tracker_June_new.xlsx
+2025-08-16 00:19:51,781 - ImportProcessor - ERROR - Error processing row: 'float' object has no attribute 'lower'
+2025-08-16 00:19:51,801 - ImportProcessor - ERROR - Error processing row: (208, b"Invalid object name 'ServiceReportForm'.DB-Lib error message 20018, severity 16:\nGeneral SQL Server error: Check messages from the SQL Server\n")
+2025-08-16 00:19:51,801 - ImportProcessor - ERROR - Error processing row: 'int' object has no attribute 'lower'
+2025-08-16 00:19:51,803 - ImportProcessor - INFO - Processing result: {'TotalProcessed': 3, 'Successful': 0, 'Failed': 3}
+2025-08-16 00:19:51,856 - ImportProcessor - INFO - Status update sent: Completed
+2025-08-16 00:19:51,857 - ImportProcessor - INFO - Status update sent: Processing started
+2025-08-16 00:20:42,001 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-16 00:21:42,040 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-16 00:22:42,209 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-16 00:23:42,272 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-16 00:24:42,325 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-16 00:25:33,268 - ImportProcessor - INFO - Starting ImportProcessor service
+2025-08-16 00:25:33,280 - ImportProcessor - INFO - MQTT client started
+2025-08-16 00:25:33,280 - ImportProcessor - INFO - Connected to MQTT broker
+2025-08-16 00:25:33,281 - ImportProcessor - INFO - Subscribed to servicereportsystem/upload
+2025-08-16 00:25:33,345 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-16 00:25:34,281 - ImportProcessor - INFO - Connected to MQTT broker
+2025-08-16 00:25:34,281 - ImportProcessor - INFO - Subscribed to servicereportsystem/upload
+2025-08-16 00:25:35,159 - ImportProcessor - INFO - Service stopped by user
+2025-08-16 00:25:42,370 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-16 00:26:25,389 - ImportProcessor - INFO - Service stopped by user
+2025-08-16 00:26:29,732 - ImportProcessor - INFO - Starting ImportProcessor service
+2025-08-16 00:26:29,742 - ImportProcessor - INFO - MQTT client started
+2025-08-16 00:26:29,742 - ImportProcessor - INFO - Connected to MQTT broker
+2025-08-16 00:26:29,743 - ImportProcessor - INFO - Subscribed to servicereportsystem/upload
+2025-08-16 00:26:29,804 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-16 00:26:43,828 - ImportProcessor - INFO - Received message on topic servicereportsystem/upload
+2025-08-16 00:26:43,829 - ImportProcessor - INFO - Processing file: 20250816_002643_Issue tracker_June_new.xlsx
+2025-08-16 00:26:43,830 - ImportProcessor - INFO - Processing record: 20250816_002643_Issue tracker_June_new.xlsx
+2025-08-16 00:26:45,333 - ImportProcessor - ERROR - Error processing row: 'float' object has no attribute 'lower'
+2025-08-16 00:26:45,354 - ImportProcessor - ERROR - Error processing row: (208, b"Invalid object name 'ServiceReportForm'.DB-Lib error message 20018, severity 16:\nGeneral SQL Server error: Check messages from the SQL Server\n")
+2025-08-16 00:26:45,355 - ImportProcessor - ERROR - Error processing row: 'int' object has no attribute 'lower'
+2025-08-16 00:26:45,356 - ImportProcessor - INFO - Processing result: {'TotalProcessed': 3, 'Successful': 0, 'Failed': 3}
+2025-08-16 00:26:45,404 - ImportProcessor - INFO - Status update sent: Completed
+2025-08-16 00:26:45,406 - ImportProcessor - INFO - Status update sent: Processing started
+2025-08-16 00:27:29,851 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-16 00:28:29,941 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-16 00:29:30,013 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-16 00:30:09,832 - ImportProcessor - INFO - Service stopped by user
+2025-08-16 00:30:27,660 - ImportProcessor - INFO - Starting ImportProcessor service
+2025-08-16 00:30:27,675 - ImportProcessor - INFO - MQTT client started
+2025-08-16 00:30:27,676 - ImportProcessor - INFO - Connected to MQTT broker
+2025-08-16 00:30:27,677 - ImportProcessor - INFO - Subscribed to servicereportsystem/upload
+2025-08-16 00:30:27,762 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-16 00:30:46,096 - ImportProcessor - INFO - Received message on topic servicereportsystem/upload
+2025-08-16 00:30:46,096 - ImportProcessor - INFO - Processing file: 20250816_003046_Issue tracker_June_new.xlsx
+2025-08-16 00:30:46,096 - ImportProcessor - INFO - Processing record: 20250816_003046_Issue tracker_June_new.xlsx
+2025-08-16 00:30:46,612 - ImportProcessor - WARNING - Skipping row with missing location: {'Unnamed: 0': nan, 'Unnamed: 1': 'Column Labels', 'Unnamed: 2': nan, 'Unnamed: 3': nan, 'Unnamed: 4': nan, 'Unnamed: 5': nan}
+2025-08-16 00:30:46,613 - ImportProcessor - WARNING - Skipping row with missing location: {'Unnamed: 0': nan, 'Unnamed: 1': 'Open', 'Unnamed: 2': 'Pending to close', 'Unnamed: 3': 'Closed and approved', 'Unnamed: 4': 'Pending SP staff', 'Unnamed: 5': 'Grand Total'}
+2025-08-16 00:30:46,613 - ImportProcessor - WARNING - Skipping row with missing location: {'Unnamed: 0': 'Count of Status', 'Unnamed: 1': 17, 'Unnamed: 2': 68, 'Unnamed: 3': 23, 'Unnamed: 4': 48, 'Unnamed: 5': 156}
+2025-08-16 00:30:46,615 - ImportProcessor - INFO - Processing result: {'TotalProcessed': 0, 'Successful': 0, 'Failed': 3}
+2025-08-16 00:30:46,657 - ImportProcessor - INFO - Status update sent: Completed
+2025-08-16 00:30:46,659 - ImportProcessor - INFO - Status update sent: Processing started
+2025-08-16 00:31:27,810 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-16 00:32:23,376 - ImportProcessor - INFO - Service stopped by user
+2025-08-16 00:32:26,504 - ImportProcessor - INFO - Starting ImportProcessor service
+2025-08-16 00:32:26,521 - ImportProcessor - INFO - MQTT client started
+2025-08-16 00:32:26,522 - ImportProcessor - INFO - Connected to MQTT broker
+2025-08-16 00:32:26,523 - ImportProcessor - INFO - Subscribed to servicereportsystem/upload
+2025-08-16 00:32:26,616 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-16 00:32:40,927 - ImportProcessor - INFO - Received message on topic servicereportsystem/upload
+2025-08-16 00:32:40,927 - ImportProcessor - INFO - Processing file: 20250816_003240_Issue tracker_June_new.xlsx
+2025-08-16 00:32:40,928 - ImportProcessor - INFO - Processing record: 20250816_003240_Issue tracker_June_new.xlsx
+2025-08-16 00:32:42,413 - ImportProcessor - WARNING - Skipping row with missing location: {'Unnamed: 0': nan, 'Unnamed: 1': 'Column Labels', 'Unnamed: 2': nan, 'Unnamed: 3': nan, 'Unnamed: 4': nan, 'Unnamed: 5': nan}
+2025-08-16 00:32:42,414 - ImportProcessor - WARNING - Skipping row with missing location: {'Unnamed: 0': nan, 'Unnamed: 1': 'Open', 'Unnamed: 2': 'Pending to close', 'Unnamed: 3': 'Closed and approved', 'Unnamed: 4': 'Pending SP staff', 'Unnamed: 5': 'Grand Total'}
+2025-08-16 00:32:42,414 - ImportProcessor - WARNING - Skipping row with missing location: {'Unnamed: 0': 'Count of Status', 'Unnamed: 1': 17, 'Unnamed: 2': 68, 'Unnamed: 3': 23, 'Unnamed: 4': 48, 'Unnamed: 5': 156}
+2025-08-16 00:32:42,416 - ImportProcessor - INFO - Processing result: {'TotalProcessed': 0, 'Successful': 0, 'Failed': 3}
+2025-08-16 00:32:42,486 - ImportProcessor - INFO - Status update sent: Completed
+2025-08-16 00:32:42,488 - ImportProcessor - INFO - Status update sent: Processing started
+2025-08-16 00:33:26,696 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-16 00:34:26,756 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-16 00:34:36,852 - ImportProcessor - INFO - Service stopped by user
+2025-08-16 00:34:40,660 - ImportProcessor - INFO - Starting ImportProcessor service
+2025-08-16 00:34:40,677 - ImportProcessor - INFO - MQTT client started
+2025-08-16 00:34:40,677 - ImportProcessor - INFO - Connected to MQTT broker
+2025-08-16 00:34:40,678 - ImportProcessor - INFO - Subscribed to servicereportsystem/upload
+2025-08-16 00:34:40,761 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-16 00:35:12,986 - ImportProcessor - INFO - Received message on topic servicereportsystem/upload
+2025-08-16 00:35:12,987 - ImportProcessor - INFO - Processing file: 20250816_003512_Issue tracker_June_new.xlsx
+2025-08-16 00:35:12,987 - ImportProcessor - INFO - Processing record: 20250816_003512_Issue tracker_June_new.xlsx
+2025-08-16 00:35:13,835 - ImportProcessor - ERROR - No valid header row found in Excel file: C:\Users\thanthtet.myet\Documents\01_Willowglen\03_ServiceReportSystem\SRS_FileStorage\ServiceReportForm\566fd088-aa3d-4907-8974-bb07ab1231b9\20250816_003512_Issue tracker_June_new.xlsx
+2025-08-16 00:35:13,835 - ImportProcessor - ERROR - No data found in Excel file: C:\Users\thanthtet.myet\Documents\01_Willowglen\03_ServiceReportSystem\SRS_FileStorage\ServiceReportForm\566fd088-aa3d-4907-8974-bb07ab1231b9\20250816_003512_Issue tracker_June_new.xlsx
+2025-08-16 00:35:13,892 - ImportProcessor - INFO - Status update sent: Failed
+2025-08-16 00:35:13,894 - ImportProcessor - INFO - Status update sent: Processing started
+2025-08-16 00:35:40,841 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-16 00:36:40,899 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-16 00:37:05,372 - ImportProcessor - INFO - Service stopped by user
+2025-08-16 00:37:10,036 - ImportProcessor - INFO - Starting ImportProcessor service
+2025-08-16 00:37:10,063 - ImportProcessor - INFO - MQTT client started
+2025-08-16 00:37:10,063 - ImportProcessor - INFO - Connected to MQTT broker
+2025-08-16 00:37:10,064 - ImportProcessor - INFO - Subscribed to servicereportsystem/upload
+2025-08-16 00:37:10,150 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-16 00:37:30,294 - ImportProcessor - INFO - Received message on topic servicereportsystem/upload
+2025-08-16 00:37:30,295 - ImportProcessor - INFO - Processing file: 20250816_003730_Issue tracker_June_new.xlsx
+2025-08-16 00:37:30,296 - ImportProcessor - INFO - Processing record: 20250816_003730_Issue tracker_June_new.xlsx
+2025-08-16 00:37:31,612 - ImportProcessor - ERROR - No valid header row found in Excel file: C:\Users\thanthtet.myet\Documents\01_Willowglen\03_ServiceReportSystem\SRS_FileStorage\ServiceReportForm\566fd088-aa3d-4907-8974-bb07ab1231b9\20250816_003730_Issue tracker_June_new.xlsx
+2025-08-16 00:37:31,613 - ImportProcessor - ERROR - No data found in Excel file: C:\Users\thanthtet.myet\Documents\01_Willowglen\03_ServiceReportSystem\SRS_FileStorage\ServiceReportForm\566fd088-aa3d-4907-8974-bb07ab1231b9\20250816_003730_Issue tracker_June_new.xlsx
+2025-08-16 00:37:31,678 - ImportProcessor - INFO - Status update sent: Failed
+2025-08-16 00:37:31,678 - ImportProcessor - INFO - Status update sent: Processing started
+2025-08-16 00:38:10,218 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-16 00:39:10,277 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-16 00:40:10,330 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-16 00:41:10,424 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-16 00:42:10,482 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-16 00:43:10,537 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-16 00:44:10,654 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-16 00:45:10,725 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-16 00:46:10,794 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-16 00:47:10,872 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-16 00:48:10,917 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-16 00:49:10,987 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-16 00:50:11,055 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-16 00:51:11,142 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-16 00:52:11,233 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-16 00:53:11,322 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-16 00:54:11,426 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-16 00:55:11,515 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-16 00:56:11,586 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-16 00:57:11,645 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-16 00:58:11,727 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-16 00:59:11,810 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-16 01:00:11,893 - ImportProcessor - INFO - Found 0 records with 'Processing' status
+2025-08-16 01:00:16,258 - ImportProcessor - INFO - Service stopped by user
