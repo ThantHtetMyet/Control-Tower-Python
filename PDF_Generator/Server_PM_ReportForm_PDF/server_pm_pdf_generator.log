@@ -1,0 +1,14 @@
+2025-11-02 04:15:58,490 - __main__ - INFO - Starting Server PM PDF Generation Service...
+2025-11-02 04:15:58,517 - __main__ - INFO - Connected to MQTT broker successfully
+2025-11-02 04:15:58,517 - __main__ - INFO - Subscribed to topic: controltower/server_pm_reportform_pdf/+
+2025-11-02 04:17:12,859 - __main__ - INFO - Received PDF generation request for Job No: *
+2025-11-02 04:17:12,860 - __main__ - ERROR - Error processing MQTT message: no running event loop
+2025-11-02 04:39:20,169 - __main__ - INFO - Disconnected from MQTT broker with result code 7
+2025-11-02 04:39:22,284 - __main__ - INFO - Connected to MQTT broker successfully
+2025-11-02 04:39:22,289 - __main__ - INFO - Subscribed to topic: controltower/server_pm_reportform_pdf/+
+2025-11-02 04:39:51,638 - __main__ - INFO - Received PDF generation request for Job No: NaN
+2025-11-02 04:39:53,719 - __main__ - INFO - Message data: {'request_id': 'pdf_1762029590619_674e1664', 'timestamp': '2025-11-01T20:39:50.620Z', 'action': 'generate_pdf'}
+2025-11-02 04:39:53,828 - __main__ - ERROR - Error processing MQTT message: no running event loop
+2025-11-02 04:40:32,351 - __main__ - INFO - Service interrupted by user
+2025-11-02 04:40:32,353 - __main__ - INFO - Disconnected from MQTT broker with result code 0
+2025-11-02 04:40:32,354 - __main__ - INFO - Service cleanup completed
