@@ -8,12 +8,19 @@ class Config:
     def __init__(self):
         # API Configuration - same as web application
         self.API_BASE_URL = os.getenv('API_BASE_URL', 'https://localhost:7145')
+        self.API_TIMEOUT = int(os.getenv('API_TIMEOUT', 10))  # Reduced timeout for faster debugging
+        
+        # API Authentication Configuration
+        self.API_AUTH_EMAIL = os.getenv('API_AUTH_EMAIL', 'system@gmail.com')  # Default admin email
+        self.API_AUTH_PASSWORD = os.getenv('API_AUTH_PASSWORD', '12345')  # Default admin password
         
         # MQTT Configuration
         self.MQTT_BROKER_HOST = os.getenv('MQTT_BROKER_HOST', 'localhost')
         self.MQTT_BROKER_PORT = int(os.getenv('MQTT_BROKER_PORT', 1883))
         self.MQTT_CLIENT_ID = os.getenv('MQTT_CLIENT_ID', 'ServerPM_PDF_Generator')
         self.MQTT_TOPIC_PREFIX = os.getenv('MQTT_TOPIC_PREFIX', 'controltower')
+        self.MQTT_USERNAME = os.getenv('MQTT_USERNAME', None)  # Optional username
+        self.MQTT_PASSWORD = os.getenv('MQTT_PASSWORD', None)  # Optional password
         
         # Database Configuration
         self.DATABASE_CONFIG = {
@@ -25,7 +32,7 @@ class Config:
         }
         
         # PDF Output Configuration
-        self.PDF_OUTPUT_DIR = Path(os.getenv('PDF_OUTPUT_DIR', './generated_pdfs'))
+        self.PDF_OUTPUT_DIR = Path(os.getenv('PDF_OUTPUT_DIR', './PDF_File'))
         self.PDF_OUTPUT_DIR.mkdir(exist_ok=True)
         
         # Template Configuration

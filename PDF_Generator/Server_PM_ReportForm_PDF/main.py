@@ -2,392 +2,521 @@ import asyncio
 import json
 import logging
 import os
-import uuid
-from datetime import datetime
+import sys
+import threading
+import urllib3
+from datetime import datetime, timezone
 from pathlib import Path
+from typing import Dict, Any, Optional
+import aiohttp
+import ssl
 
 import paho.mqtt.client as mqtt
-import aiohttp
-from pdf_generator import ServerPMPDFGenerator
+import requests
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
+
+# Disable SSL warnings for localhost development
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+# Import local modules
 from config import Config
+from database_manager import DatabaseManager
+from pdf_generator import ServerPMPDFGenerator
 
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler('server_pm_pdf_generator.log'),
-        logging.StreamHandler()
+        logging.FileHandler('server_pm_pdf_service.log'),
+        logging.StreamHandler(sys.stdout)
     ]
 )
+
 logger = logging.getLogger(__name__)
 
 class ServerPMPDFService:
+    """Main service class for Server PM Report PDF generation via MQTT"""
+    
     def __init__(self):
         self.config = Config()
-        self.pdf_generator = ServerPMPDFGenerator()
         self.mqtt_client = None
-        self.setup_mqtt_client()
+        self.db_manager = None
+        self.pdf_generator = None
+        self.session = None
+        self.jwt_token = None  # Store JWT token for API authentication
+        self.token_expires_at = None  # Track token expiration
+        self.setup_http_session()
         
-        # Create request log file
-        self.request_log_file = self.config.PDF_OUTPUT_DIR / "pdf_requests.log"
+    def setup_http_session(self):
+        """Setup HTTP session with retry strategy"""
+        self.session = requests.Session()
+        retry_strategy = Retry(
+            total=3,
+            backoff_factor=1,
+            status_forcelist=[429, 500, 502, 503, 504],
+        )
+        adapter = HTTPAdapter(max_retries=retry_strategy)
+        self.session.mount("http://", adapter)
+        self.session.mount("https://", adapter)
+        
+    async def authenticate_api(self):
+        """Authenticate with the API and get JWT token"""
+        try:
+            logger.info("")
+            logger.info("[AUTH] Authenticating with API...")
+            
+            auth_url = f"{self.config.API_BASE_URL}/api/Auth/signin"
+            auth_data = {
+                "email": self.config.API_AUTH_EMAIL,
+                "password": self.config.API_AUTH_PASSWORD
+            }
+            
+            # Create SSL context that ignores certificate verification for localhost
+            ssl_context = ssl.create_default_context()
+            ssl_context.check_hostname = False
+            ssl_context.verify_mode = ssl.CERT_NONE
+            
+            connector = aiohttp.TCPConnector(ssl=ssl_context)
+            timeout = aiohttp.ClientTimeout(total=self.config.API_TIMEOUT)
+            
+            async with aiohttp.ClientSession(connector=connector, timeout=timeout) as session:
+                logger.info(f"[AUTH] POST {auth_url}")
+                logger.info(f"[AUTH] Email: {self.config.API_AUTH_EMAIL}")
+                
+                async with session.post(auth_url, json=auth_data) as response:
+                    logger.info("")
+                    logger.info(f"[AUTH] Response Status: {response.status}")
+                    
+                    if response.status == 200:
+                        auth_response = await response.json()
+                        self.jwt_token = auth_response.get('token')
+                        expires_at = auth_response.get('expiresAt')
+                        
+                        if self.jwt_token:
+                            logger.info("")
+                            logger.info("[AUTH] Authentication successful")
+                            logger.info(f"[AUTH] Token expires at: {expires_at}")
+                            self.token_expires_at = datetime.fromisoformat(expires_at.replace('Z', '+00:00')) if expires_at else None
+                            return True
+                        else:
+                            logger.info("")
+                            logger.error("[AUTH] No token received in response")
+                            return False
+                    else:
+                        error_text = await response.text()
+                        logger.info("")
+                        logger.error(f"[AUTH] Authentication failed: Status {response.status}")
+                        logger.error(f"[AUTH] Response: {error_text}")
+                        return False
+                        
+        except Exception as e:
+            logger.info("")
+            logger.error(f"[AUTH] Authentication error: {str(e)}")
+            return False
+    
+    def is_token_valid(self):
+        """Check if current JWT token is still valid"""
+        if not self.jwt_token:
+            return False
+        
+        if self.token_expires_at and datetime.now(timezone.utc) >= self.token_expires_at:
+            logger.info("")
+            logger.info("[AUTH] Token has expired")
+            return False
+            
+        return True
         
     def setup_mqtt_client(self):
         """Setup MQTT client with callbacks"""
-        self.mqtt_client = mqtt.Client(client_id=self.config.MQTT_CLIENT_ID)
-        self.mqtt_client.on_connect = self.on_connect
-        self.mqtt_client.on_message = self.on_message
-        self.mqtt_client.on_disconnect = self.on_disconnect
+        self.mqtt_client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
+        self.mqtt_client.on_connect = self.on_mqtt_connect
+        self.mqtt_client.on_message = self.on_mqtt_message
+        self.mqtt_client.on_disconnect = self.on_mqtt_disconnect
         
-    def on_connect(self, client, userdata, flags, rc):
-        """Callback for when the client receives a CONNACK response from the server"""
-        if rc == 0:
+        # Set MQTT credentials if provided
+        if self.config.MQTT_USERNAME and self.config.MQTT_PASSWORD:
+            self.mqtt_client.username_pw_set(
+                self.config.MQTT_USERNAME, 
+                self.config.MQTT_PASSWORD
+            )
+            
+    def on_mqtt_connect(self, client, userdata, flags, reason_code, properties):
+        """Callback for MQTT connection"""
+        if reason_code == 0:
+            logger.info("")
             logger.info("Connected to MQTT broker successfully")
-            # Subscribe to the topic pattern for server PM PDF requests
-            topic = f"{self.config.MQTT_TOPIC_PREFIX}/server_pm_reportform_pdf/+"
+            # Subscribe to the PDF generation topic
+            topic = "controltower/server_pm_reportform_pdf/+"
             client.subscribe(topic)
             logger.info(f"Subscribed to topic: {topic}")
         else:
-            logger.error(f"Failed to connect to MQTT broker, return code {rc}")
+            logger.info("")
+            logger.error(f"Failed to connect to MQTT broker. Return code: {reason_code}")
             
-    def on_disconnect(self, client, userdata, rc):
-        """Callback for when the client disconnects from the server"""
-        logger.info(f"Disconnected from MQTT broker with result code {rc}")
-        
-    def on_message(self, client, userdata, msg):
-        """Callback for when a PUBLISH message is received from the server"""
+    def on_mqtt_disconnect(self, client, userdata, disconnect_flags, reason_code, properties):
+        """Callback for MQTT disconnection"""
+        if reason_code != 0:
+            logger.warning("Unexpected MQTT disconnection. Attempting to reconnect...")
+        else:
+            logger.info("MQTT client disconnected")
+            
+    def on_mqtt_message(self, client, userdata, msg):
+        """Handle incoming MQTT messages"""
         try:
-            # Extract report ID from topic
+            # Extract report_id from topic
             topic_parts = msg.topic.split('/')
             if len(topic_parts) >= 3:
-                report_id = topic_parts[-1]  # Last part should be the report ID (GUID)
+                report_id = topic_parts[-1]  # Last part of the topic
+            else:
+                logger.info("")
+                logger.error(f"Invalid topic format: {msg.topic}")
+                return
                 
-                logger.info(f"Received PDF generation request for Report ID: {report_id}")
+            # Parse message payload
+            try:
+                message_data = json.loads(msg.payload.decode('utf-8'))
+                logger.info("")
+                logger.info(f"[STEP 1] Received MQTT message for report_id: {report_id}")
+                logger.info(f"[DATA] Message data: {message_data}")
+            except json.JSONDecodeError as e:
+                logger.info("")
+                logger.error(f"[ERROR] Failed to parse MQTT message JSON: {e}")
+                return
                 
-                # Decode message payload - expecting new format
-                try:
-                    message_data = json.loads(msg.payload.decode())
-                    
-                    # Extract the three fields from the new message format
-                    report_id_from_msg = message_data.get('report_id', report_id)
-                    requested_by = message_data.get('requested_by', 'unknown')
-                    timestamp = message_data.get('timestamp', datetime.now().isoformat())
-                    
-                    # Log the incoming request with all three fields
-                    self.log_request(report_id_from_msg, requested_by, timestamp, message_data)
-                    
-                    # Save PDF request to database via API
-                    asyncio.create_task(self.save_pdf_request_to_api(report_id_from_msg, requested_by, timestamp))
-                    
-                    logger.info(f"Message data - Report ID: {report_id_from_msg}, Requested by: {requested_by}, Timestamp: {timestamp}")
-                    
-                except json.JSONDecodeError as e:
-                    logger.error(f"Failed to parse JSON message: {e}")
-                    # Fallback for non-JSON messages
-                    message_data = {"request": msg.payload.decode()}
-                    requested_by = 'unknown'
-                    timestamp = datetime.now().isoformat()
-                    self.log_request(report_id, requested_by, timestamp, message_data)
-                    
-                    # Save PDF request to database via API (fallback)
-                    asyncio.create_task(self.save_pdf_request_to_api(report_id, requested_by, timestamp))
-                
-                # Generate PDF asynchronously
-                asyncio.create_task(self.generate_pdf_async(report_id_from_msg, message_data))
-                
+            # Extract required fields
+            requested_by = message_data.get('requested_by', 'Unknown')
+            timestamp = message_data.get('timestamp', datetime.now().isoformat())
+            
+            # Process the PDF generation request in a separate thread
+            import threading
+            thread = threading.Thread(
+                target=self._run_async_process,
+                args=(report_id, requested_by, timestamp, message_data)
+            )
+            thread.daemon = True
+            thread.start()
+            
         except Exception as e:
+            logger.info("")
             logger.error(f"Error processing MQTT message: {str(e)}")
             
-    async def save_pdf_request_to_api(self, report_id, requested_by, timestamp):
-        """Save PDF request data to the PMServerReportFormPDFRequestLog table via API"""
+    def _run_async_process(self, report_id: str, requested_by: str, 
+                          timestamp: str, message_data: Dict[str, Any]):
+        """Helper method to run async process in a new event loop"""
         try:
-            # Parse timestamp if it's a string
-            if isinstance(timestamp, str):
-                try:
-                    # Try to parse ISO format timestamp
-                    parsed_timestamp = datetime.fromisoformat(timestamp.replace('Z', '+00:00'))
-                except ValueError:
-                    # Fallback to current time if parsing fails
-                    parsed_timestamp = datetime.now()
-            else:
-                parsed_timestamp = timestamp
-            
-            # Validate report_id is a valid GUID format
-            if not self.is_valid_guid(report_id):
-                logger.error(f"Invalid report_id format: {report_id}")
-                return
-            
-            # Handle requested_by - if it's 'unknown' or not a valid GUID, skip the API call
-            if requested_by == 'unknown' or not self.is_valid_guid(requested_by):
-                logger.warning(f"Skipping API call - invalid requested_by: {requested_by}")
-                return
-            
-            # Prepare the request data
-            request_data = {
-                "pmReportFormServerID": report_id,
-                "requestedBy": requested_by,
-                "requestedDate": parsed_timestamp.isoformat()
-            }
-            
-            # API endpoint URL
-            api_url = f"{self.config.API_BASE_URL}/api/PMServerReportFormPDFRequestLog"
-            
-            logger.info(f"Saving PDF request to API: {api_url}")
-            logger.debug(f"Request data: {request_data}")
-            
-            # Make the API call
-            async with aiohttp.ClientSession() as session:
-                async with session.post(
-                    api_url,
-                    json=request_data,
-                    headers={'Content-Type': 'application/json'},
-                    ssl=False  # Disable SSL verification for localhost
-                ) as response:
-                    if response.status == 201:  # Created
-                        response_data = await response.json()
-                        logger.info(f"PDF request saved to database: ID={response_data.get('id', 'unknown')}")
-                    elif response.status == 400:  # Bad Request
-                        error_text = await response.text()
-                        logger.warning(f"Failed to save PDF request - validation error: {error_text}")
-                    else:
-                        error_text = await response.text()
-                        logger.error(f"Failed to save PDF request - HTTP {response.status}: {error_text}")
-                        
-        except aiohttp.ClientError as e:
-            logger.error(f"Network error while saving PDF request: {str(e)}")
+            asyncio.run(self.process_pdf_request(report_id, requested_by, timestamp, message_data))
         except Exception as e:
-            logger.error(f"Unexpected error while saving PDF request: {str(e)}")
-    
-    def is_valid_guid(self, guid_string):
-        """Check if a string is a valid GUID format"""
-        try:
-            uuid.UUID(str(guid_string))
-            return True
-        except (ValueError, TypeError):
-            return False
+            logger.error(f"Error in async process: {str(e)}")
             
-    def log_request(self, report_id, requested_by, timestamp, full_message):
-        """Log incoming PDF generation requests to a separate log file"""
+    async def process_pdf_request(self, report_id: str, requested_by: str, 
+                          timestamp: str, message_data: Dict[str, Any]):
+        """Process PDF generation request"""
         try:
-            log_entry = {
-                'timestamp': datetime.now().isoformat(),
-                'report_id': report_id,
-                'requested_by': requested_by,
-                'request_timestamp': timestamp,
-                'full_message': full_message
-            }
+            logger.info("")
+            logger.info(f"[STEP 2] Starting PDF processing for report_id: {report_id}")
             
-            # Write to request log file
-            with open(self.request_log_file, 'a', encoding='utf-8') as f:
-                f.write(f"{json.dumps(log_entry)}\n")
+            # Send initial status update
+            await self.send_status_update(report_id, "processing", "PDF generation started")
+            
+            # Initialize database manager if not already done
+            if not self.db_manager:
+                logger.info("")
+                logger.info(f"[STEP 3] Initializing database manager...")
+                self.db_manager = DatabaseManager(self.config.DATABASE_CONFIG)
                 
-            logger.info(f"Request logged: Report ID={report_id}, Requested by={requested_by}")
-            
-        except Exception as e:
-            logger.error(f"Failed to log request: {str(e)}")
-            
-    async def save_pdf_request_to_api(self, report_id, requested_by, timestamp):
-        """Save PDF request data to the PMServerReportFormPDFRequestLog table via API"""
-        try:
-            # Parse timestamp if it's a string
-            if isinstance(timestamp, str):
-                try:
-                    # Try to parse ISO format timestamp
-                    parsed_timestamp = datetime.fromisoformat(timestamp.replace('Z', '+00:00'))
-                except ValueError:
-                    # Fallback to current time if parsing fails
-                    parsed_timestamp = datetime.now()
-            else:
-                parsed_timestamp = timestamp
-            
-            # Prepare the request data
-            request_data = {
-                "pmReportFormServerID": report_id,
-                "requestedBy": requested_by,
-                "requestedDate": parsed_timestamp.isoformat()
-            }
-            
-            # API endpoint URL
-            api_url = f"{self.config.API_BASE_URL}/api/PMServerReportFormPDFRequestLog"
-            
-            # Make the API call
-            async with aiohttp.ClientSession() as session:
-                async with session.post(
-                    api_url,
-                    json=request_data,
-                    headers={'Content-Type': 'application/json'},
-                    ssl=False  # Disable SSL verification for localhost
-                ) as response:
-                    if response.status == 201:  # Created
-                        response_data = await response.json()
-                        logger.info(f"PDF request saved to database: ID={response_data.get('id', 'unknown')}")
-                    elif response.status == 400:  # Bad Request
-                        error_text = await response.text()
-                        logger.warning(f"Failed to save PDF request - validation error: {error_text}")
-                    else:
-                        error_text = await response.text()
-                        logger.error(f"Failed to save PDF request - HTTP {response.status}: {error_text}")
-                        
-        except aiohttp.ClientError as e:
-            logger.error(f"Network error while saving PDF request: {str(e)}")
-        except Exception as e:
-            logger.error(f"Unexpected error while saving PDF request: {str(e)}")
-            
-    async def generate_pdf_async(self, report_id, message_data):
-        """Generate PDF asynchronously"""
-        try:
-            logger.info(f"Starting PDF generation for Report ID: {report_id}")
-            
-            # Send processing status update
-            await self.send_status_update(report_id, "processing", "Fetching report data from API...")
-            
-            # Fetch report data from API
-            report_data = await self.retrieve_data_from_api(report_id)
-            
-            if not report_data:
-                logger.error(f"No report data found for Report ID: {report_id}")
-                await self.send_status_update(report_id, "error", "No report data found")
-                return
+            # Initialize PDF generator if not already done
+            if not self.pdf_generator:
+                logger.info("")
+                logger.info(f"[STEP 4] Initializing PDF generator...")
+                self.pdf_generator = ServerPMPDFGenerator()
                 
-            # Send processing status update
-            await self.send_status_update(report_id, "processing", "Generating PDF report...")
+            # Retrieve data from API
+            logger.info("")
+            logger.info(f"[STEP 5] Calling API endpoint /api/PMReportFormServer/{report_id}")
+            api_data = await self.retrieve_data_from_api(report_id)
+            if not api_data:
+                logger.info("")
+                logger.error(f"[STEP 5 FAILED] No data received from API")
+                await self.send_status_update(report_id, "failed", "Failed to retrieve data from API")
+                return
+            else:
+                logger.info("")
+                logger.info(f"[STEP 5 SUCCESS] API data retrieved successfully")
+                
+            # Transform API data for PDF generation
+            logger.info("")
+            logger.info(f"[STEP 6] Transforming API data for PDF generation...")
+            report_data = self.transform_api_data(api_data)
+            logger.info(f"[STEP 6 SUCCESS] Data transformation completed")
             
-            # Generate PDF with comprehensive data
-            pdf_path = await self.pdf_generator.generate_comprehensive_pdf(report_data, report_id, message_data)
+            # Extract job number for PDF filename
+            job_no = report_data.get('reportForm', {}).get('jobNo', report_id)
+            logger.info("")
+            logger.info(f"[STEP 7] Using job number: {job_no}")
+            
+            # Generate PDF
+            logger.info("")
+            logger.info(f"[STEP 8] Generating comprehensive PDF...")
+            pdf_path = self.pdf_generator.generate_comprehensive_pdf(
+                report_data, job_no, "Server_PM"
+            )
             
             if pdf_path and os.path.exists(pdf_path):
-                logger.info(f"PDF generated successfully: {pdf_path}")
-                await self.send_status_update(report_id, "completed", f"PDF generated: {os.path.basename(pdf_path)}")
+                logger.info("")
+                logger.info(f"[STEP 8 SUCCESS] PDF generated successfully at: {pdf_path}")
+                await self.send_status_update(
+                    report_id, "completed", 
+                    f"PDF generated successfully: {os.path.basename(pdf_path)}"
+                )
             else:
-                logger.error(f"Failed to generate PDF for Report ID: {report_id}")
-                await self.send_status_update(report_id, "error", "PDF generation failed")
+                logger.info("")
+                logger.error(f"[STEP 8 FAILED] PDF generation failed")
+                await self.send_status_update(report_id, "failed", "PDF generation failed")
                 
         except Exception as e:
-            logger.error(f"Error generating PDF for Report ID {report_id}: {str(e)}")
-            await self.send_status_update(report_id, "error", f"PDF generation error: {str(e)}")
-    async def retrieve_data_from_api(self, report_id):
-        """Retrieve all data from API endpoint - same as web application"""
+            logger.error(f"Error processing PDF request for {report_id}: {str(e)}")
+            await self.send_status_update(report_id, "failed", f"Error: {str(e)}")
+            
+    async def retrieve_data_from_api(self, report_id: str) -> Optional[Dict[str, Any]]:
+        """Retrieve data from API endpoint with JWT authentication"""
         try:
-            # Construct API URL - same endpoint as web application
+            # Ensure we have a valid token
+            if not self.is_token_valid():
+                logger.info("")
+                logger.info("[API] Token invalid or expired, authenticating...")
+                if not await self.authenticate_api():
+                    logger.info("")
+                    logger.error("[API] Failed to authenticate")
+                    return None
+            
             api_url = f"{self.config.API_BASE_URL}/api/PMReportFormServer/{report_id}"
+            logger.info("")
+            logger.info(f"[API] URL: {api_url}")
             
-            logger.info(f"Fetching data from API: {api_url}")
+            # Create SSL context that ignores certificate verification for localhost
+            ssl_context = ssl.create_default_context()
+            ssl_context.check_hostname = False
+            ssl_context.verify_mode = ssl.CERT_NONE
             
-            async with aiohttp.ClientSession() as session:
-                async with session.get(api_url) as response:
-                    if response.status == 200:
-                        api_data = await response.json()
-                        logger.info("Successfully retrieved data from API")
-                        
-                        # Transform API response to match PDF generator expectations
-                        # Following the same structure as ServerPMReportFormDetails.js
-                        transformed_data = {
-                            'report_form': {
-                                'reportTitle': api_data.get('pmReportFormServer', {}).get('reportTitle', ''),
-                                'jobNo': api_data.get('reportForm', {}).get('jobNo', '') or api_data.get('pmReportFormServer', {}).get('jobNo', ''),
-                                'systemDescription': api_data.get('systemNameWarehouseName', '') or api_data.get('pmReportFormServer', {}).get('systemDescription', ''),
-                                'stationName': api_data.get('stationNameWarehouseName', '') or api_data.get('pmReportFormServer', {}).get('stationName', ''),
-                                'projectNo': api_data.get('pmReportFormServer', {}).get('projectNo', ''),
-                                'customer': api_data.get('pmReportFormServer', {}).get('customer', ''),
-                                'dateOfService': api_data.get('pmReportFormServer', {}).get('dateOfService', ''),
-                                'signOffData': api_data.get('pmReportFormServer', {}).get('signOffData', {}),
-                                'reportFormTypeID': api_data.get('reportForm', {}).get('reportFormTypeID'),
-                                'reportFormTypeName': api_data.get('reportForm', {}).get('reportFormTypeName'),
-                                'systemNameWarehouseID': api_data.get('reportForm', {}).get('systemNameWarehouseID'),
-                                'stationNameWarehouseID': api_data.get('reportForm', {}).get('stationNameWarehouseID')
-                            },
-                            # Component data following ServerPMReportFormDetails.js structure
-                            'serverHealthData': api_data.get('pmServerHealths', []),
-                            'hardDriveHealthData': api_data.get('pmServerHardDriveHealths', []),
-                            'diskUsageData': api_data.get('pmServerDiskUsageHealths', []),
-                            'cpuAndRamUsageData': api_data.get('pmServerCPUAndMemoryUsages', []),
-                            'networkHealthData': api_data.get('pmServerNetworkHealths', []),
-                            'willowlynxProcessStatusData': api_data.get('pmServerWillowlynxProcessStatuses', []),
-                            'willowlynxNetworkStatusData': api_data.get('pmServerWillowlynxNetworkStatuses', []),
-                            'willowlynxRTUStatusData': api_data.get('pmServerWillowlynxRTUStatuses', []),
-                            'willowlynxHistorialTrendData': api_data.get('pmServerWillowlynxHistoricalTrends', []),
-                            'willowlynxHistoricalReportData': api_data.get('pmServerWillowlynxHistoricalReports', []),
-                            'willowlynxSumpPitCCTVCameraData': api_data.get('pmServerWillowlynxCCTVCameras', []),
-                            'monthlyDatabaseCreationData': api_data.get('pmServerMonthlyDatabaseCreations', []),
-                            'databaseBackupData': api_data.get('pmServerDatabaseBackups', []),
-                            'timeSyncData': api_data.get('pmServerTimeSyncs', []),
-                            'hotFixesData': api_data.get('pmServerHotFixes', []),
-                            'autoFailOverData': api_data.get('pmServerFailOvers', []),
-                            'asaFirewallData': api_data.get('pmServerASAFirewalls', []),
-                            'softwarePatchData': api_data.get('pmServerSoftwarePatchSummaries', []),
-                            # Store original API response for reference
-                            'raw_api_data': api_data
-                        }
-                        
-                        return transformed_data
-                        
-                    elif response.status == 404:
-                        logger.error(f"Report not found: {report_id}")
-                        return None
-                    else:
-                        logger.error(f"API request failed with status {response.status}: {await response.text()}")
-                        return None
-                        
-        except aiohttp.ClientError as e:
-            logger.error(f"HTTP client error: {e}")
-            return None
-        except Exception as e:
-            logger.error(f"Error retrieving data from API: {e}")
-            return None
+            connector = aiohttp.TCPConnector(ssl=ssl_context)
+            timeout = aiohttp.ClientTimeout(total=self.config.API_TIMEOUT)
             
-    async def send_status_update(self, report_id, status, message):
-        """Send status update back via MQTT"""
-        try:
-            # Use the correct status topic format matching the web application
-            status_topic = f"{self.config.MQTT_TOPIC_PREFIX}/server_pm_reportform_pdf_status/{report_id}"
-            status_data = {
-                "report_id": report_id,
-                "status": status,
-                "message": message,
-                "timestamp": datetime.now().isoformat()
+            headers = {
+                'Content-Type': 'application/json',
+                'Authorization': f'Bearer {self.jwt_token}'
             }
             
-            self.mqtt_client.publish(status_topic, json.dumps(status_data))
-            logger.info(f"Status update sent for Report ID {report_id}: {status}")
+            logger.info("")
+            logger.info(f"[API] Making authenticated HTTP GET request...")
+            logger.info(f"[API] Request timeout: {self.config.API_TIMEOUT} seconds")
+            logger.info(f"[API] SSL verification disabled for localhost")
+            
+            async with aiohttp.ClientSession(connector=connector, timeout=timeout) as session:
+                async with session.get(api_url, headers=headers) as response:
+                    logger.info("")
+                    logger.info(f"[API] Response Status: {response.status}")
+                    
+                    if response.status == 200:
+                        data = await response.json()
+                        logger.info("")
+                        logger.info(f"[API SUCCESS] Data retrieved successfully (Size: {len(str(data))} chars)")
+                        logger.info(f"[API] Response Keys: {list(data.keys()) if isinstance(data, dict) else 'Not a dictionary'}")
+                        return data
+                    elif response.status == 401:
+                        logger.info("")
+                        logger.warning("[API] Unauthorized - token may be invalid, re-authenticating...")
+                        if await self.authenticate_api():
+                            # Retry with new token
+                            headers['Authorization'] = f'Bearer {self.jwt_token}'
+                            async with session.get(api_url, headers=headers) as retry_response:
+                                if retry_response.status == 200:
+                                    data = await retry_response.json()
+                                    logger.info("")
+                                    logger.info(f"[API SUCCESS] Data retrieved successfully after re-auth")
+                                    return data
+                                else:
+                                    error_text = await retry_response.text()
+                                    logger.info("")
+                                    logger.error(f"[API FAILED] Status code {retry_response.status} after re-auth")
+                                    logger.error(f"[API] Response: {error_text[:500]}...")
+                                    return None
+                        else:
+                            logger.info("")
+                            logger.error("[API] Re-authentication failed")
+                            return None
+                    else:
+                        error_text = await response.text()
+                        logger.info("")
+                        logger.error(f"[API FAILED] Status code {response.status}")
+                        logger.error(f"[API] Response: {error_text[:500]}...")  # First 500 chars
+                        return None
+                
+        except asyncio.TimeoutError:
+            logger.info("")
+            logger.error(f"[API TIMEOUT] Request timed out after {self.config.API_TIMEOUT} seconds")
+            return None
+        except aiohttp.ClientError as e:
+            logger.info("")
+            logger.error(f"[API REQUEST ERROR] {str(e)}")
+            return None
+        except Exception as e:
+            logger.info("")
+            logger.error(f"[UNEXPECTED API ERROR] {str(e)}")
+            return None
+            
+    def transform_api_data(self, api_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Transform API data to match PDF generator expectations"""
+        try:
+            # The API data structure should match what the PDF generator expects
+            # Based on the database_manager structure, we expect the following keys:
+            transformed_data = {
+                'reportForm': api_data.get('reportForm', {}),
+                'pmReportFormServer': api_data.get('pmReportFormServer', {}),
+                'signOffData': {
+                    'attendedBy': api_data.get('pmReportFormServer', {}).get('attendedBy', ''),
+                    'witnessedBy': api_data.get('pmReportFormServer', {}).get('witnessedBy', ''),
+                    'attendedDate': api_data.get('pmReportFormServer', {}).get('startDate', ''),
+                    'witnessedDate': api_data.get('pmReportFormServer', {}).get('completionDate', ''),
+                    'remarks': api_data.get('pmReportFormServer', {}).get('remarks', '')
+                },
+                
+                # Component data - map from API response to expected structure
+                'serverHealthData': api_data.get('pmServerHealths', []),
+                'hardDriveHealthData': api_data.get('pmServerHardDriveHealths', []),
+                'diskUsageData': api_data.get('pmServerDiskUsages', []),
+                'cpuAndMemoryData': api_data.get('pmServerCPUAndRAMUsages', []),
+                'networkHealthData': api_data.get('pmServerNetworkHealths', []),
+                'willowlynxProcessData': api_data.get('pmServerWillowlynxProcessStatuses', []),
+                'willowlynxNetworkData': api_data.get('pmServerWillowlynxNetworkStatuses', []),
+                'willowlynxRTUData': api_data.get('pmServerWillowlynxRTUStatuses', []),
+                'willowlynxHistoricalTrendData': api_data.get('pmServerWillowlynxHistoricalTrends', []),
+                'willowlynxHistoricalReportData': api_data.get('pmServerWillowlynxHistoricalReports', []),
+                'willowlynxCCTVData': api_data.get('pmServerWillowlynxCCTVCameras', []),
+                'monthlyDatabaseData': api_data.get('pmServerMonthlyDatabaseCreations', []),
+                'databaseBackupData': api_data.get('pmServerDatabaseBackups', []),
+                'timeSyncData': api_data.get('pmServerTimeSyncs', []),
+                'hotFixesData': api_data.get('pmServerHotFixes', []),
+                'failOverData': api_data.get('pmServerFailOvers', []),
+                'asaFirewallData': api_data.get('pmServerASAFirewalls', []),
+                'softwarePatchData': api_data.get('pmServerSoftwarePatchSummaries', [])
+            }
+            
+            logger.debug("API data transformed successfully")
+            return transformed_data
             
         except Exception as e:
-            logger.error(f"Error sending status update: {str(e)}")
+            logger.error(f"Error transforming API data: {str(e)}")
+            return api_data  # Return original data if transformation fails
             
-    def start_service(self):
-        """Start the MQTT service"""
+    async def send_status_update(self, report_id: str, status: str, message: str):
+        """Send status update via MQTT"""
         try:
-            logger.info("Starting Server PM PDF Generation Service...")
+            status_topic = f"controltower/server_pm_reportform_pdf_status/{report_id}"
+            status_message = {
+                'report_id': report_id,
+                'status': status,
+                'message': message,
+                'timestamp': datetime.now().isoformat()
+            }
             
-            # Connect to MQTT broker
+            if self.mqtt_client and self.mqtt_client.is_connected():
+                self.mqtt_client.publish(
+                    status_topic, 
+                    json.dumps(status_message),
+                    qos=1
+                )
+                logger.info(f"[STATUS UPDATE] {report_id} -> {status.upper()} - {message}")
+                logger.info(f"[MQTT] Published to topic: {status_topic}")
+            else:
+                logger.info("")
+                logger.warning("[WARNING] MQTT client not connected, cannot send status update")
+                
+        except Exception as e:
+            logger.info("")
+            logger.error(f"[ERROR] sending status update: {str(e)}")
+            
+    async def start_service(self):
+        """Start the PDF service"""
+        try:
+            logger.info("")
+            logger.info("Starting Server PM PDF Service...")
+            
+            # Ensure PDF output directory exists
+            pdf_dir = Path(self.config.PDF_OUTPUT_DIR)
+            pdf_dir.mkdir(parents=True, exist_ok=True)
+            logger.info(f"PDF output directory: {pdf_dir.absolute()}")
+            
+            # Authenticate with API first
+            logger.info("Authenticating with API...")
+            if not await self.authenticate_api():
+                logger.error("Failed to authenticate with API. Service cannot start.")
+                return False
+            
+            # Setup and connect MQTT client
+            self.setup_mqtt_client()
+            
+            logger.info(f"Connecting to MQTT broker: {self.config.MQTT_BROKER_HOST}:{self.config.MQTT_BROKER_PORT}")
             self.mqtt_client.connect(
                 self.config.MQTT_BROKER_HOST, 
                 self.config.MQTT_BROKER_PORT, 
-                60
+                60  # keepalive timeout
             )
             
-            # Start the loop
-            self.mqtt_client.loop_forever()
+            # Start MQTT loop
+            self.mqtt_client.loop_start()
             
+            logger.info("")
+            logger.info("Server PM PDF Service started successfully")
+            logger.info("Waiting for MQTT messages...")
+            
+            # Keep the service running
+            while True:
+                await asyncio.sleep(1)
+                
         except KeyboardInterrupt:
+            logger.info("")
             logger.info("Service interrupted by user")
         except Exception as e:
+            logger.info("")
             logger.error(f"Error starting service: {str(e)}")
         finally:
-            self.cleanup()
+            await self.cleanup()
             
-    def cleanup(self):
+    async def cleanup(self):
         """Cleanup resources"""
         try:
+            logger.info("")
+            logger.info("Cleaning up resources...")
+            
             if self.mqtt_client:
+                self.mqtt_client.loop_stop()
                 self.mqtt_client.disconnect()
-            logger.info("Service cleanup completed")
+                
+            if self.db_manager:
+                await self.db_manager.disconnect()
+                
+            if self.session:
+                self.session.close()
+                
+            logger.info("")
+            logger.info("Cleanup completed")
+            
         except Exception as e:
+            logger.info("")
             logger.error(f"Error during cleanup: {str(e)}")
 
-def main():
+async def main():
     """Main entry point"""
-    service = ServerPMPDFService()
-    service.start_service()
+    try:
+        service = ServerPMPDFService()
+        await service.start_service()
+    except Exception as e:
+        logger.info("")
+        logger.error(f"Fatal error: {str(e)}")
+        sys.exit(1)
 
 if __name__ == "__main__":
-    main()
+    # Run the service
+    asyncio.run(main())
