@@ -484,7 +484,7 @@ class ServerPMPDFGenerator:
         
         # 2. Add instructions
         instructions_text = """
-        <b>Server Health Check Instructions:</b><br/>
+        <b>Check Instructions:</b><br/>
         Check Server Front Panel LED Number 2, as shown below. Check LED 2 in solid green, which indicates the server is healthy.
         """
         story.append(Paragraph(instructions_text, self.styles['Normal']))
@@ -543,8 +543,8 @@ class ServerPMPDFGenerator:
                 
                 # Process details (matching web component data structure)
                 for detail in health_record['details']:
-                    server_name = detail.get('serverName', 'N/A')
-                    status = detail.get('resultStatusName', 'N/A')
+                    server_name = detail.get('serverName', '')
+                    status = detail.get('resultStatusName', '')
                     
                     # Format status without square box indicators (plain text only)
                     table_data.append([server_name, status])
@@ -647,161 +647,218 @@ class ServerPMPDFGenerator:
         return story
 
     def _create_hard_drive_page(self, title, data, report_data):
-        """Create hard drive health page matching web component structure"""
+        """Create hard drive health page matching ServerHealthCheck layout: title → instruction → image → table → remarks"""
         story = []
         
-        # Add component image if available
+        # 1. Simple Section Title (left-aligned, bold, black, no icons) - matching ServerHealthCheck
+        title_text = title
+        title_style = ParagraphStyle(
+            'SimpleTitle',
+            parent=self.styles['ComponentTitle'],
+            fontSize=14,
+            fontName='Helvetica-Bold',
+            textColor=colors.black,
+            alignment=TA_LEFT,
+            spaceAfter=15
+        )
+        story.append(Paragraph(title_text, title_style))
+        story.append(Spacer(1, 10))
+        
+        # 2. Add instructions - matching ServerHealthCheck format
+        instructions_text = """
+        <b>Hard Drive Health Check Instructions:</b><br/>
+        Check Hard Drive Health Status LED, LED in solid/blinking green, which indicates healthy.
+        """
+        story.append(Paragraph(instructions_text, self.styles['Normal']))
+        story.append(Spacer(1, 15))
+        
+        # 3. Add component image - matching ServerHealthCheck format
         image_path = Path(f"resources/ServerPMReportForm/HardDriveHealth.png")
         if image_path.exists():
             try:
-                img = Image(str(image_path), width=4*inch, height=2.5*inch)
+                img = Image(str(image_path), width=3.5*inch, height=2*inch)
                 img.hAlign = 'CENTER'
                 
-                # Create a bordered frame for the image
-                image_table = Table([[img]], colWidths=[4.5*inch])
+                # Create a bordered frame for the image - matching ServerHealthCheck
+                image_table = Table([[img]], colWidths=[4*inch])
                 image_table.setStyle(TableStyle([
                     ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
                     ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
-                    ('BOX', (0, 0), (-1, -1), 1, colors.HexColor('#e0e0e0')),
+                    ('BACKGROUND', (0, 0), (-1, -1), colors.HexColor('#f8f9fa')),
+                    ('BOX', (0, 0), (-1, -1), 1, colors.HexColor('#e9ecef')),
                     ('TOPPADDING', (0, 0), (-1, -1), 10),
                     ('BOTTOMPADDING', (0, 0), (-1, -1), 10),
                 ]))
                 story.append(image_table)
-                story.append(Spacer(1, 12))
+                story.append(Spacer(1, 15))
             except Exception as e:
-                print(f"Could not load hard drive reference image: {e}")
-                pass
+                logger.warning(f"Could not load hard drive reference image: {e}")
         
-        # Component title with icon
-        title_text = f"💾 {title}"
-        story.append(Paragraph(title_text, self.styles['ComponentTitle']))
-        story.append(Spacer(1, 20))
-        
-        # Add instructions
-        instructions_text = """
-        <b>Hard Drive Health Check Instructions:</b><br/>
-        1. Check the health status of all hard drives in the server<br/>
-        2. Verify SMART status and any error indicators<br/>
-        3. Document any drives showing warning or failure status<br/>
-        4. Note any performance degradation or unusual behavior
-        """
-        story.append(Paragraph(instructions_text, self.styles['Normal']))
-        story.append(Spacer(1, 20))
-        
+        # 4. Create data table - matching ServerHealthCheck format
         if not data:
-            story.append(Paragraph("No hard drive health data available.", self.styles['Normal']))
+            # No data message - matching ServerHealthCheck
+            no_data_table = Table([["No hard drive health data available"]], colWidths=[6*inch])
+            no_data_table.setStyle(TableStyle([
+                ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+                ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+                ('BACKGROUND', (0, 0), (-1, -1), colors.HexColor('#f9f9f9')),
+                ('BOX', (0, 0), (-1, -1), 1, colors.HexColor('#cccccc')),
+                ('FONTNAME', (0, 0), (-1, -1), 'Helvetica'),
+                ('FONTSIZE', (0, 0), (-1, -1), 10),
+                ('TOPPADDING', (0, 0), (-1, -1), 20),
+                ('BOTTOMPADDING', (0, 0), (-1, -1), 20),
+            ]))
+            story.append(no_data_table)
             return story
         
-        # Create table headers
-        headers = ['Server Name', 'Hard Drive Name', 'Result Status', 'Remarks', 'Created Date']
+        # Create table headers - matching ServerHealthCheck
+        headers = ['Server Name', 'Result Status']
         table_data = [headers]
         
         # Handle the nested structure from API response
+        remarks_text = ""
         for health_record in data:
             if isinstance(health_record, dict) and 'details' in health_record:
-                # Add remarks section if available
+                # Store remarks for later display
                 if health_record.get('remarks'):
-                    story.append(Paragraph(f"📝 <b>Remarks:</b> {health_record['remarks']}", self.styles['Normal']))
-                    story.append(Spacer(1, 10))
+                    remarks_text = health_record['remarks']
                 
-                # Process details
+                # Process details (matching web component data structure)
                 for detail in health_record['details']:
-                    server_name = detail.get('serverName', 'N/A')
-                    hard_drive_name = detail.get('hardDriveName', 'N/A')
-                    status = detail.get('resultStatusName', 'N/A')
-                    remarks = detail.get('remarks', 'N/A')
-                    created_date = self._format_date(detail.get('createdDate'))
+                    server_name = detail.get('serverName', '')
+                    status = detail.get('resultStatusName', '')
                     
-                    # Format status with indicators
-                    if status and status.lower() in ['pass', 'ok', 'good', 'healthy']:
-                        status_display = f"✅ {status}"
-                    elif status and status.lower() in ['fail', 'error', 'bad', 'unhealthy']:
-                        status_display = f"❌ {status}"
-                    elif status and status.lower() in ['warning', 'caution']:
-                        status_display = f"⚠️ {status}"
-                    else:
-                        status_display = status
-                    
-                    table_data.append([server_name, hard_drive_name, status_display, remarks, created_date])
+                    # Format status without square box indicators (plain text only) - matching ServerHealthCheck
+                    table_data.append([server_name, status])
         
-        # Create table with improved styling
+        # Create table with improved styling - matching ServerHealthCheck exactly
         if len(table_data) > 1:
-            col_widths = [1.5*inch, 1.5*inch, 1.5*inch, 1.8*inch, 1.2*inch]
+            col_widths = [3*inch, 3*inch]
             
             table = Table(table_data, colWidths=col_widths)
             table.setStyle(TableStyle([
-                # Header styling
-                ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#1976d2')),
-                ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+                # Header styling - matching ServerHealthCheck
+                ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#f5f5f5')),
+                ('TEXTCOLOR', (0, 0), (-1, 0), colors.black),
                 ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
                 ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
-                ('FONTSIZE', (0, 0), (-1, 0), 9),
+                ('FONTSIZE', (0, 0), (-1, 0), 11),
                 ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
                 ('TOPPADDING', (0, 0), (-1, 0), 12),
                 
-                # Data rows styling
-                ('BACKGROUND', (0, 1), (-1, -1), colors.HexColor('#f8f9fa')),
+                # Data rows styling - matching ServerHealthCheck
+                ('BACKGROUND', (0, 1), (-1, -1), colors.white),
                 ('FONTNAME', (0, 1), (-1, -1), 'Helvetica'),
-                ('FONTSIZE', (0, 1), (-1, -1), 8),
-                ('TOPPADDING', (0, 1), (-1, -1), 8),
-                ('BOTTOMPADDING', (0, 1), (-1, -1), 8),
-                ('LEFTPADDING', (0, 0), (-1, -1), 6),
-                ('RIGHTPADDING', (0, 0), (-1, -1), 6),
+                ('FONTSIZE', (0, 1), (-1, -1), 10),
+                ('TOPPADDING', (0, 1), (-1, -1), 10),
+                ('BOTTOMPADDING', (0, 1), (-1, -1), 10),
+                ('LEFTPADDING', (0, 0), (-1, -1), 12),
+                ('RIGHTPADDING', (0, 0), (-1, -1), 12),
                 
-                # Grid and borders
+                # Grid and borders - matching ServerHealthCheck
                 ('GRID', (0, 0), (-1, -1), 1, colors.HexColor('#e0e0e0')),
-                ('LINEBELOW', (0, 0), (-1, 0), 2, colors.HexColor('#1976d2')),
+                ('LINEBELOW', (0, 0), (-1, 0), 1, colors.HexColor('#e0e0e0')),
             ]))
             
             story.append(table)
+            story.append(Spacer(1, 20))
         else:
-            story.append(Paragraph("No hard drive health records available.", self.styles['Normal']))
+            # No records message - matching ServerHealthCheck
+            no_records_table = Table([["No hard drive health records available"]], colWidths=[6*inch])
+            no_records_table.setStyle(TableStyle([
+                ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+                ('FONTNAME', (0, 0), (-1, -1), 'Helvetica'),
+                ('FONTSIZE', (0, 0), (-1, -1), 10),
+                ('TOPPADDING', (0, 0), (-1, -1), 15),
+                ('BOTTOMPADDING', (0, 0), (-1, -1), 15),
+            ]))
+            story.append(no_records_table)
+            story.append(Spacer(1, 20))
+        
+        # 5. Remarks Section with title outside the box - matching ServerHealthCheck exactly
+        if remarks_text:
+            # Create a custom style for italic remark title - matching ServerHealthCheck
+            remark_title_style = ParagraphStyle(
+                'RemarkTitle',
+                parent=self.styles['Normal'],
+                fontSize=12,  # Slightly larger font
+                fontName='Helvetica-BoldOblique',  # Bold italic for better distinction
+                textColor=colors.black,
+                alignment=TA_LEFT,
+                spaceAfter=8,  # Space after title before box
+                spaceBefore=0,  # No space before title
+                leftIndent=15,  # Match the left padding of the box
+                rightIndent=0,
+                leading=12  # Tight line spacing
+            )
+            
+            # Create the remarks title (no underline) - matching ServerHealthCheck
+            remark_title = Paragraph("Remark", remark_title_style)
+            
+            # Add title to story
+            story.append(remark_title)
+            
+            # Create remarks text with some top margin to separate from title
+            remarks_text_style = ParagraphStyle(
+                'RemarksText',
+                parent=self.styles['Normal'],
+                fontSize=10,
+                spaceBefore=0,
+                spaceAfter=0
+            )
+            remarks_content = Paragraph(remarks_text, remarks_text_style)
+            
+            # Create a container table for just the remarks content - matching ServerHealthCheck
+            remarks_container = Table([
+                [remarks_content]
+            ], colWidths=[6*inch])
+            
+            remarks_container.setStyle(TableStyle([
+                ('BACKGROUND', (0, 0), (-1, -1), colors.HexColor('#f5f5f5')),
+                ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+                ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+                ('TOPPADDING', (0, 0), (-1, -1), 15),
+                ('LEFTPADDING', (0, 0), (-1, -1), 15),
+                ('RIGHTPADDING', (0, 0), (-1, -1), 15),
+                ('BOTTOMPADDING', (0, 0), (-1, -1), 15),
+                ('BOX', (0, 0), (-1, -1), 1, colors.HexColor('#d0d0d0')),
+            ]))
+            
+            story.append(remarks_container)
         
         return story
 
     def _create_disk_usage_page(self, title, data, report_data):
-        """Create disk usage check page matching DiskUsage_Details.js structure"""
+        """Create disk usage check page matching established UI flow pattern"""
         story = []
         
-        # Add component image if available
-        image_path = Path(f"resources/ServerPMReportForm/CPUAndRamUsage.png")
-        if image_path.exists():
-            try:
-                img = Image(str(image_path), width=4*inch, height=2.5*inch)
-                img.hAlign = 'CENTER'
-                
-                # Create a bordered frame for the image
-                image_table = Table([[img]], colWidths=[4.5*inch])
-                image_table.setStyle(TableStyle([
-                    ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
-                    ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
-                    ('BOX', (0, 0), (-1, -1), 1, colors.HexColor('#e0e0e0')),
-                    ('TOPPADDING', (0, 0), (-1, -1), 10),
-                    ('BOTTOMPADDING', (0, 0), (-1, -1), 10),
-                ]))
-                story.append(image_table)
-                story.append(Spacer(1, 12))
-            except Exception as e:
-                print(f"Could not load CPU and RAM usage reference image: {e}")
-                pass
+        # 1. Simple Section Title (left-aligned, bold, black, no icons) - matching Server Health Check
+        title_text = title
+        title_style = ParagraphStyle(
+            'SimpleTitle',
+            parent=self.styles['ComponentTitle'],
+            fontSize=14,
+            fontName='Helvetica-Bold',
+            textColor=colors.black,
+            alignment=TA_LEFT,
+            spaceAfter=15
+        )
+        story.append(Paragraph(title_text, title_style))
+        story.append(Spacer(1, 10))
         
-        # Section title with icon
-        title_text = "💾 Server Disk Usage Check"
-        story.append(Paragraph(title_text, self.styles['ComponentTitle']))
-        story.append(Spacer(1, 12))
-        
-        # Add instructions matching the web component
-        instructions_title = "Using Computer Management"
-        story.append(Paragraph(instructions_title, self.styles['SectionHeader']))
+        # 2. Add instructions - matching Server Health Check format
+        # 2. Add instructions section matching web component format
+        instructions_title = "<b>Using Computer Management</b>"
+        story.append(Paragraph(instructions_title, self.styles['Normal']))
         story.append(Spacer(1, 6))
         
-        instructions_list = """
-        • From Control Panel→Administration Tools→Computer Management.<br/>
-        • Click on the Storage→Disk Management. Check the Status for all the hard disk<br/>
-        • Remove old windows event logs to meet the target disk usage limit.
+        instructions_text = """
+        • From Control Panel → Administration Tools → Computer Management.<br/>
+        • click on the Storage → Disk Management. check the Status for all the hard disk<br/>
+        • Remove old windows event logs to meet the target disk usage limit
         """
-        story.append(Paragraph(instructions_list, self.styles['Normal']))
-        story.append(Spacer(1, 12))
+        story.append(Paragraph(instructions_text, self.styles['Normal']))
+        story.append(Spacer(1, 15))
         
         # Add important note matching web component
         note_text = """
@@ -809,101 +866,196 @@ class ServerPMPDFGenerator:
         backups. The disk space usage can be up to 90%, which is considered as normal.
         """
         story.append(Paragraph(note_text, self.styles['Normal']))
+        story.append(Spacer(1, 15))
+        
+        # 3. Add component image (smaller size to prevent remarks from jumping to next page) - matching Server Health Check
+        image_path = Path(f"resources/ServerPMReportForm/DiskUsage.png")
+        if image_path.exists():
+            try:
+                img = Image(str(image_path), width=3.5*inch, height=2*inch)
+                img.hAlign = 'CENTER'
+                
+                # Create a bordered frame for the image - matching Server Health Check exactly
+                image_frame = Table([[img]], colWidths=[4*inch])
+                image_frame.setStyle(TableStyle([
+                    ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+                    ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+                    ('BACKGROUND', (0, 0), (-1, -1), colors.white),
+                    ('BOX', (0, 0), (-1, -1), 1, colors.HexColor('#d0d0d0')),
+                    ('TOPPADDING', (0, 0), (-1, -1), 10),
+                    ('BOTTOMPADDING', (0, 0), (-1, -1), 10),
+                    ('LEFTPADDING', (0, 0), (-1, -1), 10),
+                    ('RIGHTPADDING', (0, 0), (-1, -1), 10),
+                ]))
+                story.append(image_frame)
+                story.append(Spacer(1, 15))
+            except Exception as e:
+                print(f"Could not load disk usage reference image: {e}")
+                pass
+        
+        # 4. Data Table - Process disk usage data matching DiskUsage component structure
+        if not data:
+            # No data message table (matching Server Health Check style)
+            no_data_table = Table([["No disk usage data available"]], colWidths=[6*inch])
+            no_data_table.setStyle(TableStyle([
+                ('BACKGROUND', (0, 0), (-1, -1), colors.HexColor('#f5f5f5')),
+                ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+                ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+                ('FONTNAME', (0, 0), (-1, -1), 'Helvetica'),
+                ('FONTSIZE', (0, 0), (-1, -1), 10),
+                ('TEXTCOLOR', (0, 0), (-1, -1), colors.HexColor('#666666')),
+                ('TOPPADDING', (0, 0), (-1, -1), 20),
+                ('BOTTOMPADDING', (0, 0), (-1, -1), 20),
+                ('BOX', (0, 0), (-1, -1), 1, colors.HexColor('#d0d0d0')),
+            ]))
+            story.append(no_data_table)
+        else:
+            # Handle nested structure from API response
+            all_disks = []
+            for usage_record in data:
+                if isinstance(usage_record, dict):
+                    # Process details
+                    if 'details' in usage_record and isinstance(usage_record['details'], list):
+                        all_disks.extend(usage_record['details'])
+                    else:
+                        # Handle direct structure for backward compatibility
+                        all_disks.append(usage_record)
+            
+            # Group disks by server name (matching web component logic)
+            grouped_by_server = {}
+            for item in all_disks:
+                if isinstance(item, dict):
+                    server_name = item.get('serverName', 'Unknown Server')
+                    if server_name not in grouped_by_server:
+                        grouped_by_server[server_name] = []
+                    grouped_by_server[server_name].append(item)
+            
+            if grouped_by_server:
+                # Create tables for each server
+                for server_name, disks in grouped_by_server.items():
+                    # Server header
+                    server_header = f"{server_name}: - Disk Capacity:"
+                    story.append(Paragraph(server_header, self.styles['SectionHeader']))
+                    story.append(Spacer(1, 6))
+                    
+                    # Create disk table for this server (matching DiskUsage component columns)
+                    table_data = [['Disk', 'Status', 'Capacity', 'Free Space', 'Usage %', 'Check']]
+                    
+                    for disk in disks:
+                        disk_name = disk.get('diskName', disk.get('disk', ''))
+                        status = disk.get('serverDiskStatusName', disk.get('status', ''))
+                        capacity = disk.get('capacity', disk.get('totalSize', ''))
+                        free_space = disk.get('freeSpace', disk.get('freeSize', ''))
+                        usage_percentage = disk.get('usage', disk.get('usagePercentage', ''))
+                        check_result = disk.get('resultStatusName', disk.get('check', ''))
+                        
+                        table_data.append([
+                            str(disk_name) if disk_name else '',
+                            str(status) if status else '', 
+                            str(capacity) if capacity else '',
+                            str(free_space) if free_space else '', 
+                            str(usage_percentage) if usage_percentage else '', 
+                            str(check_result) if check_result else ''
+                        ])
+                    
+                    # Create table with exact styling as Server Health Check
+                    col_width = 6.5 * inch / 6
+                    table = Table(table_data, colWidths=[col_width] * 6)
+                    table.setStyle(TableStyle([
+                        # Header styling - gray background, black text
+                        ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#f5f5f5')),
+                        ('TEXTCOLOR', (0, 0), (-1, 0), colors.black),
+                        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+                        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+                        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+                        ('FONTSIZE', (0, 0), (-1, 0), 10),
+                        ('TOPPADDING', (0, 0), (-1, 0), 8),
+                        ('BOTTOMPADDING', (0, 0), (-1, 0), 8),
+                        ('LEFTPADDING', (0, 0), (-1, -1), 6),
+                        ('RIGHTPADDING', (0, 0), (-1, -1), 6),
+                        
+                        # Data rows styling - white background, black text
+                        ('BACKGROUND', (0, 1), (-1, -1), colors.white),
+                        ('TEXTCOLOR', (0, 1), (-1, -1), colors.black),
+                        ('FONTNAME', (0, 1), (-1, -1), 'Helvetica'),
+                        ('FONTSIZE', (0, 1), (-1, -1), 9),
+                        ('TOPPADDING', (0, 1), (-1, -1), 6),
+                        ('BOTTOMPADDING', (0, 1), (-1, -1), 6),
+                        
+                        # Grid and borders
+                        ('GRID', (0, 0), (-1, -1), 1, colors.black),
+                        ('BOX', (0, 0), (-1, -1), 1, colors.black),
+                    ]))
+                    story.append(table)
+                    story.append(Spacer(1, 12))
+            else:
+                # No data message table
+                no_data_table = Table([["No disk usage records available"]], colWidths=[6*inch])
+                no_data_table.setStyle(TableStyle([
+                    ('BACKGROUND', (0, 0), (-1, -1), colors.HexColor('#f5f5f5')),
+                    ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+                    ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+                    ('FONTNAME', (0, 0), (-1, -1), 'Helvetica'),
+                    ('FONTSIZE', (0, 0), (-1, -1), 10),
+                    ('TEXTCOLOR', (0, 0), (-1, -1), colors.HexColor('#666666')),
+                    ('TOPPADDING', (0, 0), (-1, -1), 20),
+                    ('BOTTOMPADDING', (0, 0), (-1, -1), 20),
+                    ('BOX', (0, 0), (-1, -1), 1, colors.HexColor('#d0d0d0')),
+                ]))
+                story.append(no_data_table)
+        
         story.append(Spacer(1, 12))
         
-        # Process disk usage data
-        if not data:
-            story.append(Paragraph("No disk usage data available", self.styles['Normal']))
-            return story
+        # 5. Remarks Section - Extract remarks from data and display with consistent styling
+        remarks_text = ""
+        if data:
+            for usage_record in data:
+                if isinstance(usage_record, dict) and usage_record.get('remarks'):
+                    remarks_text = usage_record['remarks']
+                    break
         
-        # Handle nested structure from API response
-        all_disks = []
-        for usage_record in data:
-            if isinstance(usage_record, dict):
-                # Add remarks section if available
-                if usage_record.get('remarks'):
-                    story.append(Paragraph(f"📝 <b>Remarks:</b> {usage_record['remarks']}", self.styles['Normal']))
-                    story.append(Spacer(1, 10))
-                
-                # Process details
-                if 'details' in usage_record and isinstance(usage_record['details'], list):
-                    all_disks.extend(usage_record['details'])
-                else:
-                    # Handle direct structure for backward compatibility
-                    all_disks.append(usage_record)
+        if not remarks_text:
+            remarks_text = "No specific remarks for disk usage check."
         
-        # Group disks by server name (matching web component logic)
-        grouped_by_server = {}
-        for item in all_disks:
-            if isinstance(item, dict):
-                server_name = item.get('serverName', 'Unknown Server')
-                if server_name not in grouped_by_server:
-                    grouped_by_server[server_name] = []
-                grouped_by_server[server_name].append(item)
+        # Remarks title (matching Server Health Check - no colon, left-aligned)
+        remarks_title_style = ParagraphStyle(
+            'RemarkTitle',
+            parent=self.styles['Normal'],
+            fontName='Helvetica-BoldOblique',
+            fontSize=11,
+            leftIndent=15,
+            spaceAfter=6,
+            alignment=0  # Left alignment
+        )
+        story.append(Paragraph("Remark", remarks_title_style))
         
-        if grouped_by_server:
-            # Create tables for each server
-            for server_name, disks in grouped_by_server.items():
-                # Server header
-                server_header = f"🖥️ {server_name} ({len(disks)} disk{'s' if len(disks) != 1 else ''})"
-                story.append(Paragraph(server_header, self.styles['SectionHeader']))
-                story.append(Spacer(1, 6))
-                
-                # Create disk table for this server
-                table_data = [['Disk', 'Total Size', 'Used Size', 'Free Size', 'Usage %', 'Result Status']]
-                
-                for disk in disks:
-                    disk_name = disk.get('diskName', 'N/A')
-                    total_size = disk.get('totalSize', 'N/A')
-                    used_size = disk.get('usedSize', 'N/A')
-                    free_size = disk.get('freeSize', 'N/A')
-                    usage_percentage = disk.get('usagePercentage', 'N/A')
-                    result_status = disk.get('resultStatusName', 'N/A')
-                    
-                    # Format result status with indicators
-                    if result_status and result_status.lower() in ['pass', 'ok', 'good']:
-                        result_display = f"✅ {result_status}"
-                    elif result_status and result_status.lower() in ['fail', 'error', 'bad']:
-                        result_display = f"❌ {result_status}"
-                    elif result_status and result_status.lower() in ['warning', 'caution']:
-                        result_display = f"⚠️ {result_status}"
-                    else:
-                        result_display = str(result_status)
-                    
-                    table_data.append([
-                        str(disk_name), str(total_size), str(used_size), 
-                        str(free_size), str(usage_percentage), result_display
-                    ])
-                
-                # Create table with improved styling
-                col_width = 6.5 * inch / 6
-                table = Table(table_data, colWidths=[col_width] * 6)
-                table.setStyle(TableStyle([
-                    # Header styling
-                    ('BACKGROUND', (0, 0), (-1, 0), colors.darkblue),
-                    ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
-                    ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
-                    ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
-                    ('FONTSIZE', (0, 0), (-1, 0), 10),
-                    ('BOTTOMPADDING', (0, 0), (-1, 0), 8),
-                    ('TOPPADDING', (0, 0), (-1, 0), 8),
-                    
-                    # Data rows styling
-                    ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
-                    ('FONTNAME', (0, 1), (-1, -1), 'Helvetica'),
-                    ('FONTSIZE', (0, 1), (-1, -1), 8),
-                    ('TOPPADDING', (0, 1), (-1, -1), 6),
-                    ('BOTTOMPADDING', (0, 1), (-1, -1), 6),
-                    ('LEFTPADDING', (0, 0), (-1, -1), 4),
-                    ('RIGHTPADDING', (0, 0), (-1, -1), 4),
-                    
-                    # Grid and borders
-                    ('GRID', (0, 0), (-1, -1), 1, colors.black),
-                ]))
-                story.append(table)
-                story.append(Spacer(1, 12))
-        else:
-            story.append(Paragraph("No disk usage records available", self.styles['Normal']))
+        # Remarks content styling
+        remarks_text_style = ParagraphStyle(
+            'RemarksText',
+            parent=self.styles['Normal'],
+            fontSize=10,
+            leftIndent=0,
+            alignment=0  # Left alignment
+        )
+        remarks_content = Paragraph(remarks_text, remarks_text_style)
+        
+        # Create a container table for just the remarks content - matching Server Health Check
+        remarks_container = Table([
+            [remarks_content]
+        ], colWidths=[6*inch])
+        
+        remarks_container.setStyle(TableStyle([
+            ('BACKGROUND', (0, 0), (-1, -1), colors.HexColor('#f5f5f5')),
+            ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+            ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+            ('TOPPADDING', (0, 0), (-1, -1), 15),
+            ('LEFTPADDING', (0, 0), (-1, -1), 15),
+            ('RIGHTPADDING', (0, 0), (-1, -1), 15),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 15),
+            ('BOX', (0, 0), (-1, -1), 1, colors.HexColor('#d0d0d0')),
+        ]))
+        
+        story.append(remarks_container)
         
         return story
 
@@ -911,48 +1063,60 @@ class ServerPMPDFGenerator:
         """Create CPU and memory usage page matching CPUAndRamUsage_Details.js structure"""
         story = []
         
-        # Add component image if available
-        image_path = Path(f"resources/ServerPMReportForm/{title.replace(' ', '')}.png")
-        if image_path.exists():
-            try:
-                img = Image(str(image_path), width=3*inch, height=2*inch)
-                story.append(img)
-                story.append(Spacer(1, 20))
-            except:
-                pass
+        # 1. Simple Section Title (matching other components - no icons, simple format)
+        title_text = title
+        title_style = ParagraphStyle(
+            'SimpleTitle',
+            parent=self.styles['ComponentTitle'],
+            fontSize=14,
+            fontName='Helvetica-Bold',
+            textColor=colors.black,
+            alignment=TA_LEFT,
+            spaceAfter=15
+        )
+        story.append(Paragraph(title_text, title_style))
+        story.append(Spacer(1, 10))
         
-        # Component title with icon
-        title_text = "🧠 Server CPU and RAM Usage Check"
-        story.append(Paragraph(title_text, self.styles['ComponentTitle']))
-        story.append(Spacer(1, 20))
-        
-        # Add instructions matching the web component
+        # 2. Add instructions section matching web component format
         instructions_text = """
         <b>Using Task Manager, and go to Performance Tab</b><br/>
         ○ Right click on the task bar and select task manager
         """
         story.append(Paragraph(instructions_text, self.styles['Normal']))
-        story.append(Spacer(1, 12))
+        story.append(Spacer(1, 15))
         
-        # Add important note matching web component
-        note_text = """
-        <b>* Note:</b> The SQL Server Database on HDSRS Servers use as much memory as it needs to provide best performance, 
-        we limit the memory usage so the overall server memory usage can be up to 90%
-        """
-        story.append(Paragraph(note_text, self.styles['Normal']))
-        story.append(Spacer(1, 12))
+        # 4. Add component image (smaller size to prevent remarks from jumping to next page) - matching Server Health Check
+        image_path = Path(f"resources/ServerPMReportForm/CPUAndRamUsage.png")
+        if image_path.exists():
+            try:
+                img = Image(str(image_path), width=3.5*inch, height=2*inch)
+                img.hAlign = 'CENTER'
+                
+                # Create a bordered frame for the image - matching Server Health Check exactly
+                image_frame = Table([[img]], colWidths=[4*inch])
+                image_frame.setStyle(TableStyle([
+                    ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+                    ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+                    ('BACKGROUND', (0, 0), (-1, -1), colors.white),
+                    ('BOX', (0, 0), (-1, -1), 1, colors.HexColor('#d0d0d0')),
+                    ('TOPPADDING', (0, 0), (-1, -1), 10),
+                    ('BOTTOMPADDING', (0, 0), (-1, -1), 10),
+                    ('LEFTPADDING', (0, 0), (-1, -1), 10),
+                    ('RIGHTPADDING', (0, 0), (-1, -1), 10),
+                ]))
+                story.append(image_frame)
+                story.append(Spacer(1, 15))
+            except Exception as e:
+                print(f"Could not load CPU and RAM usage reference image: {e}")
+                pass
         
-        # Process CPU and memory data
+        
+        # 5. Data Table - Process CPU and memory data matching CPUAndRamUsage component structure
         if data and len(data) > 0:
             # Handle nested structure from API response
             all_records = []
             for usage_record in data:
                 if isinstance(usage_record, dict):
-                    # Add remarks section if available
-                    if usage_record.get('remarks'):
-                        story.append(Paragraph(f"📝 <b>Remarks:</b> {usage_record['remarks']}", self.styles['Normal']))
-                        story.append(Spacer(1, 10))
-                    
                     # Process details
                     if 'details' in usage_record and isinstance(usage_record['details'], list):
                         all_records.extend(usage_record['details'])
@@ -964,141 +1128,157 @@ class ServerPMPDFGenerator:
                 if isinstance(record, dict):
                     # Add record separator if multiple records
                     if record_index > 0:
-                        story.append(Spacer(1, 12))
+                        story.append(Spacer(1, 15))
                     
                     # Memory Usage Details Section
                     memory_details = record.get('memoryUsageDetails', [])
                     if memory_details:
-                        memory_title = "💾 Memory Usage Check:"
+                        memory_title = "Memory Usage Check:"
                         story.append(Paragraph(memory_title, self.styles['SectionHeader']))
                         story.append(Spacer(1, 6))
                         
-                        # Create memory usage table
+                        # Create memory usage table with exact styling as Server Health Check
                         memory_table_data = [['S/N', 'Machine Name', 'Memory Size', 'Memory In Use (%)', 'Memory In Used < 90%? *Historical server < 90%?']]
                         
                         for detail_index, detail in enumerate(memory_details):
                             serial_no = detail.get('serialNo', str(detail_index + 1))
-                            server_name = detail.get('serverName', 'N/A')
-                            memory_size = detail.get('memorySize', 'N/A')
-                            memory_usage = detail.get('memoryUsagePercentage', 'N/A')
-                            result_status = detail.get('resultStatusName', 'N/A')
+                            server_name = detail.get('serverName', '')
+                            memory_size = detail.get('memorySize', '')
+                            memory_usage = detail.get('memoryUsagePercentage', '')
+                            result_status = detail.get('resultStatusName', '')
                             
-                            # Format result status with indicators
-                            if result_status and result_status.lower() in ['pass', 'ok', 'good', 'yes']:
-                                result_display = f"✅ {result_status}"
-                            elif result_status and result_status.lower() in ['fail', 'error', 'bad', 'no']:
-                                result_display = f"❌ {result_status}"
-                            elif result_status and result_status.lower() in ['warning', 'caution']:
-                                result_display = f"⚠️ {result_status}"
-                            else:
-                                result_display = result_status
-                            
-                            memory_usage_display = f"{memory_usage}%" if memory_usage != 'N/A' else 'N/A'
+                            memory_usage_display = f"{memory_usage}%" if memory_usage else ''
                             
                             memory_table_data.append([
-                                serial_no, server_name, memory_size, memory_usage_display, result_display
+                                str(serial_no) if serial_no else '',
+                                str(server_name) if server_name else '',
+                                str(memory_size) if memory_size else '',
+                                str(memory_usage_display) if memory_usage_display else '',
+                                str(result_status) if result_status else ''
                             ])
                         
-                        # Create memory table with improved styling
-                        memory_table = Table(memory_table_data, colWidths=[0.7*inch, 1.5*inch, 1.2*inch, 1.3*inch, 2.3*inch])
+                        # Create memory table with exact styling as Server Health Check
+                        col_width = 6.5 * inch / 5
+                        memory_table = Table(memory_table_data, colWidths=[col_width] * 5)
                         memory_table.setStyle(TableStyle([
-                            # Header styling
-                            ('BACKGROUND', (0, 0), (-1, 0), colors.darkblue),
-                            ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
-                            ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+                            # Header styling - gray background, black text
+                            ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#f5f5f5')),
+                            ('TEXTCOLOR', (0, 0), (-1, 0), colors.black),
+                            ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+                            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
                             ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
-                            ('FONTSIZE', (0, 0), (-1, 0), 9),
-                            ('BOTTOMPADDING', (0, 0), (-1, 0), 8),
+                            ('FONTSIZE', (0, 0), (-1, 0), 10),
                             ('TOPPADDING', (0, 0), (-1, 0), 8),
-                            
-                            # Data rows styling
-                            ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
-                            ('FONTNAME', (0, 1), (-1, -1), 'Helvetica'),
-                            ('FONTSIZE', (0, 1), (-1, -1), 8),
-                            ('TOPPADDING', (0, 1), (-1, -1), 6),
-                            ('BOTTOMPADDING', (0, 1), (-1, -1), 6),
+                            ('BOTTOMPADDING', (0, 0), (-1, 0), 8),
                             ('LEFTPADDING', (0, 0), (-1, -1), 6),
                             ('RIGHTPADDING', (0, 0), (-1, -1), 6),
                             
-                            # Grid and borders
-                            ('GRID', (0, 0), (-1, -1), 1, colors.black),
-                        ]))
-                        story.append(memory_table)
-                        story.append(Spacer(1, 12))
-                    
-                    # CPU Usage Details Section
-                    cpu_details = record.get('cpuUsageDetails', [])
-                    if cpu_details:
-                        cpu_title = "⚡ CPU Usage Check:"
-                        story.append(Paragraph(cpu_title, self.styles['SectionHeader']))
-                        story.append(Spacer(1, 6))
-                        
-                        # Create CPU usage table
-                        cpu_table_data = [['S/N', 'Machine Name', 'CPU Usage (%)', 'CPU Usage < 50%?']]
-                        
-                        for detail_index, detail in enumerate(cpu_details):
-                            serial_no = detail.get('serialNo', str(detail_index + 1))
-                            server_name = detail.get('serverName', 'N/A')
-                            cpu_usage = detail.get('cpuUsagePercentage', 'N/A')
-                            result_status = detail.get('resultStatusName', 'N/A')
-                            
-                            # Format result status with indicators
-                            if result_status and result_status.lower() in ['pass', 'ok', 'good', 'yes']:
-                                result_display = f"✅ {result_status}"
-                            elif result_status and result_status.lower() in ['fail', 'error', 'bad', 'no']:
-                                result_display = f"❌ {result_status}"
-                            elif result_status and result_status.lower() in ['warning', 'caution']:
-                                result_display = f"⚠️ {result_status}"
-                            else:
-                                result_display = result_status
-                            
-                            cpu_usage_display = f"{cpu_usage}%" if cpu_usage != 'N/A' else 'N/A'
-                            
-                            cpu_table_data.append([
-                                serial_no, server_name, cpu_usage_display, result_display
-                            ])
-                        
-                        # Create CPU table with improved styling
-                        cpu_table = Table(cpu_table_data, colWidths=[1*inch, 2*inch, 1.5*inch, 2.5*inch])
-                        cpu_table.setStyle(TableStyle([
-                            # Header styling
-                            ('BACKGROUND', (0, 0), (-1, 0), colors.darkblue),
-                            ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
-                            ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
-                            ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
-                            ('FONTSIZE', (0, 0), (-1, 0), 10),
-                            ('BOTTOMPADDING', (0, 0), (-1, 0), 8),
-                            ('TOPPADDING', (0, 0), (-1, 0), 8),
-                            
-                            # Data rows styling
-                            ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+                            # Data rows styling - white background, black text
+                            ('BACKGROUND', (0, 1), (-1, -1), colors.white),
+                            ('TEXTCOLOR', (0, 1), (-1, -1), colors.black),
                             ('FONTNAME', (0, 1), (-1, -1), 'Helvetica'),
                             ('FONTSIZE', (0, 1), (-1, -1), 9),
                             ('TOPPADDING', (0, 1), (-1, -1), 6),
                             ('BOTTOMPADDING', (0, 1), (-1, -1), 6),
-                            ('LEFTPADDING', (0, 0), (-1, -1), 8),
-                            ('RIGHTPADDING', (0, 0), (-1, -1), 8),
                             
                             # Grid and borders
-                            ('GRID', (0, 0), (-1, -1), 1, colors.black),
+                            ('GRID', (0, 0), (-1, -1), 1, colors.HexColor('#d0d0d0')),
+                        ]))
+                        story.append(memory_table)
+                        story.append(Spacer(1, 15))
+                    
+                    # CPU Usage Details Section
+                    cpu_details = record.get('cpuUsageDetails', [])
+                    if cpu_details:
+                        cpu_title = "CPU Usage Check:"
+                        story.append(Paragraph(cpu_title, self.styles['SectionHeader']))
+                        story.append(Spacer(1, 6))
+                        
+                        # Create CPU usage table with exact styling as Server Health Check
+                        cpu_table_data = [['S/N', 'Machine Name', 'CPU Usage (%)', 'CPU Usage < 50%?']]
+                        
+                        for detail_index, detail in enumerate(cpu_details):
+                            serial_no = detail.get('serialNo', str(detail_index + 1))
+                            server_name = detail.get('serverName', '')
+                            cpu_usage = detail.get('cpuUsagePercentage', '')
+                            result_status = detail.get('resultStatusName', '')
+                            
+                            cpu_usage_display = f"{cpu_usage}%" if cpu_usage else ''
+                            
+                            cpu_table_data.append([
+                                str(serial_no) if serial_no else '',
+                                str(server_name) if server_name else '',
+                                str(cpu_usage_display) if cpu_usage_display else '',
+                                str(result_status) if result_status else ''
+                            ])
+                        
+                        # Create CPU table with exact styling as Server Health Check
+                        col_width = 6.5 * inch / 4
+                        cpu_table = Table(cpu_table_data, colWidths=[col_width] * 4)
+                        cpu_table.setStyle(TableStyle([
+                            # Header styling - gray background, black text
+                            ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#f5f5f5')),
+                            ('TEXTCOLOR', (0, 0), (-1, 0), colors.black),
+                            ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+                            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+                            ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+                            ('FONTSIZE', (0, 0), (-1, 0), 10),
+                            ('TOPPADDING', (0, 0), (-1, 0), 8),
+                            ('BOTTOMPADDING', (0, 0), (-1, 0), 8),
+                            ('LEFTPADDING', (0, 0), (-1, -1), 6),
+                            ('RIGHTPADDING', (0, 0), (-1, -1), 6),
+                            
+                            # Data rows styling - white background, black text
+                            ('BACKGROUND', (0, 1), (-1, -1), colors.white),
+                            ('TEXTCOLOR', (0, 1), (-1, -1), colors.black),
+                            ('FONTNAME', (0, 1), (-1, -1), 'Helvetica'),
+                            ('FONTSIZE', (0, 1), (-1, -1), 9),
+                            ('TOPPADDING', (0, 1), (-1, -1), 6),
+                            ('BOTTOMPADDING', (0, 1), (-1, -1), 6),
+                            
+                            # Grid and borders
+                            ('GRID', (0, 0), (-1, -1), 1, colors.HexColor('#d0d0d0')),
                         ]))
                         story.append(cpu_table)
-                        story.append(Spacer(1, 12))
+                        story.append(Spacer(1, 15))
                     
                     # No details message if neither CPU nor memory data available
                     if not memory_details and not cpu_details:
                         no_details_text = "No CPU or memory usage details available for this record"
                         story.append(Paragraph(no_details_text, self.styles['Normal']))
-                        story.append(Spacer(1, 12))
+                        story.append(Spacer(1, 15))
         else:
             no_data_text = "No CPU and memory usage data available"
             story.append(Paragraph(no_data_text, self.styles['Normal']))
+            story.append(Spacer(1, 15))
         
-        # Add remarks section
+        # 6. Remarks section - matching previous sections pattern
         remarks = ""
         if data and len(data) > 0:
-            # Get remarks from the first record (already handled above in nested structure processing)
-            pass  # Remarks are already added above when processing nested structure
+            for usage_record in data:
+                if isinstance(usage_record, dict) and usage_record.get('remarks'):
+                    remarks = usage_record['remarks']
+                    break
+        
+        if remarks:
+            # Create remarks container with consistent styling
+            remarks_title = Paragraph("Remarks:", self.styles['SectionHeader'])
+            remarks_content = Paragraph(f"{remarks}", self.styles['Normal'])
+            
+            # Create bordered container for remarks - matching Server Health Check exactly
+            remarks_container = Table([[remarks_title], [remarks_content]], colWidths=[6.5*inch])
+            remarks_container.setStyle(TableStyle([
+                ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+                ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+                ('BACKGROUND', (0, 0), (-1, -1), colors.white),
+                ('BOX', (0, 0), (-1, -1), 1, colors.HexColor('#d0d0d0')),
+                ('TOPPADDING', (0, 0), (-1, -1), 10),
+                ('BOTTOMPADDING', (0, 0), (-1, -1), 10),
+                ('LEFTPADDING', (0, 0), (-1, -1), 10),
+                ('RIGHTPADDING', (0, 0), (-1, -1), 10),
+            ]))
+            
+            story.append(remarks_container)
         
         return story
 
@@ -1191,7 +1371,7 @@ class ServerPMPDFGenerator:
                         
                         table_data.append([
                             str(detail_index + 1),
-                            detail.get('serverName', 'N/A'),
+                            detail.get('serverName', ''),
                             status_text
                         ])
                     
@@ -1243,7 +1423,7 @@ class ServerPMPDFGenerator:
                         
                         table_data.append([
                             str(detail_index + 1),
-                            detail.get('serverName', 'N/A'),
+                            detail.get('serverName', ''),
                             status_text
                         ])
                     
@@ -1345,11 +1525,11 @@ class ServerPMPDFGenerator:
                 elif status and status.lower() in ['warning', 'caution', 'pending']:
                     status_text = f"⚠️ {status}"
                 else:
-                    status_text = status or 'N/A'
+                    status_text = status or ''
                 
                 table_data.append([
-                    row.get('serialNo', 'N/A'),
-                    row.get('machineName', 'N/A'),
+                    row.get('serialNo', ''),
+                    row.get('machineName', ''),
                     status_text
                 ])
             
@@ -1492,10 +1672,10 @@ class ServerPMPDFGenerator:
                         if isinstance(detail, dict):
                             row = []
                             for col in columns:
-                                value = detail.get(col, 'N/A')
+                                value = detail.get(col, '')
                                 
                                 # Format specific columns
-                                if col == 'resultStatusName' and value and value != 'N/A':
+                                if col == 'resultStatusName' and value and value != '':
                                     # Add status indicators
                                     if value.lower() in ['pass', 'ok', 'good', 'active', 'running', 'online']:
                                         value = f"✅ {value}"
@@ -1503,19 +1683,19 @@ class ServerPMPDFGenerator:
                                         value = f"❌ {value}"
                                     elif value.lower() in ['warning', 'caution', 'pending']:
                                         value = f"⚠️ {value}"
-                                elif col.endswith('Date') and value and value != 'N/A':
+                                elif col.endswith('Date') and value and value != '':
                                     value = self._format_date(value)
                                 
-                                row.append(str(value) if value is not None else 'N/A')
+                                row.append(str(value) if value is not None else '')
                             table_data.append(row)
                 else:
                     # Handle direct item structure (backward compatibility)
                     row = []
                     for col in columns:
-                        value = item.get(col, 'N/A')
+                        value = item.get(col, '')
                         
                         # Format specific columns
-                        if col == 'resultStatusName' and value and value != 'N/A':
+                        if col == 'resultStatusName' and value and value != '':
                             # Add status indicators
                             if value.lower() in ['pass', 'ok', 'good', 'active', 'running', 'online']:
                                 value = f"✅ {value}"
@@ -1523,14 +1703,14 @@ class ServerPMPDFGenerator:
                                 value = f"❌ {value}"
                             elif value.lower() in ['warning', 'caution', 'pending']:
                                 value = f"⚠️ {value}"
-                        elif col.endswith('Date') and value and value != 'N/A':
+                        elif col.endswith('Date') and value and value != '':
                             value = self._format_date(value)
                         
-                        row.append(str(value) if value is not None else 'N/A')
+                        row.append(str(value) if value is not None else '')
                     table_data.append(row)
             else:
                 # Handle non-dict data
-                table_data.append([str(item)] + ['N/A'] * (len(columns) - 1))
+                table_data.append([str(item)] + [''] * (len(columns) - 1))
         
         # Create table
         if len(table_data) > 1:  # Has data beyond headers
@@ -1580,7 +1760,7 @@ class ServerPMPDFGenerator:
     def _get_status_label(self, status_id):
         """Get status label from status ID"""
         if not status_id:
-            return 'N/A'
+            return ''
         
         # Common status mappings (you may need to adjust based on your actual data)
         status_mappings = {

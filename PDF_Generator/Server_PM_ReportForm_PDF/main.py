@@ -385,7 +385,7 @@ class ServerPMPDFService:
                 # Component data - map from API response to expected structure
                 'serverHealthData': api_data.get('pmServerHealths', []),
                 'hardDriveHealthData': api_data.get('pmServerHardDriveHealths', []),
-                'diskUsageData': api_data.get('pmServerDiskUsages', []),
+                'diskUsageData': api_data.get('pmServerDiskUsageHealths', []),
                 'cpuAndMemoryData': api_data.get('pmServerCPUAndRAMUsages', []),
                 'networkHealthData': api_data.get('pmServerNetworkHealths', []),
                 'willowlynxProcessData': api_data.get('pmServerWillowlynxProcessStatuses', []),
