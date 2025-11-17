@@ -386,7 +386,7 @@ class ServerPMPDFService:
                 'serverHealthData': api_data.get('pmServerHealths', []),
                 'hardDriveHealthData': api_data.get('pmServerHardDriveHealths', []),
                 'diskUsageData': api_data.get('pmServerDiskUsageHealths', []),
-                'cpuAndMemoryData': api_data.get('pmServerCPUAndRAMUsages', []),
+                'cpuAndMemoryData': api_data.get('pmServerCPUAndMemoryUsages', []),
                 'networkHealthData': api_data.get('pmServerNetworkHealths', []),
                 'willowlynxProcessData': api_data.get('pmServerWillowlynxProcessStatuses', []),
                 'willowlynxNetworkData': api_data.get('pmServerWillowlynxNetworkStatuses', []),
