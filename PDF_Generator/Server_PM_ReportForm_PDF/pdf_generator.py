@@ -1622,7 +1622,7 @@ class ServerPMPDFGenerator:
             self.styles['Normal']
         ))
         story.append(Spacer(1, 10))
-        self._add_reference_image(story, "WillowlynxHistoricalReport.png", width=3*inch, height=1.75*inch)
+        self._add_reference_image(story, "WillowlynxHistoricalReport.png", width=2*inch, height=1.2*inch)
 
         status_text = self._format_status_badge(
             record.get('yesNoStatusName')
@@ -1761,13 +1761,15 @@ class ServerPMPDFGenerator:
                     status_text = self._resolve_yes_no_status(detail) or self._format_status_badge(
                         self._get_status_label(detail.get('yesNoStatusID'))
                     )
-                    rows.append([
-                        Paragraph(str(detail.get('serialNo') or detail_index), ParagraphStyle(
-                            'MonthlyDBSN', parent=self.styles['Normal'], alignment=TA_CENTER
-                        )),
-                        Paragraph(detail.get('serverName', 'N/A'), self.styles['Normal']),
-                        self._build_status_chip(status_text)
-                    ])
+                rows.append([
+                    Paragraph(str(detail.get('serialNo') or detail_index), ParagraphStyle(
+                        'MonthlyDBSN', parent=self.styles['Normal'], alignment=TA_CENTER
+                    )),
+                    Paragraph(detail.get('serverName', 'N/A'), self.styles['Normal']),
+                    Paragraph(status_text or 'N/A', ParagraphStyle(
+                        'MonthlyDBStatus', parent=self.styles['Normal'], alignment=TA_CENTER
+                    ))
+                ])
 
                 table = Table(rows, colWidths=[0.8*inch, 3.6*inch, 1.6*inch])
                 table.setStyle(TableStyle([
@@ -1775,6 +1777,7 @@ class ServerPMPDFGenerator:
                     ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
                     ('ALIGN', (0, 0), (-1, 0), 'CENTER'),
                     ('ALIGN', (0, 1), (1, -1), 'LEFT'),
+                    ('ALIGN', (2, 1), (2, -1), 'CENTER'),
                     ('GRID', (0, 0), (-1, -1), 0.6, colors.HexColor('#d0d0d0')),
                     ('TOPPADDING', (0, 0), (-1, -1), 8),
                     ('BOTTOMPADDING', (0, 0), (-1, -1), 8),
@@ -1916,7 +1919,9 @@ class ServerPMPDFGenerator:
                         'TimeSyncSN', parent=self.styles['Normal'], alignment=TA_CENTER
                     )),
                     Paragraph(item['machineName'], self.styles['Normal']),
-                    self._build_status_chip(item['status'])
+                    Paragraph(item['status'] or 'N/A', ParagraphStyle(
+                        'TimeSyncStatus', parent=self.styles['Normal'], alignment=TA_CENTER
+                    ))
                 ])
 
             table = Table(rows, colWidths=[0.8*inch, 3.2*inch, 1.8*inch])
@@ -1926,6 +1931,7 @@ class ServerPMPDFGenerator:
                 ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
                 ('ALIGN', (0, 0), (-1, 0), 'CENTER'),
                 ('ALIGN', (0, 1), (1, -1), 'LEFT'),
+                ('ALIGN', (2, 1), (2, -1), 'CENTER'),
                 ('GRID', (0, 0), (-1, -1), 0.8, colors.HexColor('#e0e0e0')),
                 ('FONTNAME', (0, 1), (-1, -1), 'Helvetica'),
                 ('FONTSIZE', (0, 0), (-1, -1), 9),
@@ -1990,7 +1996,9 @@ class ServerPMPDFGenerator:
                 )),
                 Paragraph(detail.get('serverName', 'N/A'), self.styles['Normal']),
                 Paragraph(detail.get('hotFixName') or detail.get('latestHotFixsApplied') or 'N/A', self.styles['Normal']),
-                self._build_status_chip(status_text)
+                Paragraph(status_text or 'N/A', ParagraphStyle(
+                    'HotfixStatus', parent=self.styles['Normal'], alignment=TA_CENTER
+                ))
             ])
 
         table = Table(table_data, colWidths=[0.8*inch, 2.4*inch, 2.4*inch, 1.2*inch])
@@ -2088,7 +2096,9 @@ class ServerPMPDFGenerator:
                 [Paragraph(f"<b>Procedure:</b><br/>{steps}", self.styles['Normal']), ''],
                 [
                     Paragraph(f"<b>Expected Result:</b><br/>{scenario['expected']}", self.styles['Normal']),
-                    self._build_status_chip(result_text, width=1.0*inch)
+                    Paragraph(result_text or 'N/A', ParagraphStyle(
+                        'FailoverResult', parent=self.styles['Normal'], alignment=TA_CENTER
+                    ))
                 ]
             ], colWidths=[4.9*inch, 1.1*inch])
             card_table.setStyle(TableStyle([
@@ -2151,7 +2161,9 @@ class ServerPMPDFGenerator:
                     )),
                     Paragraph(item.get('commandInput', 'N/A'), self.styles['Normal']),
                     Paragraph(item.get('asaFirewallStatusName', 'N/A'), self.styles['Normal']),
-                    self._build_status_chip(item.get('resultStatusName'), width=1.3*inch)
+                    Paragraph(item.get('resultStatusName') or 'N/A', ParagraphStyle(
+                        'ASAStatus', parent=self.styles['Normal'], alignment=TA_CENTER
+                    ))
                 ])
 
             table = Table(table_data, colWidths=[0.6*inch, 2.3*inch, 2.3*inch, 1.4*inch])
@@ -2160,6 +2172,7 @@ class ServerPMPDFGenerator:
                 ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
                 ('ALIGN', (0, 0), (-1, 0), 'CENTER'),
                 ('ALIGN', (0, 1), (2, -1), 'LEFT'),
+                ('ALIGN', (3, 1), (3, -1), 'CENTER'),
                 ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor('#cccccc')),
                 ('FONTNAME', (0, 1), (-1, -1), 'Helvetica'),
                 ('FONTSIZE', (0, 0), (-1, -1), 9),
@@ -2394,6 +2407,14 @@ class ServerPMPDFGenerator:
         if not details:
             return None
 
+        header_style = ParagraphStyle(
+            'BackupHeaderText',
+            parent=self.styles['Normal'],
+            alignment=TA_CENTER,
+            fontName='Helvetica-Bold',
+            leading=12
+        )
+
         rows = []
         for idx, detail in enumerate(details, start=1):
             status_text = self._resolve_yes_no_status(detail) or self._format_status_badge(
@@ -2402,12 +2423,20 @@ class ServerPMPDFGenerator:
             rows.append([
                 Paragraph(str(idx), ParagraphStyle('BackupSN', parent=self.styles['Normal'], alignment=TA_CENTER)),
                 Paragraph(detail.get('serverName', 'N/A'), self.styles['Normal']),
-                self._build_status_chip(status_text, width=1.6*inch)
+                Paragraph(status_text or 'N/A', ParagraphStyle(
+                    'BackupStatus', parent=self.styles['Normal'], alignment=TA_CENTER
+                ))
             ])
 
         table = Table(
-            [['S/N', 'Item', status_header]] + rows,
-            colWidths=[0.8*inch, 3.4*inch, 1.8*inch]
+            [
+                [
+                    Paragraph('S/N', header_style),
+                    Paragraph('Item', header_style),
+                    Paragraph(status_header, header_style)
+                ]
+            ] + rows,
+            colWidths=[0.8*inch, 3.0*inch, 2.2*inch]
         )
         table.setStyle(TableStyle([
             ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#1976d2')),
@@ -2415,6 +2444,7 @@ class ServerPMPDFGenerator:
             ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
             ('ALIGN', (0, 0), (-1, 0), 'CENTER'),
             ('ALIGN', (0, 1), (1, -1), 'LEFT'),
+            ('ALIGN', (2, 1), (2, -1), 'CENTER'),
             ('FONTNAME', (0, 1), (-1, -1), 'Helvetica'),
             ('GRID', (0, 0), (-1, -1), 0.8, colors.HexColor('#e0e0e0')),
             ('FONTSIZE', (0, 0), (-1, -1), 9),

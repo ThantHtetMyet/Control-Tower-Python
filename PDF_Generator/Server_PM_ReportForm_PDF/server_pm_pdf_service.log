@@ -5569,3 +5569,1278 @@ paragraph text '<para>Check Instructions:</b><br/> Check Server Front Panel LED 
 2025-11-17 13:54:35,539 - __main__ - INFO - [MQTT] Published to topic: controltower/server_pm_reportform_pdf_status/db052ee8-601d-4771-a2e2-0beaf50f3589
 2025-11-17 13:56:15,715 - __main__ - INFO - 
 2025-11-17 13:56:15,716 - __main__ - INFO - Cleaning up resources...
+2025-11-17 22:52:01,376 - __main__ - INFO - 
+2025-11-17 22:52:01,376 - __main__ - INFO - Starting Server PM PDF Service...
+2025-11-17 22:52:01,377 - __main__ - INFO - PDF output directory: C:\Users\thanthtet.myet\Documents\01_Willowglen\B_001_Workplace\ControlTower\ControlTower_Python\PDF_Generator\Server_PM_ReportForm_PDF\PDF_File
+2025-11-17 22:52:01,377 - __main__ - INFO - Authenticating with API...
+2025-11-17 22:52:01,377 - __main__ - INFO - 
+2025-11-17 22:52:01,377 - __main__ - INFO - [AUTH] Authenticating with API...
+2025-11-17 22:52:01,395 - __main__ - INFO - [AUTH] POST https://localhost:7145/api/Auth/signin
+2025-11-17 22:52:01,396 - __main__ - INFO - [AUTH] Email: system@gmail.com
+2025-11-17 22:52:03,693 - __main__ - INFO - 
+2025-11-17 22:52:03,695 - __main__ - ERROR - [AUTH] Authentication error: Cannot connect to host localhost:7145 ssl:default [The remote computer refused the network connection]
+2025-11-17 22:52:03,695 - __main__ - ERROR - Failed to authenticate with API. Service cannot start.
+2025-11-17 22:52:03,696 - __main__ - INFO - 
+2025-11-17 22:52:03,697 - __main__ - INFO - Cleaning up resources...
+2025-11-17 22:52:03,697 - __main__ - INFO - 
+2025-11-17 22:52:03,698 - __main__ - INFO - Cleanup completed
+2025-11-17 22:53:27,610 - __main__ - INFO - 
+2025-11-17 22:53:27,610 - __main__ - INFO - Starting Server PM PDF Service...
+2025-11-17 22:53:27,611 - __main__ - INFO - PDF output directory: C:\Users\thanthtet.myet\Documents\01_Willowglen\B_001_Workplace\ControlTower\ControlTower_Python\PDF_Generator\Server_PM_ReportForm_PDF\PDF_File
+2025-11-17 22:53:27,611 - __main__ - INFO - Authenticating with API...
+2025-11-17 22:53:27,611 - __main__ - INFO - 
+2025-11-17 22:53:27,611 - __main__ - INFO - [AUTH] Authenticating with API...
+2025-11-17 22:53:27,637 - __main__ - INFO - [AUTH] POST https://localhost:7145/api/Auth/signin
+2025-11-17 22:53:27,638 - __main__ - INFO - [AUTH] Email: system@gmail.com
+2025-11-17 22:53:37,072 - __main__ - INFO - 
+2025-11-17 22:53:37,073 - __main__ - INFO - [AUTH] Response Status: 200
+2025-11-17 22:53:37,080 - __main__ - INFO - 
+2025-11-17 22:53:37,081 - __main__ - INFO - [AUTH] Authentication successful
+2025-11-17 22:53:37,082 - __main__ - INFO - [AUTH] Token expires at: 2025-11-18T14:53:37.0182833Z
+2025-11-17 22:53:37,089 - __main__ - INFO - Connecting to MQTT broker: localhost:1883
+2025-11-17 22:53:37,102 - __main__ - INFO - 
+2025-11-17 22:53:37,103 - __main__ - INFO - 
+2025-11-17 22:53:37,103 - __main__ - INFO - Server PM PDF Service started successfully
+2025-11-17 22:53:37,105 - __main__ - INFO - Connected to MQTT broker successfully
+2025-11-17 22:53:37,106 - __main__ - INFO - Waiting for MQTT messages...
+2025-11-17 22:53:37,107 - __main__ - INFO - Subscribed to topic: controltower/server_pm_reportform_pdf/+
+2025-11-17 22:54:59,429 - __main__ - INFO - 
+2025-11-17 22:54:59,429 - __main__ - INFO - [STEP 1] Received MQTT message for report_id: db052ee8-601d-4771-a2e2-0beaf50f3589
+2025-11-17 22:54:59,430 - __main__ - INFO - [DATA] Message data: {'report_id': 'db052ee8-601d-4771-a2e2-0beaf50f3589', 'requested_by': '11111111-1111-1111-1111-111111111111', 'timestamp': '2025-11-17T14:54:59.396Z'}
+2025-11-17 22:54:59,433 - __main__ - INFO - 
+2025-11-17 22:54:59,433 - __main__ - INFO - [STEP 2] Starting PDF processing for report_id: db052ee8-601d-4771-a2e2-0beaf50f3589
+2025-11-17 22:54:59,434 - __main__ - INFO - [STATUS UPDATE] db052ee8-601d-4771-a2e2-0beaf50f3589 -> PROCESSING - PDF generation started
+2025-11-17 22:54:59,435 - __main__ - INFO - [MQTT] Published to topic: controltower/server_pm_reportform_pdf_status/db052ee8-601d-4771-a2e2-0beaf50f3589
+2025-11-17 22:54:59,438 - __main__ - INFO - 
+2025-11-17 22:54:59,438 - __main__ - INFO - [STEP 3] Initializing database manager...
+2025-11-17 22:54:59,439 - __main__ - INFO - 
+2025-11-17 22:54:59,439 - __main__ - INFO - [STEP 4] Initializing PDF generator...
+2025-11-17 22:54:59,442 - __main__ - INFO - 
+2025-11-17 22:54:59,442 - __main__ - INFO - [STEP 5] Calling API endpoint /api/PMReportFormServer/db052ee8-601d-4771-a2e2-0beaf50f3589
+2025-11-17 22:54:59,445 - __main__ - INFO - 
+2025-11-17 22:54:59,446 - __main__ - INFO - [API] URL: https://localhost:7145/api/PMReportFormServer/db052ee8-601d-4771-a2e2-0beaf50f3589
+2025-11-17 22:54:59,540 - __main__ - INFO - 
+2025-11-17 22:54:59,541 - __main__ - INFO - [API] Making authenticated HTTP GET request...
+2025-11-17 22:54:59,541 - __main__ - INFO - [API] Request timeout: 10 seconds
+2025-11-17 22:54:59,542 - __main__ - INFO - [API] SSL verification disabled for localhost
+2025-11-17 22:54:59,656 - __main__ - INFO - 
+2025-11-17 22:54:59,656 - __main__ - INFO - [API] Response Status: 200
+2025-11-17 22:54:59,657 - __main__ - INFO - 
+2025-11-17 22:54:59,658 - __main__ - INFO - [API SUCCESS] Data retrieved successfully (Size: 27045 chars)
+2025-11-17 22:54:59,658 - __main__ - INFO - [API] Response Keys: ['reportForm', 'pmReportFormServer', 'pmServerHealths', 'pmServerHardDriveHealths', 'pmServerDiskUsageHealths', 'pmServerCPUAndMemoryUsages', 'pmServerNetworkHealths', 'pmServerWillowlynxProcessStatuses', 'pmServerWillowlynxNetworkStatuses', 'pmServerWillowlynxRTUStatuses', 'pmServerWillowlynxHistoricalTrends', 'pmServerWillowlynxHistoricalReports', 'pmServerWillowlynxCCTVCameras', 'pmServerMonthlyDatabaseCreations', 'pmServerDatabaseBackups', 'pmServerTimeSyncs', 'pmServerHotFixes', 'pmServerFailOvers', 'pmServerASAFirewalls', 'pmServerSoftwarePatchSummaries']
+2025-11-17 22:54:59,660 - __main__ - INFO - 
+2025-11-17 22:54:59,661 - __main__ - INFO - [STEP 5 SUCCESS] API data retrieved successfully
+2025-11-17 22:54:59,661 - __main__ - INFO - 
+2025-11-17 22:54:59,662 - __main__ - INFO - [STEP 6] Transforming API data for PDF generation...
+2025-11-17 22:54:59,662 - __main__ - INFO - [STEP 6 SUCCESS] Data transformation completed
+2025-11-17 22:54:59,663 - __main__ - INFO - 
+2025-11-17 22:54:59,663 - __main__ - INFO - [STEP 7] Using job number: 8401L0067
+2025-11-17 22:54:59,663 - __main__ - INFO - 
+2025-11-17 22:54:59,664 - __main__ - INFO - [STEP 8] Generating comprehensive PDF...
+2025-11-17 22:54:59,664 - pdf_generator - INFO - Converting API response data to JSON format...
+2025-11-17 22:54:59,667 - pdf_generator - INFO - Parsing JSON data for PDF generation...
+2025-11-17 22:54:59,667 - pdf_generator - INFO - JSON conversion and parsing completed successfully
+2025-11-17 22:55:00,787 - pdf_generator - INFO - PDF generated successfully: PDF_File\Server_PM_Report_8401L0067_20251117_225459.pdf
+2025-11-17 22:55:00,788 - __main__ - INFO - 
+2025-11-17 22:55:00,789 - __main__ - INFO - [STEP 8 SUCCESS] PDF generated successfully at: PDF_File\Server_PM_Report_8401L0067_20251117_225459.pdf
+2025-11-17 22:55:00,790 - __main__ - INFO - [STATUS UPDATE] db052ee8-601d-4771-a2e2-0beaf50f3589 -> COMPLETED - PDF generated successfully: Server_PM_Report_8401L0067_20251117_225459.pdf
+2025-11-17 22:55:00,792 - __main__ - INFO - [MQTT] Published to topic: controltower/server_pm_reportform_pdf_status/db052ee8-601d-4771-a2e2-0beaf50f3589
+2025-11-17 23:47:49,493 - __main__ - INFO - 
+2025-11-17 23:47:49,494 - __main__ - INFO - Cleaning up resources...
+2025-11-17 23:47:56,584 - __main__ - INFO - 
+2025-11-17 23:47:56,584 - __main__ - INFO - Starting Server PM PDF Service...
+2025-11-17 23:47:56,585 - __main__ - INFO - PDF output directory: C:\Users\thanthtet.myet\Documents\01_Willowglen\B_001_Workplace\ControlTower\ControlTower_Python\PDF_Generator\Server_PM_ReportForm_PDF\PDF_File
+2025-11-17 23:47:56,585 - __main__ - INFO - Authenticating with API...
+2025-11-17 23:47:56,585 - __main__ - INFO - 
+2025-11-17 23:47:56,585 - __main__ - INFO - [AUTH] Authenticating with API...
+2025-11-17 23:47:56,611 - __main__ - INFO - [AUTH] POST https://localhost:7145/api/Auth/signin
+2025-11-17 23:47:56,612 - __main__ - INFO - [AUTH] Email: system@gmail.com
+2025-11-17 23:47:57,041 - __main__ - INFO - 
+2025-11-17 23:47:57,041 - __main__ - INFO - [AUTH] Response Status: 200
+2025-11-17 23:47:57,042 - __main__ - INFO - 
+2025-11-17 23:47:57,042 - __main__ - INFO - [AUTH] Authentication successful
+2025-11-17 23:47:57,042 - __main__ - INFO - [AUTH] Token expires at: 2025-11-18T15:47:57.0367806Z
+2025-11-17 23:47:57,043 - __main__ - INFO - Connecting to MQTT broker: localhost:1883
+2025-11-17 23:47:57,047 - __main__ - INFO - 
+2025-11-17 23:47:57,047 - __main__ - INFO - 
+2025-11-17 23:47:57,047 - __main__ - INFO - Server PM PDF Service started successfully
+2025-11-17 23:47:57,047 - __main__ - INFO - Connected to MQTT broker successfully
+2025-11-17 23:47:57,047 - __main__ - INFO - Waiting for MQTT messages...
+2025-11-17 23:47:57,048 - __main__ - INFO - Subscribed to topic: controltower/server_pm_reportform_pdf/+
+2025-11-17 23:48:11,591 - __main__ - INFO - 
+2025-11-17 23:48:11,592 - __main__ - INFO - [STEP 1] Received MQTT message for report_id: db052ee8-601d-4771-a2e2-0beaf50f3589
+2025-11-17 23:48:11,592 - __main__ - INFO - [DATA] Message data: {'report_id': 'db052ee8-601d-4771-a2e2-0beaf50f3589', 'requested_by': '11111111-1111-1111-1111-111111111111', 'timestamp': '2025-11-17T15:48:11.5784478Z'}
+2025-11-17 23:48:11,596 - __main__ - INFO - 
+2025-11-17 23:48:11,597 - __main__ - INFO - [STEP 2] Starting PDF processing for report_id: db052ee8-601d-4771-a2e2-0beaf50f3589
+2025-11-17 23:48:11,598 - __main__ - INFO - [STATUS UPDATE] db052ee8-601d-4771-a2e2-0beaf50f3589 -> PROCESSING - PDF generation started
+2025-11-17 23:48:11,598 - __main__ - INFO - [MQTT] Published to topic: controltower/server_pm_reportform_pdf_status/db052ee8-601d-4771-a2e2-0beaf50f3589
+2025-11-17 23:48:11,599 - __main__ - INFO - 
+2025-11-17 23:48:11,600 - __main__ - INFO - [STEP 3] Initializing database manager...
+2025-11-17 23:48:11,600 - __main__ - INFO - 
+2025-11-17 23:48:11,601 - __main__ - INFO - [STEP 4] Initializing PDF generator...
+2025-11-17 23:48:11,604 - __main__ - INFO - 
+2025-11-17 23:48:11,604 - __main__ - INFO - [STEP 5] Calling API endpoint /api/PMReportFormServer/db052ee8-601d-4771-a2e2-0beaf50f3589
+2025-11-17 23:48:11,607 - __main__ - INFO - 
+2025-11-17 23:48:11,608 - __main__ - INFO - [API] URL: https://localhost:7145/api/PMReportFormServer/db052ee8-601d-4771-a2e2-0beaf50f3589
+2025-11-17 23:48:11,698 - __main__ - INFO - 
+2025-11-17 23:48:11,699 - __main__ - INFO - [API] Making authenticated HTTP GET request...
+2025-11-17 23:48:11,699 - __main__ - INFO - [API] Request timeout: 10 seconds
+2025-11-17 23:48:11,700 - __main__ - INFO - [API] SSL verification disabled for localhost
+2025-11-17 23:48:12,394 - __main__ - INFO - 
+2025-11-17 23:48:12,395 - __main__ - INFO - [API] Response Status: 200
+2025-11-17 23:48:12,398 - __main__ - INFO - 
+2025-11-17 23:48:12,399 - __main__ - INFO - [API SUCCESS] Data retrieved successfully (Size: 27045 chars)
+2025-11-17 23:48:12,400 - __main__ - INFO - [API] Response Keys: ['reportForm', 'pmReportFormServer', 'pmServerHealths', 'pmServerHardDriveHealths', 'pmServerDiskUsageHealths', 'pmServerCPUAndMemoryUsages', 'pmServerNetworkHealths', 'pmServerWillowlynxProcessStatuses', 'pmServerWillowlynxNetworkStatuses', 'pmServerWillowlynxRTUStatuses', 'pmServerWillowlynxHistoricalTrends', 'pmServerWillowlynxHistoricalReports', 'pmServerWillowlynxCCTVCameras', 'pmServerMonthlyDatabaseCreations', 'pmServerDatabaseBackups', 'pmServerTimeSyncs', 'pmServerHotFixes', 'pmServerFailOvers', 'pmServerASAFirewalls', 'pmServerSoftwarePatchSummaries']
+2025-11-17 23:48:12,404 - __main__ - INFO - 
+2025-11-17 23:48:12,405 - __main__ - INFO - [STEP 5 SUCCESS] API data retrieved successfully
+2025-11-17 23:48:12,405 - __main__ - INFO - 
+2025-11-17 23:48:12,406 - __main__ - INFO - [STEP 6] Transforming API data for PDF generation...
+2025-11-17 23:48:12,407 - __main__ - INFO - [STEP 6 SUCCESS] Data transformation completed
+2025-11-17 23:48:12,407 - __main__ - INFO - 
+2025-11-17 23:48:12,408 - __main__ - INFO - [STEP 7] Using job number: 8401L0067
+2025-11-17 23:48:12,408 - __main__ - INFO - 
+2025-11-17 23:48:12,409 - __main__ - INFO - [STEP 8] Generating comprehensive PDF...
+2025-11-17 23:48:12,409 - pdf_generator - INFO - Converting API response data to JSON format...
+2025-11-17 23:48:12,411 - pdf_generator - INFO - Parsing JSON data for PDF generation...
+2025-11-17 23:48:12,414 - pdf_generator - INFO - JSON conversion and parsing completed successfully
+2025-11-17 23:48:13,521 - pdf_generator - INFO - PDF generated successfully: PDF_File\Server_PM_Report_8401L0067_20251117_234812.pdf
+2025-11-17 23:48:13,522 - __main__ - INFO - 
+2025-11-17 23:48:13,523 - __main__ - INFO - [STEP 8 SUCCESS] PDF generated successfully at: PDF_File\Server_PM_Report_8401L0067_20251117_234812.pdf
+2025-11-17 23:48:13,524 - __main__ - INFO - [STATUS UPDATE] db052ee8-601d-4771-a2e2-0beaf50f3589 -> COMPLETED - PDF generated successfully: Server_PM_Report_8401L0067_20251117_234812.pdf
+2025-11-17 23:48:13,524 - __main__ - INFO - [MQTT] Published to topic: controltower/server_pm_reportform_pdf_status/db052ee8-601d-4771-a2e2-0beaf50f3589
+2025-11-17 23:50:47,615 - __main__ - INFO - 
+2025-11-17 23:50:47,616 - __main__ - INFO - [STEP 1] Received MQTT message for report_id: db052ee8-601d-4771-a2e2-0beaf50f3589
+2025-11-17 23:50:47,616 - __main__ - INFO - [DATA] Message data: {'report_id': 'db052ee8-601d-4771-a2e2-0beaf50f3589', 'requested_by': '11111111-1111-1111-1111-111111111111', 'timestamp': '2025-11-17T15:50:47.6126022Z'}
+2025-11-17 23:50:47,620 - __main__ - INFO - 
+2025-11-17 23:50:47,621 - __main__ - INFO - [STEP 2] Starting PDF processing for report_id: db052ee8-601d-4771-a2e2-0beaf50f3589
+2025-11-17 23:50:47,623 - __main__ - INFO - [STATUS UPDATE] db052ee8-601d-4771-a2e2-0beaf50f3589 -> PROCESSING - PDF generation started
+2025-11-17 23:50:47,624 - __main__ - INFO - [MQTT] Published to topic: controltower/server_pm_reportform_pdf_status/db052ee8-601d-4771-a2e2-0beaf50f3589
+2025-11-17 23:50:47,625 - __main__ - INFO - 
+2025-11-17 23:50:47,627 - __main__ - INFO - [STEP 5] Calling API endpoint /api/PMReportFormServer/db052ee8-601d-4771-a2e2-0beaf50f3589
+2025-11-17 23:50:47,630 - __main__ - INFO - 
+2025-11-17 23:50:47,631 - __main__ - INFO - [API] URL: https://localhost:7145/api/PMReportFormServer/db052ee8-601d-4771-a2e2-0beaf50f3589
+2025-11-17 23:50:47,733 - __main__ - INFO - 
+2025-11-17 23:50:47,733 - __main__ - INFO - [API] Making authenticated HTTP GET request...
+2025-11-17 23:50:47,734 - __main__ - INFO - [API] Request timeout: 10 seconds
+2025-11-17 23:50:47,734 - __main__ - INFO - [API] SSL verification disabled for localhost
+2025-11-17 23:50:48,319 - __main__ - INFO - 
+2025-11-17 23:50:48,319 - __main__ - INFO - [API] Response Status: 200
+2025-11-17 23:50:48,321 - __main__ - INFO - 
+2025-11-17 23:50:48,321 - __main__ - INFO - [API SUCCESS] Data retrieved successfully (Size: 27045 chars)
+2025-11-17 23:50:48,322 - __main__ - INFO - [API] Response Keys: ['reportForm', 'pmReportFormServer', 'pmServerHealths', 'pmServerHardDriveHealths', 'pmServerDiskUsageHealths', 'pmServerCPUAndMemoryUsages', 'pmServerNetworkHealths', 'pmServerWillowlynxProcessStatuses', 'pmServerWillowlynxNetworkStatuses', 'pmServerWillowlynxRTUStatuses', 'pmServerWillowlynxHistoricalTrends', 'pmServerWillowlynxHistoricalReports', 'pmServerWillowlynxCCTVCameras', 'pmServerMonthlyDatabaseCreations', 'pmServerDatabaseBackups', 'pmServerTimeSyncs', 'pmServerHotFixes', 'pmServerFailOvers', 'pmServerASAFirewalls', 'pmServerSoftwarePatchSummaries']
+2025-11-17 23:50:48,324 - __main__ - INFO - 
+2025-11-17 23:50:48,324 - __main__ - INFO - [STEP 5 SUCCESS] API data retrieved successfully
+2025-11-17 23:50:48,325 - __main__ - INFO - 
+2025-11-17 23:50:48,325 - __main__ - INFO - [STEP 6] Transforming API data for PDF generation...
+2025-11-17 23:50:48,326 - __main__ - INFO - [STEP 6 SUCCESS] Data transformation completed
+2025-11-17 23:50:48,327 - __main__ - INFO - 
+2025-11-17 23:50:48,327 - __main__ - INFO - [STEP 7] Using job number: 8401L0067
+2025-11-17 23:50:48,328 - __main__ - INFO - 
+2025-11-17 23:50:48,329 - __main__ - INFO - [STEP 8] Generating comprehensive PDF...
+2025-11-17 23:50:48,329 - pdf_generator - INFO - Converting API response data to JSON format...
+2025-11-17 23:50:48,330 - pdf_generator - INFO - Parsing JSON data for PDF generation...
+2025-11-17 23:50:48,331 - pdf_generator - INFO - JSON conversion and parsing completed successfully
+2025-11-17 23:50:49,344 - pdf_generator - INFO - PDF generated successfully: PDF_File\Server_PM_Report_8401L0067_20251117_235048.pdf
+2025-11-17 23:50:49,345 - __main__ - INFO - 
+2025-11-17 23:50:49,345 - __main__ - INFO - [STEP 8 SUCCESS] PDF generated successfully at: PDF_File\Server_PM_Report_8401L0067_20251117_235048.pdf
+2025-11-17 23:50:49,346 - __main__ - INFO - [STATUS UPDATE] db052ee8-601d-4771-a2e2-0beaf50f3589 -> COMPLETED - PDF generated successfully: Server_PM_Report_8401L0067_20251117_235048.pdf
+2025-11-17 23:50:49,347 - __main__ - INFO - [MQTT] Published to topic: controltower/server_pm_reportform_pdf_status/db052ee8-601d-4771-a2e2-0beaf50f3589
+2025-11-17 23:53:57,516 - __main__ - INFO - 
+2025-11-17 23:53:57,516 - __main__ - INFO - [STEP 1] Received MQTT message for report_id: db052ee8-601d-4771-a2e2-0beaf50f3589
+2025-11-17 23:53:57,517 - __main__ - INFO - [DATA] Message data: {'report_id': 'db052ee8-601d-4771-a2e2-0beaf50f3589', 'requested_by': '11111111-1111-1111-1111-111111111111', 'timestamp': '2025-11-17T15:53:57.5012737Z'}
+2025-11-17 23:53:57,521 - __main__ - INFO - 
+2025-11-17 23:53:57,521 - __main__ - INFO - [STEP 2] Starting PDF processing for report_id: db052ee8-601d-4771-a2e2-0beaf50f3589
+2025-11-17 23:53:57,523 - __main__ - INFO - [STATUS UPDATE] db052ee8-601d-4771-a2e2-0beaf50f3589 -> PROCESSING - PDF generation started
+2025-11-17 23:53:57,524 - __main__ - INFO - [MQTT] Published to topic: controltower/server_pm_reportform_pdf_status/db052ee8-601d-4771-a2e2-0beaf50f3589
+2025-11-17 23:53:57,524 - __main__ - INFO - 
+2025-11-17 23:53:57,525 - __main__ - INFO - [STEP 5] Calling API endpoint /api/PMReportFormServer/db052ee8-601d-4771-a2e2-0beaf50f3589
+2025-11-17 23:53:57,526 - __main__ - INFO - 
+2025-11-17 23:53:57,526 - __main__ - INFO - [API] URL: https://localhost:7145/api/PMReportFormServer/db052ee8-601d-4771-a2e2-0beaf50f3589
+2025-11-17 23:53:57,604 - __main__ - INFO - 
+2025-11-17 23:53:57,605 - __main__ - INFO - [API] Making authenticated HTTP GET request...
+2025-11-17 23:53:57,605 - __main__ - INFO - [API] Request timeout: 10 seconds
+2025-11-17 23:53:57,606 - __main__ - INFO - [API] SSL verification disabled for localhost
+2025-11-17 23:53:57,764 - __main__ - INFO - 
+2025-11-17 23:53:57,764 - __main__ - INFO - [API] Response Status: 200
+2025-11-17 23:53:57,766 - __main__ - INFO - 
+2025-11-17 23:53:57,767 - __main__ - INFO - [API SUCCESS] Data retrieved successfully (Size: 27045 chars)
+2025-11-17 23:53:57,767 - __main__ - INFO - [API] Response Keys: ['reportForm', 'pmReportFormServer', 'pmServerHealths', 'pmServerHardDriveHealths', 'pmServerDiskUsageHealths', 'pmServerCPUAndMemoryUsages', 'pmServerNetworkHealths', 'pmServerWillowlynxProcessStatuses', 'pmServerWillowlynxNetworkStatuses', 'pmServerWillowlynxRTUStatuses', 'pmServerWillowlynxHistoricalTrends', 'pmServerWillowlynxHistoricalReports', 'pmServerWillowlynxCCTVCameras', 'pmServerMonthlyDatabaseCreations', 'pmServerDatabaseBackups', 'pmServerTimeSyncs', 'pmServerHotFixes', 'pmServerFailOvers', 'pmServerASAFirewalls', 'pmServerSoftwarePatchSummaries']
+2025-11-17 23:53:57,769 - __main__ - INFO - 
+2025-11-17 23:53:57,770 - __main__ - INFO - [STEP 5 SUCCESS] API data retrieved successfully
+2025-11-17 23:53:57,770 - __main__ - INFO - 
+2025-11-17 23:53:57,770 - __main__ - INFO - [STEP 6] Transforming API data for PDF generation...
+2025-11-17 23:53:57,771 - __main__ - INFO - [STEP 6 SUCCESS] Data transformation completed
+2025-11-17 23:53:57,772 - __main__ - INFO - 
+2025-11-17 23:53:57,773 - __main__ - INFO - [STEP 7] Using job number: 8401L0067
+2025-11-17 23:53:57,773 - __main__ - INFO - 
+2025-11-17 23:53:57,774 - __main__ - INFO - [STEP 8] Generating comprehensive PDF...
+2025-11-17 23:53:57,774 - pdf_generator - INFO - Converting API response data to JSON format...
+2025-11-17 23:53:57,775 - pdf_generator - INFO - Parsing JSON data for PDF generation...
+2025-11-17 23:53:57,776 - pdf_generator - INFO - JSON conversion and parsing completed successfully
+2025-11-17 23:53:58,727 - pdf_generator - INFO - PDF generated successfully: PDF_File\Server_PM_Report_8401L0067_20251117_235357.pdf
+2025-11-17 23:53:58,728 - __main__ - INFO - 
+2025-11-17 23:53:58,729 - __main__ - INFO - [STEP 8 SUCCESS] PDF generated successfully at: PDF_File\Server_PM_Report_8401L0067_20251117_235357.pdf
+2025-11-17 23:53:58,729 - __main__ - INFO - [STATUS UPDATE] db052ee8-601d-4771-a2e2-0beaf50f3589 -> COMPLETED - PDF generated successfully: Server_PM_Report_8401L0067_20251117_235357.pdf
+2025-11-17 23:53:58,730 - __main__ - INFO - [MQTT] Published to topic: controltower/server_pm_reportform_pdf_status/db052ee8-601d-4771-a2e2-0beaf50f3589
+2025-11-17 23:54:14,660 - __main__ - INFO - 
+2025-11-17 23:54:14,661 - __main__ - INFO - [STEP 1] Received MQTT message for report_id: db052ee8-601d-4771-a2e2-0beaf50f3589
+2025-11-17 23:54:14,661 - __main__ - INFO - [DATA] Message data: {'report_id': 'db052ee8-601d-4771-a2e2-0beaf50f3589', 'requested_by': '11111111-1111-1111-1111-111111111111', 'timestamp': '2025-11-17T15:54:14.6583602Z'}
+2025-11-17 23:54:14,665 - __main__ - INFO - 
+2025-11-17 23:54:14,665 - __main__ - INFO - [STEP 2] Starting PDF processing for report_id: db052ee8-601d-4771-a2e2-0beaf50f3589
+2025-11-17 23:54:14,666 - __main__ - INFO - [STATUS UPDATE] db052ee8-601d-4771-a2e2-0beaf50f3589 -> PROCESSING - PDF generation started
+2025-11-17 23:54:14,667 - __main__ - INFO - [MQTT] Published to topic: controltower/server_pm_reportform_pdf_status/db052ee8-601d-4771-a2e2-0beaf50f3589
+2025-11-17 23:54:14,667 - __main__ - INFO - 
+2025-11-17 23:54:14,668 - __main__ - INFO - [STEP 5] Calling API endpoint /api/PMReportFormServer/db052ee8-601d-4771-a2e2-0beaf50f3589
+2025-11-17 23:54:14,668 - __main__ - INFO - 
+2025-11-17 23:54:14,669 - __main__ - INFO - [API] URL: https://localhost:7145/api/PMReportFormServer/db052ee8-601d-4771-a2e2-0beaf50f3589
+2025-11-17 23:54:14,755 - __main__ - INFO - 
+2025-11-17 23:54:14,756 - __main__ - INFO - [API] Making authenticated HTTP GET request...
+2025-11-17 23:54:14,756 - __main__ - INFO - [API] Request timeout: 10 seconds
+2025-11-17 23:54:14,757 - __main__ - INFO - [API] SSL verification disabled for localhost
+2025-11-17 23:54:14,924 - __main__ - INFO - 
+2025-11-17 23:54:14,928 - __main__ - INFO - [API] Response Status: 200
+2025-11-17 23:54:14,930 - __main__ - INFO - 
+2025-11-17 23:54:14,935 - __main__ - INFO - [API SUCCESS] Data retrieved successfully (Size: 27045 chars)
+2025-11-17 23:54:14,936 - __main__ - INFO - [API] Response Keys: ['reportForm', 'pmReportFormServer', 'pmServerHealths', 'pmServerHardDriveHealths', 'pmServerDiskUsageHealths', 'pmServerCPUAndMemoryUsages', 'pmServerNetworkHealths', 'pmServerWillowlynxProcessStatuses', 'pmServerWillowlynxNetworkStatuses', 'pmServerWillowlynxRTUStatuses', 'pmServerWillowlynxHistoricalTrends', 'pmServerWillowlynxHistoricalReports', 'pmServerWillowlynxCCTVCameras', 'pmServerMonthlyDatabaseCreations', 'pmServerDatabaseBackups', 'pmServerTimeSyncs', 'pmServerHotFixes', 'pmServerFailOvers', 'pmServerASAFirewalls', 'pmServerSoftwarePatchSummaries']
+2025-11-17 23:54:14,943 - __main__ - INFO - 
+2025-11-17 23:54:14,944 - __main__ - INFO - [STEP 5 SUCCESS] API data retrieved successfully
+2025-11-17 23:54:14,945 - __main__ - INFO - 
+2025-11-17 23:54:14,946 - __main__ - INFO - [STEP 6] Transforming API data for PDF generation...
+2025-11-17 23:54:14,946 - __main__ - INFO - [STEP 6 SUCCESS] Data transformation completed
+2025-11-17 23:54:14,947 - __main__ - INFO - 
+2025-11-17 23:54:14,947 - __main__ - INFO - [STEP 7] Using job number: 8401L0067
+2025-11-17 23:54:14,948 - __main__ - INFO - 
+2025-11-17 23:54:14,948 - __main__ - INFO - [STEP 8] Generating comprehensive PDF...
+2025-11-17 23:54:14,949 - pdf_generator - INFO - Converting API response data to JSON format...
+2025-11-17 23:54:14,950 - pdf_generator - INFO - Parsing JSON data for PDF generation...
+2025-11-17 23:54:14,951 - pdf_generator - INFO - JSON conversion and parsing completed successfully
+2025-11-17 23:54:15,997 - pdf_generator - INFO - PDF generated successfully: PDF_File\Server_PM_Report_8401L0067_20251117_235414.pdf
+2025-11-17 23:54:15,998 - __main__ - INFO - 
+2025-11-17 23:54:15,999 - __main__ - INFO - [STEP 8 SUCCESS] PDF generated successfully at: PDF_File\Server_PM_Report_8401L0067_20251117_235414.pdf
+2025-11-17 23:54:16,000 - __main__ - INFO - [STATUS UPDATE] db052ee8-601d-4771-a2e2-0beaf50f3589 -> COMPLETED - PDF generated successfully: Server_PM_Report_8401L0067_20251117_235414.pdf
+2025-11-17 23:54:16,000 - __main__ - INFO - [MQTT] Published to topic: controltower/server_pm_reportform_pdf_status/db052ee8-601d-4771-a2e2-0beaf50f3589
+2025-11-17 23:59:55,177 - __main__ - INFO - 
+2025-11-17 23:59:55,178 - __main__ - INFO - [STEP 1] Received MQTT message for report_id: db052ee8-601d-4771-a2e2-0beaf50f3589
+2025-11-17 23:59:55,178 - __main__ - INFO - [DATA] Message data: {'report_id': 'db052ee8-601d-4771-a2e2-0beaf50f3589', 'requested_by': '11111111-1111-1111-1111-111111111111', 'timestamp': '2025-11-17T15:59:55.1535918Z'}
+2025-11-17 23:59:55,185 - __main__ - INFO - 
+2025-11-17 23:59:55,186 - __main__ - INFO - [STEP 2] Starting PDF processing for report_id: db052ee8-601d-4771-a2e2-0beaf50f3589
+2025-11-17 23:59:55,189 - __main__ - INFO - [STATUS UPDATE] db052ee8-601d-4771-a2e2-0beaf50f3589 -> PROCESSING - PDF generation started
+2025-11-17 23:59:55,193 - __main__ - INFO - [MQTT] Published to topic: controltower/server_pm_reportform_pdf_status/db052ee8-601d-4771-a2e2-0beaf50f3589
+2025-11-17 23:59:55,194 - __main__ - INFO - 
+2025-11-17 23:59:55,195 - __main__ - INFO - [STEP 5] Calling API endpoint /api/PMReportFormServer/db052ee8-601d-4771-a2e2-0beaf50f3589
+2025-11-17 23:59:55,196 - __main__ - INFO - 
+2025-11-17 23:59:55,200 - __main__ - INFO - [API] URL: https://localhost:7145/api/PMReportFormServer/db052ee8-601d-4771-a2e2-0beaf50f3589
+2025-11-17 23:59:55,295 - __main__ - INFO - 
+2025-11-17 23:59:55,295 - __main__ - INFO - [API] Making authenticated HTTP GET request...
+2025-11-17 23:59:55,295 - __main__ - INFO - [API] Request timeout: 10 seconds
+2025-11-17 23:59:55,296 - __main__ - INFO - [API] SSL verification disabled for localhost
+2025-11-17 23:59:55,506 - __main__ - INFO - 
+2025-11-17 23:59:55,506 - __main__ - INFO - [API] Response Status: 200
+2025-11-17 23:59:55,508 - __main__ - INFO - 
+2025-11-17 23:59:55,509 - __main__ - INFO - [API SUCCESS] Data retrieved successfully (Size: 27045 chars)
+2025-11-17 23:59:55,509 - __main__ - INFO - [API] Response Keys: ['reportForm', 'pmReportFormServer', 'pmServerHealths', 'pmServerHardDriveHealths', 'pmServerDiskUsageHealths', 'pmServerCPUAndMemoryUsages', 'pmServerNetworkHealths', 'pmServerWillowlynxProcessStatuses', 'pmServerWillowlynxNetworkStatuses', 'pmServerWillowlynxRTUStatuses', 'pmServerWillowlynxHistoricalTrends', 'pmServerWillowlynxHistoricalReports', 'pmServerWillowlynxCCTVCameras', 'pmServerMonthlyDatabaseCreations', 'pmServerDatabaseBackups', 'pmServerTimeSyncs', 'pmServerHotFixes', 'pmServerFailOvers', 'pmServerASAFirewalls', 'pmServerSoftwarePatchSummaries']
+2025-11-17 23:59:55,511 - __main__ - INFO - 
+2025-11-17 23:59:55,512 - __main__ - INFO - [STEP 5 SUCCESS] API data retrieved successfully
+2025-11-17 23:59:55,512 - __main__ - INFO - 
+2025-11-17 23:59:55,513 - __main__ - INFO - [STEP 6] Transforming API data for PDF generation...
+2025-11-17 23:59:55,513 - __main__ - INFO - [STEP 6 SUCCESS] Data transformation completed
+2025-11-17 23:59:55,513 - __main__ - INFO - 
+2025-11-17 23:59:55,514 - __main__ - INFO - [STEP 7] Using job number: 8401L0067
+2025-11-17 23:59:55,515 - __main__ - INFO - 
+2025-11-17 23:59:55,515 - __main__ - INFO - [STEP 8] Generating comprehensive PDF...
+2025-11-17 23:59:55,517 - pdf_generator - INFO - Converting API response data to JSON format...
+2025-11-17 23:59:55,518 - pdf_generator - INFO - Parsing JSON data for PDF generation...
+2025-11-17 23:59:55,519 - pdf_generator - INFO - JSON conversion and parsing completed successfully
+2025-11-17 23:59:56,508 - pdf_generator - INFO - PDF generated successfully: PDF_File\Server_PM_Report_8401L0067_20251117_235955.pdf
+2025-11-17 23:59:56,508 - __main__ - INFO - 
+2025-11-17 23:59:56,509 - __main__ - INFO - [STEP 8 SUCCESS] PDF generated successfully at: PDF_File\Server_PM_Report_8401L0067_20251117_235955.pdf
+2025-11-17 23:59:56,510 - __main__ - INFO - [STATUS UPDATE] db052ee8-601d-4771-a2e2-0beaf50f3589 -> COMPLETED - PDF generated successfully: Server_PM_Report_8401L0067_20251117_235955.pdf
+2025-11-17 23:59:56,511 - __main__ - INFO - [MQTT] Published to topic: controltower/server_pm_reportform_pdf_status/db052ee8-601d-4771-a2e2-0beaf50f3589
+2025-11-18 00:04:31,868 - __main__ - INFO - 
+2025-11-18 00:04:31,868 - __main__ - INFO - Cleaning up resources...
+2025-11-18 00:04:35,810 - __main__ - INFO - 
+2025-11-18 00:04:35,810 - __main__ - INFO - Starting Server PM PDF Service...
+2025-11-18 00:04:35,811 - __main__ - INFO - PDF output directory: C:\Users\thanthtet.myet\Documents\01_Willowglen\B_001_Workplace\ControlTower\ControlTower_Python\PDF_Generator\Server_PM_ReportForm_PDF\PDF_File
+2025-11-18 00:04:35,812 - __main__ - INFO - Authenticating with API...
+2025-11-18 00:04:35,812 - __main__ - INFO - 
+2025-11-18 00:04:35,812 - __main__ - INFO - [AUTH] Authenticating with API...
+2025-11-18 00:04:35,840 - __main__ - INFO - [AUTH] POST https://localhost:7145/api/Auth/signin
+2025-11-18 00:04:35,841 - __main__ - INFO - [AUTH] Email: system@gmail.com
+2025-11-18 00:04:36,349 - __main__ - INFO - 
+2025-11-18 00:04:36,349 - __main__ - INFO - [AUTH] Response Status: 200
+2025-11-18 00:04:36,349 - __main__ - INFO - 
+2025-11-18 00:04:36,350 - __main__ - INFO - [AUTH] Authentication successful
+2025-11-18 00:04:36,350 - __main__ - INFO - [AUTH] Token expires at: 2025-11-18T16:04:36.3471942Z
+2025-11-18 00:04:36,352 - __main__ - INFO - Connecting to MQTT broker: localhost:1883
+2025-11-18 00:04:36,359 - __main__ - INFO - 
+2025-11-18 00:04:36,359 - __main__ - INFO - 
+2025-11-18 00:04:36,359 - __main__ - INFO - Server PM PDF Service started successfully
+2025-11-18 00:04:36,360 - __main__ - INFO - Connected to MQTT broker successfully
+2025-11-18 00:04:36,360 - __main__ - INFO - Waiting for MQTT messages...
+2025-11-18 00:04:36,361 - __main__ - INFO - Subscribed to topic: controltower/server_pm_reportform_pdf/+
+2025-11-18 00:04:43,370 - __main__ - INFO - 
+2025-11-18 00:04:43,371 - __main__ - INFO - [STEP 1] Received MQTT message for report_id: db052ee8-601d-4771-a2e2-0beaf50f3589
+2025-11-18 00:04:43,371 - __main__ - INFO - [DATA] Message data: {'report_id': 'db052ee8-601d-4771-a2e2-0beaf50f3589', 'requested_by': '11111111-1111-1111-1111-111111111111', 'timestamp': '2025-11-17T16:04:43.3692049Z'}
+2025-11-18 00:04:43,376 - __main__ - INFO - 
+2025-11-18 00:04:43,376 - __main__ - INFO - [STEP 2] Starting PDF processing for report_id: db052ee8-601d-4771-a2e2-0beaf50f3589
+2025-11-18 00:04:43,378 - __main__ - INFO - [STATUS UPDATE] db052ee8-601d-4771-a2e2-0beaf50f3589 -> PROCESSING - PDF generation started
+2025-11-18 00:04:43,379 - __main__ - INFO - [MQTT] Published to topic: controltower/server_pm_reportform_pdf_status/db052ee8-601d-4771-a2e2-0beaf50f3589
+2025-11-18 00:04:43,380 - __main__ - INFO - 
+2025-11-18 00:04:43,381 - __main__ - INFO - [STEP 3] Initializing database manager...
+2025-11-18 00:04:43,382 - __main__ - INFO - 
+2025-11-18 00:04:43,382 - __main__ - INFO - [STEP 4] Initializing PDF generator...
+2025-11-18 00:04:43,388 - __main__ - INFO - 
+2025-11-18 00:04:43,388 - __main__ - INFO - [STEP 5] Calling API endpoint /api/PMReportFormServer/db052ee8-601d-4771-a2e2-0beaf50f3589
+2025-11-18 00:04:43,389 - __main__ - INFO - 
+2025-11-18 00:04:43,389 - __main__ - INFO - [API] URL: https://localhost:7145/api/PMReportFormServer/db052ee8-601d-4771-a2e2-0beaf50f3589
+2025-11-18 00:04:43,463 - __main__ - INFO - 
+2025-11-18 00:04:43,464 - __main__ - INFO - [API] Making authenticated HTTP GET request...
+2025-11-18 00:04:43,465 - __main__ - INFO - [API] Request timeout: 10 seconds
+2025-11-18 00:04:43,465 - __main__ - INFO - [API] SSL verification disabled for localhost
+2025-11-18 00:04:43,619 - __main__ - INFO - 
+2025-11-18 00:04:43,619 - __main__ - INFO - [API] Response Status: 200
+2025-11-18 00:04:43,621 - __main__ - INFO - 
+2025-11-18 00:04:43,622 - __main__ - INFO - [API SUCCESS] Data retrieved successfully (Size: 27045 chars)
+2025-11-18 00:04:43,622 - __main__ - INFO - [API] Response Keys: ['reportForm', 'pmReportFormServer', 'pmServerHealths', 'pmServerHardDriveHealths', 'pmServerDiskUsageHealths', 'pmServerCPUAndMemoryUsages', 'pmServerNetworkHealths', 'pmServerWillowlynxProcessStatuses', 'pmServerWillowlynxNetworkStatuses', 'pmServerWillowlynxRTUStatuses', 'pmServerWillowlynxHistoricalTrends', 'pmServerWillowlynxHistoricalReports', 'pmServerWillowlynxCCTVCameras', 'pmServerMonthlyDatabaseCreations', 'pmServerDatabaseBackups', 'pmServerTimeSyncs', 'pmServerHotFixes', 'pmServerFailOvers', 'pmServerASAFirewalls', 'pmServerSoftwarePatchSummaries']
+2025-11-18 00:04:43,624 - __main__ - INFO - 
+2025-11-18 00:04:43,625 - __main__ - INFO - [STEP 5 SUCCESS] API data retrieved successfully
+2025-11-18 00:04:43,625 - __main__ - INFO - 
+2025-11-18 00:04:43,625 - __main__ - INFO - [STEP 6] Transforming API data for PDF generation...
+2025-11-18 00:04:43,626 - __main__ - INFO - [STEP 6 SUCCESS] Data transformation completed
+2025-11-18 00:04:43,627 - __main__ - INFO - 
+2025-11-18 00:04:43,627 - __main__ - INFO - [STEP 7] Using job number: 8401L0067
+2025-11-18 00:04:43,627 - __main__ - INFO - 
+2025-11-18 00:04:43,627 - __main__ - INFO - [STEP 8] Generating comprehensive PDF...
+2025-11-18 00:04:43,628 - pdf_generator - INFO - Converting API response data to JSON format...
+2025-11-18 00:04:43,629 - pdf_generator - INFO - Parsing JSON data for PDF generation...
+2025-11-18 00:04:43,630 - pdf_generator - INFO - JSON conversion and parsing completed successfully
+2025-11-18 00:04:44,637 - pdf_generator - INFO - PDF generated successfully: PDF_File\Server_PM_Report_8401L0067_20251118_000443.pdf
+2025-11-18 00:04:44,638 - __main__ - INFO - 
+2025-11-18 00:04:44,639 - __main__ - INFO - [STEP 8 SUCCESS] PDF generated successfully at: PDF_File\Server_PM_Report_8401L0067_20251118_000443.pdf
+2025-11-18 00:04:44,639 - __main__ - INFO - [STATUS UPDATE] db052ee8-601d-4771-a2e2-0beaf50f3589 -> COMPLETED - PDF generated successfully: Server_PM_Report_8401L0067_20251118_000443.pdf
+2025-11-18 00:04:44,640 - __main__ - INFO - [MQTT] Published to topic: controltower/server_pm_reportform_pdf_status/db052ee8-601d-4771-a2e2-0beaf50f3589
+2025-11-18 00:10:19,267 - __main__ - INFO - 
+2025-11-18 00:10:19,268 - __main__ - INFO - Cleaning up resources...
+2025-11-18 00:10:23,304 - __main__ - INFO - 
+2025-11-18 00:10:23,305 - __main__ - INFO - Starting Server PM PDF Service...
+2025-11-18 00:10:23,305 - __main__ - INFO - PDF output directory: C:\Users\thanthtet.myet\Documents\01_Willowglen\B_001_Workplace\ControlTower\ControlTower_Python\PDF_Generator\Server_PM_ReportForm_PDF\PDF_File
+2025-11-18 00:10:23,305 - __main__ - INFO - Authenticating with API...
+2025-11-18 00:10:23,305 - __main__ - INFO - 
+2025-11-18 00:10:23,305 - __main__ - INFO - [AUTH] Authenticating with API...
+2025-11-18 00:10:23,329 - __main__ - INFO - [AUTH] POST https://localhost:7145/api/Auth/signin
+2025-11-18 00:10:23,329 - __main__ - INFO - [AUTH] Email: system@gmail.com
+2025-11-18 00:10:23,707 - __main__ - INFO - 
+2025-11-18 00:10:23,708 - __main__ - INFO - [AUTH] Response Status: 200
+2025-11-18 00:10:23,708 - __main__ - INFO - 
+2025-11-18 00:10:23,709 - __main__ - INFO - [AUTH] Authentication successful
+2025-11-18 00:10:23,709 - __main__ - INFO - [AUTH] Token expires at: 2025-11-18T16:10:23.7063595Z
+2025-11-18 00:10:23,710 - __main__ - INFO - Connecting to MQTT broker: localhost:1883
+2025-11-18 00:10:23,714 - __main__ - INFO - 
+2025-11-18 00:10:23,714 - __main__ - INFO - 
+2025-11-18 00:10:23,714 - __main__ - INFO - Server PM PDF Service started successfully
+2025-11-18 00:10:23,714 - __main__ - INFO - Connected to MQTT broker successfully
+2025-11-18 00:10:23,715 - __main__ - INFO - Waiting for MQTT messages...
+2025-11-18 00:10:23,716 - __main__ - INFO - Subscribed to topic: controltower/server_pm_reportform_pdf/+
+2025-11-18 00:10:45,619 - __main__ - INFO - 
+2025-11-18 00:10:45,620 - __main__ - INFO - [STEP 1] Received MQTT message for report_id: db052ee8-601d-4771-a2e2-0beaf50f3589
+2025-11-18 00:10:45,620 - __main__ - INFO - [DATA] Message data: {'report_id': 'db052ee8-601d-4771-a2e2-0beaf50f3589', 'requested_by': '11111111-1111-1111-1111-111111111111', 'timestamp': '2025-11-17T16:10:45.6177397Z'}
+2025-11-18 00:10:45,624 - __main__ - INFO - 
+2025-11-18 00:10:45,625 - __main__ - INFO - [STEP 2] Starting PDF processing for report_id: db052ee8-601d-4771-a2e2-0beaf50f3589
+2025-11-18 00:10:45,627 - __main__ - INFO - [STATUS UPDATE] db052ee8-601d-4771-a2e2-0beaf50f3589 -> PROCESSING - PDF generation started
+2025-11-18 00:10:45,630 - __main__ - INFO - [MQTT] Published to topic: controltower/server_pm_reportform_pdf_status/db052ee8-601d-4771-a2e2-0beaf50f3589
+2025-11-18 00:10:45,632 - __main__ - INFO - 
+2025-11-18 00:10:45,633 - __main__ - INFO - [STEP 3] Initializing database manager...
+2025-11-18 00:10:45,634 - __main__ - INFO - 
+2025-11-18 00:10:45,634 - __main__ - INFO - [STEP 4] Initializing PDF generator...
+2025-11-18 00:10:45,637 - __main__ - INFO - 
+2025-11-18 00:10:45,638 - __main__ - INFO - [STEP 5] Calling API endpoint /api/PMReportFormServer/db052ee8-601d-4771-a2e2-0beaf50f3589
+2025-11-18 00:10:45,640 - __main__ - INFO - 
+2025-11-18 00:10:45,641 - __main__ - INFO - [API] URL: https://localhost:7145/api/PMReportFormServer/db052ee8-601d-4771-a2e2-0beaf50f3589
+2025-11-18 00:10:45,712 - __main__ - INFO - 
+2025-11-18 00:10:45,713 - __main__ - INFO - [API] Making authenticated HTTP GET request...
+2025-11-18 00:10:45,713 - __main__ - INFO - [API] Request timeout: 10 seconds
+2025-11-18 00:10:45,714 - __main__ - INFO - [API] SSL verification disabled for localhost
+2025-11-18 00:10:45,899 - __main__ - INFO - 
+2025-11-18 00:10:45,899 - __main__ - INFO - [API] Response Status: 200
+2025-11-18 00:10:45,900 - __main__ - INFO - 
+2025-11-18 00:10:45,901 - __main__ - INFO - [API SUCCESS] Data retrieved successfully (Size: 27045 chars)
+2025-11-18 00:10:45,902 - __main__ - INFO - [API] Response Keys: ['reportForm', 'pmReportFormServer', 'pmServerHealths', 'pmServerHardDriveHealths', 'pmServerDiskUsageHealths', 'pmServerCPUAndMemoryUsages', 'pmServerNetworkHealths', 'pmServerWillowlynxProcessStatuses', 'pmServerWillowlynxNetworkStatuses', 'pmServerWillowlynxRTUStatuses', 'pmServerWillowlynxHistoricalTrends', 'pmServerWillowlynxHistoricalReports', 'pmServerWillowlynxCCTVCameras', 'pmServerMonthlyDatabaseCreations', 'pmServerDatabaseBackups', 'pmServerTimeSyncs', 'pmServerHotFixes', 'pmServerFailOvers', 'pmServerASAFirewalls', 'pmServerSoftwarePatchSummaries']
+2025-11-18 00:10:45,904 - __main__ - INFO - 
+2025-11-18 00:10:45,904 - __main__ - INFO - [STEP 5 SUCCESS] API data retrieved successfully
+2025-11-18 00:10:45,904 - __main__ - INFO - 
+2025-11-18 00:10:45,905 - __main__ - INFO - [STEP 6] Transforming API data for PDF generation...
+2025-11-18 00:10:45,905 - __main__ - INFO - [STEP 6 SUCCESS] Data transformation completed
+2025-11-18 00:10:45,906 - __main__ - INFO - 
+2025-11-18 00:10:45,906 - __main__ - INFO - [STEP 7] Using job number: 8401L0067
+2025-11-18 00:10:45,907 - __main__ - INFO - 
+2025-11-18 00:10:45,907 - __main__ - INFO - [STEP 8] Generating comprehensive PDF...
+2025-11-18 00:10:45,907 - pdf_generator - INFO - Converting API response data to JSON format...
+2025-11-18 00:10:45,909 - pdf_generator - INFO - Parsing JSON data for PDF generation...
+2025-11-18 00:10:45,910 - pdf_generator - INFO - JSON conversion and parsing completed successfully
+2025-11-18 00:10:46,906 - pdf_generator - INFO - PDF generated successfully: PDF_File\Server_PM_Report_8401L0067_20251118_001045.pdf
+2025-11-18 00:10:46,907 - __main__ - INFO - 
+2025-11-18 00:10:46,907 - __main__ - INFO - [STEP 8 SUCCESS] PDF generated successfully at: PDF_File\Server_PM_Report_8401L0067_20251118_001045.pdf
+2025-11-18 00:10:46,908 - __main__ - INFO - [STATUS UPDATE] db052ee8-601d-4771-a2e2-0beaf50f3589 -> COMPLETED - PDF generated successfully: Server_PM_Report_8401L0067_20251118_001045.pdf
+2025-11-18 00:10:46,909 - __main__ - INFO - [MQTT] Published to topic: controltower/server_pm_reportform_pdf_status/db052ee8-601d-4771-a2e2-0beaf50f3589
+2025-11-18 00:54:22,277 - __main__ - INFO - 
+2025-11-18 00:54:22,277 - __main__ - INFO - Cleaning up resources...
+2025-11-18 01:05:28,855 - __main__ - INFO - 
+2025-11-18 01:05:28,855 - __main__ - INFO - Starting Server PM PDF Service...
+2025-11-18 01:05:28,856 - __main__ - INFO - PDF output directory: C:\Users\thanthtet.myet\Documents\01_Willowglen\B_001_Workplace\ControlTower\ControlTower_Python\PDF_Generator\Server_PM_ReportForm_PDF\PDF_File
+2025-11-18 01:05:28,856 - __main__ - INFO - Authenticating with API...
+2025-11-18 01:05:28,856 - __main__ - INFO - 
+2025-11-18 01:05:28,857 - __main__ - INFO - [AUTH] Authenticating with API...
+2025-11-18 01:05:28,886 - __main__ - INFO - [AUTH] POST https://localhost:7145/api/Auth/signin
+2025-11-18 01:05:28,886 - __main__ - INFO - [AUTH] Email: system@gmail.com
+2025-11-18 01:05:29,415 - __main__ - INFO - 
+2025-11-18 01:05:29,416 - __main__ - INFO - [AUTH] Response Status: 200
+2025-11-18 01:05:29,417 - __main__ - INFO - 
+2025-11-18 01:05:29,417 - __main__ - INFO - [AUTH] Authentication successful
+2025-11-18 01:05:29,417 - __main__ - INFO - [AUTH] Token expires at: 2025-11-18T17:05:29.4143814Z
+2025-11-18 01:05:29,419 - __main__ - INFO - Connecting to MQTT broker: localhost:1883
+2025-11-18 01:05:29,424 - __main__ - INFO - 
+2025-11-18 01:05:29,424 - __main__ - INFO - 
+2025-11-18 01:05:29,427 - __main__ - INFO - Server PM PDF Service started successfully
+2025-11-18 01:05:29,428 - __main__ - INFO - Connected to MQTT broker successfully
+2025-11-18 01:05:29,428 - __main__ - INFO - Waiting for MQTT messages...
+2025-11-18 01:05:29,431 - __main__ - INFO - Subscribed to topic: controltower/server_pm_reportform_pdf/+
+2025-11-18 01:44:39,562 - __main__ - INFO - 
+2025-11-18 01:44:39,563 - __main__ - INFO - Cleaning up resources...
+2025-11-18 01:44:43,856 - __main__ - INFO - 
+2025-11-18 01:44:43,857 - __main__ - INFO - Starting Server PM PDF Service...
+2025-11-18 01:44:43,857 - __main__ - INFO - PDF output directory: C:\Users\thanthtet.myet\Documents\01_Willowglen\B_001_Workplace\ControlTower\ControlTower_Python\PDF_Generator\Server_PM_ReportForm_PDF\PDF_File
+2025-11-18 01:44:43,858 - __main__ - INFO - Authenticating with API...
+2025-11-18 01:44:43,858 - __main__ - INFO - 
+2025-11-18 01:44:43,858 - __main__ - INFO - [AUTH] Authenticating with API...
+2025-11-18 01:44:43,886 - __main__ - INFO - [AUTH] POST https://localhost:7145/api/Auth/signin
+2025-11-18 01:44:43,886 - __main__ - INFO - [AUTH] Email: system@gmail.com
+2025-11-18 01:44:52,534 - __main__ - INFO - 
+2025-11-18 01:44:52,534 - __main__ - INFO - [AUTH] Response Status: 200
+2025-11-18 01:44:52,538 - __main__ - INFO - 
+2025-11-18 01:44:52,539 - __main__ - INFO - [AUTH] Authentication successful
+2025-11-18 01:44:52,539 - __main__ - INFO - [AUTH] Token expires at: 2025-11-18T17:44:52.4915346Z
+2025-11-18 01:44:52,540 - __main__ - INFO - Connecting to MQTT broker: localhost:1883
+2025-11-18 01:44:52,545 - __main__ - INFO - 
+2025-11-18 01:44:52,545 - __main__ - INFO - Server PM PDF Service started successfully
+2025-11-18 01:44:52,546 - __main__ - INFO - 
+2025-11-18 01:44:52,546 - __main__ - INFO - Waiting for MQTT messages...
+2025-11-18 01:44:52,546 - __main__ - INFO - Connected to MQTT broker successfully
+2025-11-18 01:44:52,548 - __main__ - INFO - Subscribed to topic: controltower/server_pm_reportform_pdf/+
+2025-11-18 01:44:52,549 - __main__ - INFO - Subscribed to topic: controltower/cm_reportform_pdf/+
+2025-11-18 01:45:23,668 - __main__ - INFO - 
+2025-11-18 01:45:23,668 - __main__ - INFO - [STEP 1] Received MQTT message for report_id: d05c3cac-fe1f-46f2-b648-f68503af473a
+2025-11-18 01:45:23,669 - __main__ - INFO - [DATA] Message data: {'report_id': 'd05c3cac-fe1f-46f2-b648-f68503af473a', 'requested_by': '11111111-1111-1111-1111-111111111111', 'timestamp': '2025-11-17T17:45:23.6559817Z'}
+2025-11-18 01:45:23,673 - __main__ - INFO - 
+2025-11-18 01:45:23,674 - __main__ - INFO - [STEP 2] Starting PDF processing for report_id: d05c3cac-fe1f-46f2-b648-f68503af473a (cm_reportform_pdf)
+2025-11-18 01:45:23,675 - __main__ - INFO - [STATUS UPDATE] d05c3cac-fe1f-46f2-b648-f68503af473a -> PROCESSING - PDF generation started
+2025-11-18 01:45:23,676 - __main__ - INFO - [MQTT] Published to topic: controltower/cm_reportform_pdf_status/d05c3cac-fe1f-46f2-b648-f68503af473a
+2025-11-18 01:45:23,677 - __main__ - INFO - 
+2025-11-18 01:45:23,677 - __main__ - INFO - [STEP 3] Initializing database manager...
+2025-11-18 01:45:23,678 - __main__ - INFO - 
+2025-11-18 01:45:23,678 - __main__ - INFO - [STEP 4] Initializing CM PDF generator...
+2025-11-18 01:45:23,681 - __main__ - INFO - 
+2025-11-18 01:45:23,682 - __main__ - INFO - [STEP 5] Calling API endpoint /api/ReportForm/CMReportForm/d05c3cac-fe1f-46f2-b648-f68503af473a
+2025-11-18 01:45:23,682 - __main__ - INFO - 
+2025-11-18 01:45:23,684 - __main__ - INFO - [API] URL: https://localhost:7145/api/ReportForm/CMReportForm/d05c3cac-fe1f-46f2-b648-f68503af473a
+2025-11-18 01:45:23,781 - __main__ - INFO - 
+2025-11-18 01:45:23,781 - __main__ - INFO - [API] Making authenticated HTTP GET request...
+2025-11-18 01:45:23,782 - __main__ - INFO - [API] Request timeout: 10 seconds
+2025-11-18 01:45:23,782 - __main__ - INFO - [API] SSL verification disabled for localhost
+2025-11-18 01:45:23,852 - __main__ - INFO - 
+2025-11-18 01:45:23,852 - __main__ - INFO - [API] Response Status: 200
+2025-11-18 01:45:23,853 - __main__ - INFO - 
+2025-11-18 01:45:23,853 - __main__ - INFO - [API SUCCESS] Data retrieved successfully (Size: 5863 chars)
+2025-11-18 01:45:23,854 - __main__ - INFO - [API] Response Keys: ['id', 'reportFormTypeID', 'reportFormTypeName', 'jobNo', 'systemNameWarehouseID', 'systemNameWarehouseName', 'stationNameWarehouseID', 'stationNameWarehouseName', 'uploadStatus', 'uploadHostname', 'uploadIPAddress', 'formStatus', 'createdDate', 'updatedDate', 'createdBy', 'createdByUserName', 'updatedBy', 'updatedByUserName', 'cmReportForm', 'materialUsed', 'beforeIssueImages', 'afterActionImages', 'materialUsedOldSerialImages', 'materialUsedNewSerialImages']
+2025-11-18 01:45:23,856 - __main__ - INFO - 
+2025-11-18 01:45:23,857 - __main__ - INFO - [STEP 6] Transforming API data for report type cm_reportform_pdf...
+2025-11-18 01:45:23,857 - __main__ - INFO - 
+2025-11-18 01:45:23,858 - __main__ - INFO - [STEP 7] Using job number: d05c3cac-fe1f-46f2-b648-f68503af473a
+2025-11-18 01:45:23,858 - __main__ - INFO - 
+2025-11-18 01:45:23,859 - __main__ - INFO - [STEP 8] Generating PDF output...
+2025-11-18 01:45:23,881 - cm_pdf_generator - INFO - [CM PDF] Generated CM report at PDF_File\CM_Report_d05c3cac-fe1f-46f2-b648-f68503af473a_20251118_014523.pdf
+2025-11-18 01:45:23,882 - __main__ - INFO - 
+2025-11-18 01:45:23,882 - __main__ - INFO - [STEP 8 SUCCESS] PDF generated successfully at: PDF_File\CM_Report_d05c3cac-fe1f-46f2-b648-f68503af473a_20251118_014523.pdf
+2025-11-18 01:45:23,883 - __main__ - INFO - [STATUS UPDATE] d05c3cac-fe1f-46f2-b648-f68503af473a -> COMPLETED - PDF generated successfully: CM_Report_d05c3cac-fe1f-46f2-b648-f68503af473a_20251118_014523.pdf
+2025-11-18 01:45:23,884 - __main__ - INFO - [MQTT] Published to topic: controltower/cm_reportform_pdf_status/d05c3cac-fe1f-46f2-b648-f68503af473a
+2025-11-18 01:56:32,476 - __main__ - INFO - 
+2025-11-18 01:56:32,476 - __main__ - INFO - Cleaning up resources...
+2025-11-18 01:56:55,935 - __main__ - INFO - 
+2025-11-18 01:56:55,936 - __main__ - INFO - Starting Server PM PDF Service...
+2025-11-18 01:56:55,936 - __main__ - INFO - PDF output directory: C:\Users\thanthtet.myet\Documents\01_Willowglen\B_001_Workplace\ControlTower\ControlTower_Python\PDF_Generator\Server_PM_ReportForm_PDF\PDF_File
+2025-11-18 01:56:55,937 - __main__ - INFO - Authenticating with API...
+2025-11-18 01:56:55,937 - __main__ - INFO - 
+2025-11-18 01:56:55,937 - __main__ - INFO - [AUTH] Authenticating with API...
+2025-11-18 01:56:55,965 - __main__ - INFO - [AUTH] POST https://localhost:7145/api/Auth/signin
+2025-11-18 01:56:55,966 - __main__ - INFO - [AUTH] Email: system@gmail.com
+2025-11-18 01:56:56,590 - __main__ - INFO - 
+2025-11-18 01:56:56,591 - __main__ - INFO - [AUTH] Response Status: 200
+2025-11-18 01:56:56,592 - __main__ - INFO - 
+2025-11-18 01:56:56,592 - __main__ - INFO - [AUTH] Authentication successful
+2025-11-18 01:56:56,592 - __main__ - INFO - [AUTH] Token expires at: 2025-11-18T17:56:56.5890828Z
+2025-11-18 01:56:56,594 - __main__ - INFO - Connecting to MQTT broker: localhost:1883
+2025-11-18 01:56:56,600 - __main__ - INFO - 
+2025-11-18 01:56:56,600 - __main__ - INFO - 
+2025-11-18 01:56:56,601 - __main__ - INFO - Server PM PDF Service started successfully
+2025-11-18 01:56:56,601 - __main__ - INFO - Connected to MQTT broker successfully
+2025-11-18 01:56:56,601 - __main__ - INFO - Waiting for MQTT messages...
+2025-11-18 01:56:56,602 - __main__ - INFO - Subscribed to topic: controltower/server_pm_reportform_pdf/+
+2025-11-18 01:56:56,603 - __main__ - INFO - Subscribed to topic: controltower/cm_reportform_pdf/+
+2025-11-18 01:57:50,293 - __main__ - INFO - 
+2025-11-18 01:57:50,293 - __main__ - INFO - Cleaning up resources...
+2025-11-18 01:58:33,045 - __main__ - INFO - 
+2025-11-18 01:58:33,046 - __main__ - INFO - Press 'r' + Enter at any time to refresh the PDF service.
+2025-11-18 01:58:33,047 - __main__ - INFO - 
+2025-11-18 01:58:33,066 - __main__ - INFO - Starting Server PM PDF Service...
+2025-11-18 01:58:33,066 - __main__ - INFO - PDF output directory: C:\Users\thanthtet.myet\Documents\01_Willowglen\B_001_Workplace\ControlTower\ControlTower_Python\PDF_Generator\Server_PM_ReportForm_PDF\PDF_File
+2025-11-18 01:58:33,067 - __main__ - INFO - Authenticating with API...
+2025-11-18 01:58:33,067 - __main__ - INFO - 
+2025-11-18 01:58:33,067 - __main__ - INFO - [AUTH] Authenticating with API...
+2025-11-18 01:58:33,091 - __main__ - INFO - [AUTH] POST https://localhost:7145/api/Auth/signin
+2025-11-18 01:58:33,091 - __main__ - INFO - [AUTH] Email: system@gmail.com
+2025-11-18 01:58:33,451 - __main__ - INFO - 
+2025-11-18 01:58:33,451 - __main__ - INFO - [AUTH] Response Status: 200
+2025-11-18 01:58:33,452 - __main__ - INFO - 
+2025-11-18 01:58:33,452 - __main__ - INFO - [AUTH] Authentication successful
+2025-11-18 01:58:33,452 - __main__ - INFO - [AUTH] Token expires at: 2025-11-18T17:58:33.4499757Z
+2025-11-18 01:58:33,453 - __main__ - INFO - Connecting to MQTT broker: localhost:1883
+2025-11-18 01:58:33,457 - __main__ - INFO - 
+2025-11-18 01:58:33,457 - __main__ - INFO - Server PM PDF Service started successfully
+2025-11-18 01:58:33,457 - __main__ - INFO - 
+2025-11-18 01:58:33,458 - __main__ - INFO - Waiting for MQTT messages...
+2025-11-18 01:58:33,458 - __main__ - INFO - Connected to MQTT broker successfully
+2025-11-18 01:58:33,459 - __main__ - INFO - Subscribed to topic: controltower/server_pm_reportform_pdf/+
+2025-11-18 01:58:33,459 - __main__ - INFO - Subscribed to topic: controltower/cm_reportform_pdf/+
+2025-11-18 01:58:38,933 - __main__ - INFO - 
+2025-11-18 01:58:38,933 - __main__ - INFO - [REFRESH] Refresh command received. Restarting service...
+2025-11-18 01:58:39,705 - __main__ - INFO - 
+2025-11-18 01:58:39,705 - __main__ - INFO - Press 'r' + Enter at any time to refresh the PDF service.
+2025-11-18 01:58:39,707 - __main__ - INFO - 
+2025-11-18 01:58:39,707 - __main__ - INFO - Starting Server PM PDF Service...
+2025-11-18 01:58:39,708 - __main__ - INFO - PDF output directory: C:\Users\thanthtet.myet\Documents\01_Willowglen\B_001_Workplace\ControlTower\ControlTower_Python\PDF_Generator\Server_PM_ReportForm_PDF\PDF_File
+2025-11-18 01:58:39,708 - __main__ - INFO - Authenticating with API...
+2025-11-18 01:58:39,708 - __main__ - INFO - 
+2025-11-18 01:58:39,708 - __main__ - INFO - [AUTH] Authenticating with API...
+2025-11-18 01:58:39,732 - __main__ - INFO - [AUTH] POST https://localhost:7145/api/Auth/signin
+2025-11-18 01:58:39,732 - __main__ - INFO - [AUTH] Email: system@gmail.com
+2025-11-18 01:58:40,037 - __main__ - INFO - 
+2025-11-18 01:58:40,037 - __main__ - INFO - [AUTH] Response Status: 200
+2025-11-18 01:58:40,038 - __main__ - INFO - 
+2025-11-18 01:58:40,038 - __main__ - INFO - [AUTH] Authentication successful
+2025-11-18 01:58:40,038 - __main__ - INFO - [AUTH] Token expires at: 2025-11-18T17:58:40.0359102Z
+2025-11-18 01:58:40,039 - __main__ - INFO - Connecting to MQTT broker: localhost:1883
+2025-11-18 01:58:40,042 - __main__ - INFO - 
+2025-11-18 01:58:40,042 - __main__ - INFO - 
+2025-11-18 01:58:40,042 - __main__ - INFO - Server PM PDF Service started successfully
+2025-11-18 01:58:40,043 - __main__ - INFO - Connected to MQTT broker successfully
+2025-11-18 01:58:40,043 - __main__ - INFO - Waiting for MQTT messages...
+2025-11-18 01:58:40,044 - __main__ - INFO - Subscribed to topic: controltower/server_pm_reportform_pdf/+
+2025-11-18 01:58:40,045 - __main__ - INFO - Subscribed to topic: controltower/cm_reportform_pdf/+
+2025-11-18 01:58:50,805 - __main__ - INFO - 
+2025-11-18 01:58:50,805 - __main__ - INFO - Press 'r' + Enter at any time to refresh the PDF service.
+2025-11-18 01:58:50,807 - __main__ - INFO - 
+2025-11-18 01:58:50,807 - __main__ - INFO - Starting Server PM PDF Service...
+2025-11-18 01:58:50,807 - __main__ - INFO - PDF output directory: C:\Users\thanthtet.myet\Documents\01_Willowglen\B_001_Workplace\ControlTower\ControlTower_Python\PDF_Generator\Server_PM_ReportForm_PDF\PDF_File
+2025-11-18 01:58:50,807 - __main__ - INFO - Authenticating with API...
+2025-11-18 01:58:50,807 - __main__ - INFO - 
+2025-11-18 01:58:50,807 - __main__ - INFO - [AUTH] Authenticating with API...
+2025-11-18 01:58:50,827 - __main__ - INFO - [AUTH] POST https://localhost:7145/api/Auth/signin
+2025-11-18 01:58:50,827 - __main__ - INFO - [AUTH] Email: system@gmail.com
+2025-11-18 01:58:51,080 - __main__ - INFO - 
+2025-11-18 01:58:51,080 - __main__ - INFO - [AUTH] Response Status: 200
+2025-11-18 01:58:51,081 - __main__ - INFO - 
+2025-11-18 01:58:51,081 - __main__ - INFO - [AUTH] Authentication successful
+2025-11-18 01:58:51,081 - __main__ - INFO - [AUTH] Token expires at: 2025-11-18T17:58:51.0790836Z
+2025-11-18 01:58:51,082 - __main__ - INFO - Connecting to MQTT broker: localhost:1883
+2025-11-18 01:58:51,085 - __main__ - INFO - 
+2025-11-18 01:58:51,085 - __main__ - INFO - Server PM PDF Service started successfully
+2025-11-18 01:58:51,085 - __main__ - INFO - Waiting for MQTT messages...
+2025-11-18 01:58:51,085 - __main__ - INFO - 
+2025-11-18 01:58:51,086 - __main__ - INFO - Connected to MQTT broker successfully
+2025-11-18 01:58:51,086 - __main__ - INFO - Subscribed to topic: controltower/server_pm_reportform_pdf/+
+2025-11-18 01:58:51,087 - __main__ - INFO - Subscribed to topic: controltower/cm_reportform_pdf/+
+2025-11-18 01:58:55,637 - __main__ - INFO - 
+2025-11-18 01:58:55,637 - __main__ - INFO - Cleaning up resources...
+2025-11-18 01:58:55,637 - __main__ - INFO - Cleaning up resources...
+2025-11-18 01:58:56,187 - __main__ - INFO - MQTT client disconnected
+2025-11-18 01:58:56,188 - __main__ - INFO - 
+2025-11-18 01:58:56,188 - __main__ - INFO - Cleanup completed
+2025-11-18 01:59:42,697 - __main__ - INFO - 
+2025-11-18 01:59:42,697 - __main__ - INFO - Press 'r' + Enter at any time to refresh the PDF service.
+2025-11-18 01:59:42,699 - __main__ - INFO - 
+2025-11-18 01:59:42,699 - __main__ - INFO - Starting Server PM PDF Service...
+2025-11-18 01:59:42,699 - __main__ - INFO - PDF output directory: C:\Users\thanthtet.myet\Documents\01_Willowglen\B_001_Workplace\ControlTower\ControlTower_Python\PDF_Generator\Server_PM_ReportForm_PDF\PDF_File
+2025-11-18 01:59:42,699 - __main__ - INFO - Authenticating with API...
+2025-11-18 01:59:42,699 - __main__ - INFO - 
+2025-11-18 01:59:42,699 - __main__ - INFO - [AUTH] Authenticating with API...
+2025-11-18 01:59:42,724 - __main__ - INFO - [AUTH] POST https://localhost:7145/api/Auth/signin
+2025-11-18 01:59:42,725 - __main__ - INFO - [AUTH] Email: system@gmail.com
+2025-11-18 01:59:43,091 - __main__ - INFO - 
+2025-11-18 01:59:43,092 - __main__ - INFO - [AUTH] Response Status: 200
+2025-11-18 01:59:43,092 - __main__ - INFO - 
+2025-11-18 01:59:43,092 - __main__ - INFO - [AUTH] Authentication successful
+2025-11-18 01:59:43,092 - __main__ - INFO - [AUTH] Token expires at: 2025-11-18T17:59:43.0891537Z
+2025-11-18 01:59:43,093 - __main__ - INFO - Connecting to MQTT broker: localhost:1883
+2025-11-18 01:59:43,109 - __main__ - INFO - 
+2025-11-18 01:59:43,109 - __main__ - INFO - 
+2025-11-18 01:59:43,110 - __main__ - INFO - Server PM PDF Service started successfully
+2025-11-18 01:59:43,110 - __main__ - INFO - Connected to MQTT broker successfully
+2025-11-18 01:59:43,110 - __main__ - INFO - Waiting for MQTT messages...
+2025-11-18 01:59:43,111 - __main__ - INFO - Subscribed to topic: controltower/server_pm_reportform_pdf/+
+2025-11-18 01:59:43,114 - __main__ - INFO - Subscribed to topic: controltower/cm_reportform_pdf/+
+2025-11-18 01:59:48,051 - __main__ - INFO - 
+2025-11-18 01:59:48,051 - __main__ - INFO - [STEP 1] Received MQTT message for report_id: d05c3cac-fe1f-46f2-b648-f68503af473a
+2025-11-18 01:59:48,052 - __main__ - INFO - [DATA] Message data: {'report_id': 'd05c3cac-fe1f-46f2-b648-f68503af473a', 'requested_by': '11111111-1111-1111-1111-111111111111', 'timestamp': '2025-11-17T17:59:48.0498656Z'}
+2025-11-18 01:59:48,057 - __main__ - INFO - 
+2025-11-18 01:59:48,058 - __main__ - INFO - [STEP 2] Starting PDF processing for report_id: d05c3cac-fe1f-46f2-b648-f68503af473a (cm_reportform_pdf)
+2025-11-18 01:59:48,059 - __main__ - INFO - [STATUS UPDATE] d05c3cac-fe1f-46f2-b648-f68503af473a -> PROCESSING - PDF generation started
+2025-11-18 01:59:48,061 - __main__ - INFO - [MQTT] Published to topic: controltower/cm_reportform_pdf_status/d05c3cac-fe1f-46f2-b648-f68503af473a
+2025-11-18 01:59:48,062 - __main__ - INFO - 
+2025-11-18 01:59:48,063 - __main__ - INFO - [STEP 3] Initializing database manager...
+2025-11-18 01:59:48,064 - __main__ - INFO - 
+2025-11-18 01:59:48,065 - __main__ - INFO - [STEP 4] Initializing CM PDF generator...
+2025-11-18 01:59:48,069 - __main__ - INFO - 
+2025-11-18 01:59:48,069 - __main__ - INFO - [STEP 5] Calling API endpoint /api/ReportForm/CMReportForm/d05c3cac-fe1f-46f2-b648-f68503af473a
+2025-11-18 01:59:48,070 - __main__ - INFO - 
+2025-11-18 01:59:48,070 - __main__ - INFO - [API] URL: https://localhost:7145/api/ReportForm/CMReportForm/d05c3cac-fe1f-46f2-b648-f68503af473a
+2025-11-18 01:59:48,226 - __main__ - INFO - 
+2025-11-18 01:59:48,228 - __main__ - INFO - [API] Making authenticated HTTP GET request...
+2025-11-18 01:59:48,230 - __main__ - INFO - [API] Request timeout: 10 seconds
+2025-11-18 01:59:48,231 - __main__ - INFO - [API] SSL verification disabled for localhost
+2025-11-18 01:59:48,321 - __main__ - INFO - 
+2025-11-18 01:59:48,321 - __main__ - INFO - [API] Response Status: 200
+2025-11-18 01:59:48,322 - __main__ - INFO - 
+2025-11-18 01:59:48,322 - __main__ - INFO - [API SUCCESS] Data retrieved successfully (Size: 5863 chars)
+2025-11-18 01:59:48,323 - __main__ - INFO - [API] Response Keys: ['id', 'reportFormTypeID', 'reportFormTypeName', 'jobNo', 'systemNameWarehouseID', 'systemNameWarehouseName', 'stationNameWarehouseID', 'stationNameWarehouseName', 'uploadStatus', 'uploadHostname', 'uploadIPAddress', 'formStatus', 'createdDate', 'updatedDate', 'createdBy', 'createdByUserName', 'updatedBy', 'updatedByUserName', 'cmReportForm', 'materialUsed', 'beforeIssueImages', 'afterActionImages', 'materialUsedOldSerialImages', 'materialUsedNewSerialImages']
+2025-11-18 01:59:48,325 - __main__ - INFO - 
+2025-11-18 01:59:48,326 - __main__ - INFO - [STEP 6] Transforming API data for report type cm_reportform_pdf...
+2025-11-18 01:59:48,326 - __main__ - INFO - 
+2025-11-18 01:59:48,326 - __main__ - INFO - [STEP 7] Using job number: d05c3cac-fe1f-46f2-b648-f68503af473a
+2025-11-18 01:59:48,327 - __main__ - INFO - 
+2025-11-18 01:59:48,327 - __main__ - INFO - [STEP 8] Generating PDF output...
+2025-11-18 01:59:48,379 - cm_pdf_generator - INFO - [CM PDF] Generated CM report at PDF_File\CM_Report_d05c3cac-fe1f-46f2-b648-f68503af473a_20251118_015948.pdf
+2025-11-18 01:59:48,380 - __main__ - INFO - 
+2025-11-18 01:59:48,381 - __main__ - INFO - [STEP 8 SUCCESS] PDF generated successfully at: PDF_File\CM_Report_d05c3cac-fe1f-46f2-b648-f68503af473a_20251118_015948.pdf
+2025-11-18 01:59:48,382 - __main__ - INFO - [STATUS UPDATE] d05c3cac-fe1f-46f2-b648-f68503af473a -> COMPLETED - PDF generated successfully: CM_Report_d05c3cac-fe1f-46f2-b648-f68503af473a_20251118_015948.pdf
+2025-11-18 01:59:48,384 - __main__ - INFO - [MQTT] Published to topic: controltower/cm_reportform_pdf_status/d05c3cac-fe1f-46f2-b648-f68503af473a
+2025-11-18 02:05:40,023 - __main__ - INFO - 
+2025-11-18 02:05:40,025 - __main__ - INFO - Cleaning up resources...
+2025-11-18 02:05:44,381 - __main__ - INFO - 
+2025-11-18 02:05:44,381 - __main__ - INFO - Press 'r' + Enter at any time to refresh the PDF service.
+2025-11-18 02:05:44,383 - __main__ - INFO - 
+2025-11-18 02:05:44,383 - __main__ - INFO - Starting Server PM PDF Service...
+2025-11-18 02:05:44,383 - __main__ - INFO - PDF output directory: C:\Users\thanthtet.myet\Documents\01_Willowglen\B_001_Workplace\ControlTower\ControlTower_Python\PDF_Generator\Server_PM_ReportForm_PDF\PDF_File
+2025-11-18 02:05:44,383 - __main__ - INFO - Authenticating with API...
+2025-11-18 02:05:44,383 - __main__ - INFO - 
+2025-11-18 02:05:44,384 - __main__ - INFO - [AUTH] Authenticating with API...
+2025-11-18 02:05:44,409 - __main__ - INFO - [AUTH] POST https://localhost:7145/api/Auth/signin
+2025-11-18 02:05:44,409 - __main__ - INFO - [AUTH] Email: system@gmail.com
+2025-11-18 02:05:44,956 - __main__ - INFO - 
+2025-11-18 02:05:44,957 - __main__ - INFO - [AUTH] Response Status: 200
+2025-11-18 02:05:44,957 - __main__ - INFO - 
+2025-11-18 02:05:44,957 - __main__ - INFO - [AUTH] Authentication successful
+2025-11-18 02:05:44,958 - __main__ - INFO - [AUTH] Token expires at: 2025-11-18T18:05:44.9510012Z
+2025-11-18 02:05:44,959 - __main__ - INFO - Connecting to MQTT broker: localhost:1883
+2025-11-18 02:05:44,963 - __main__ - INFO - 
+2025-11-18 02:05:44,963 - __main__ - INFO - 
+2025-11-18 02:05:44,963 - __main__ - INFO - Server PM PDF Service started successfully
+2025-11-18 02:05:44,963 - __main__ - INFO - Connected to MQTT broker successfully
+2025-11-18 02:05:44,964 - __main__ - INFO - Waiting for MQTT messages...
+2025-11-18 02:05:44,964 - __main__ - INFO - Subscribed to topic: controltower/server_pm_reportform_pdf/+
+2025-11-18 02:05:44,965 - __main__ - INFO - Subscribed to topic: controltower/cm_reportform_pdf/+
+2025-11-18 02:05:54,609 - __main__ - INFO - 
+2025-11-18 02:05:54,610 - __main__ - INFO - [STEP 1] Received MQTT message for report_id: d05c3cac-fe1f-46f2-b648-f68503af473a
+2025-11-18 02:05:54,610 - __main__ - INFO - [DATA] Message data: {'report_id': 'd05c3cac-fe1f-46f2-b648-f68503af473a', 'requested_by': '11111111-1111-1111-1111-111111111111', 'timestamp': '2025-11-17T18:05:54.6070330Z'}
+2025-11-18 02:05:54,615 - __main__ - INFO - 
+2025-11-18 02:05:54,616 - __main__ - INFO - [STEP 2] Starting PDF processing for report_id: d05c3cac-fe1f-46f2-b648-f68503af473a (cm_reportform_pdf)
+2025-11-18 02:05:54,617 - __main__ - INFO - [STATUS UPDATE] d05c3cac-fe1f-46f2-b648-f68503af473a -> PROCESSING - PDF generation started
+2025-11-18 02:05:54,618 - __main__ - INFO - [MQTT] Published to topic: controltower/cm_reportform_pdf_status/d05c3cac-fe1f-46f2-b648-f68503af473a
+2025-11-18 02:05:54,619 - __main__ - INFO - 
+2025-11-18 02:05:54,620 - __main__ - INFO - [STEP 3] Initializing database manager...
+2025-11-18 02:05:54,620 - __main__ - INFO - 
+2025-11-18 02:05:54,621 - __main__ - INFO - [STEP 4] Initializing CM PDF generator...
+2025-11-18 02:05:54,625 - __main__ - INFO - 
+2025-11-18 02:05:54,627 - __main__ - INFO - [STEP 5] Calling API endpoint /api/ReportForm/CMReportForm/d05c3cac-fe1f-46f2-b648-f68503af473a
+2025-11-18 02:05:54,631 - __main__ - INFO - 
+2025-11-18 02:05:54,632 - __main__ - INFO - [API] URL: https://localhost:7145/api/ReportForm/CMReportForm/d05c3cac-fe1f-46f2-b648-f68503af473a
+2025-11-18 02:05:54,730 - __main__ - INFO - 
+2025-11-18 02:05:54,730 - __main__ - INFO - [API] Making authenticated HTTP GET request...
+2025-11-18 02:05:54,731 - __main__ - INFO - [API] Request timeout: 10 seconds
+2025-11-18 02:05:54,731 - __main__ - INFO - [API] SSL verification disabled for localhost
+2025-11-18 02:05:54,825 - __main__ - INFO - 
+2025-11-18 02:05:54,826 - __main__ - INFO - [API] Response Status: 200
+2025-11-18 02:05:54,828 - __main__ - INFO - 
+2025-11-18 02:05:54,829 - __main__ - INFO - [API SUCCESS] Data retrieved successfully (Size: 5863 chars)
+2025-11-18 02:05:54,830 - __main__ - INFO - [API] Response Keys: ['id', 'reportFormTypeID', 'reportFormTypeName', 'jobNo', 'systemNameWarehouseID', 'systemNameWarehouseName', 'stationNameWarehouseID', 'stationNameWarehouseName', 'uploadStatus', 'uploadHostname', 'uploadIPAddress', 'formStatus', 'createdDate', 'updatedDate', 'createdBy', 'createdByUserName', 'updatedBy', 'updatedByUserName', 'cmReportForm', 'materialUsed', 'beforeIssueImages', 'afterActionImages', 'materialUsedOldSerialImages', 'materialUsedNewSerialImages']
+2025-11-18 02:05:54,833 - __main__ - INFO - 
+2025-11-18 02:05:54,834 - __main__ - INFO - [STEP 6] Transforming API data for report type cm_reportform_pdf...
+2025-11-18 02:05:54,835 - __main__ - INFO - 
+2025-11-18 02:05:54,836 - __main__ - INFO - [STEP 7] Using job number: 8401L0069
+2025-11-18 02:05:54,836 - __main__ - INFO - 
+2025-11-18 02:05:54,837 - __main__ - INFO - [STEP 8] Generating PDF output...
+2025-11-18 02:05:57,099 - cm_pdf_generator - INFO - [CM PDF] Generated CM report at PDF_File\CM_Report_8401L0069_20251118_020554.pdf
+2025-11-18 02:05:57,100 - __main__ - INFO - 
+2025-11-18 02:05:57,101 - __main__ - INFO - [STEP 8 SUCCESS] PDF generated successfully at: PDF_File\CM_Report_8401L0069_20251118_020554.pdf
+2025-11-18 02:05:57,102 - __main__ - INFO - [STATUS UPDATE] d05c3cac-fe1f-46f2-b648-f68503af473a -> COMPLETED - PDF generated successfully: CM_Report_8401L0069_20251118_020554.pdf
+2025-11-18 02:05:57,103 - __main__ - INFO - [MQTT] Published to topic: controltower/cm_reportform_pdf_status/d05c3cac-fe1f-46f2-b648-f68503af473a
+2025-11-18 02:18:53,645 - __main__ - INFO - 
+2025-11-18 02:18:53,646 - __main__ - INFO - [REFRESH] Refresh command received. Restarting service...
+2025-11-18 02:18:54,503 - __main__ - INFO - 
+2025-11-18 02:18:54,504 - __main__ - INFO - Press 'r' + Enter at any time to refresh the PDF service.
+2025-11-18 02:18:54,505 - __main__ - INFO - 
+2025-11-18 02:18:54,506 - __main__ - INFO - Starting Server PM PDF Service...
+2025-11-18 02:18:54,506 - __main__ - INFO - PDF output directory: C:\Users\thanthtet.myet\Documents\01_Willowglen\B_001_Workplace\ControlTower\ControlTower_Python\PDF_Generator\Server_PM_ReportForm_PDF\PDF_File
+2025-11-18 02:18:54,506 - __main__ - INFO - Authenticating with API...
+2025-11-18 02:18:54,507 - __main__ - INFO - 
+2025-11-18 02:18:54,507 - __main__ - INFO - [AUTH] Authenticating with API...
+2025-11-18 02:18:54,537 - __main__ - INFO - [AUTH] POST https://localhost:7145/api/Auth/signin
+2025-11-18 02:18:54,538 - __main__ - INFO - [AUTH] Email: system@gmail.com
+2025-11-18 02:18:54,957 - __main__ - INFO - 
+2025-11-18 02:18:54,957 - __main__ - INFO - [AUTH] Response Status: 200
+2025-11-18 02:18:54,958 - __main__ - INFO - 
+2025-11-18 02:18:54,958 - __main__ - INFO - [AUTH] Authentication successful
+2025-11-18 02:18:54,959 - __main__ - INFO - [AUTH] Token expires at: 2025-11-18T18:18:54.9561938Z
+2025-11-18 02:18:54,960 - __main__ - INFO - Connecting to MQTT broker: localhost:1883
+2025-11-18 02:18:54,967 - __main__ - INFO - 
+2025-11-18 02:18:54,967 - __main__ - INFO - 
+2025-11-18 02:18:54,968 - __main__ - INFO - Server PM PDF Service started successfully
+2025-11-18 02:18:54,968 - __main__ - INFO - Connected to MQTT broker successfully
+2025-11-18 02:18:54,969 - __main__ - INFO - Waiting for MQTT messages...
+2025-11-18 02:18:54,970 - __main__ - INFO - Subscribed to topic: controltower/server_pm_reportform_pdf/+
+2025-11-18 02:18:54,971 - __main__ - INFO - Subscribed to topic: controltower/cm_reportform_pdf/+
+2025-11-18 02:19:08,355 - __main__ - INFO - 
+2025-11-18 02:19:08,356 - __main__ - INFO - [STEP 1] Received MQTT message for report_id: d05c3cac-fe1f-46f2-b648-f68503af473a
+2025-11-18 02:19:08,357 - __main__ - INFO - [DATA] Message data: {'report_id': 'd05c3cac-fe1f-46f2-b648-f68503af473a', 'requested_by': '11111111-1111-1111-1111-111111111111', 'timestamp': '2025-11-17T18:19:08.3532185Z'}
+2025-11-18 02:19:08,362 - __main__ - INFO - 
+2025-11-18 02:19:08,363 - __main__ - INFO - [STEP 2] Starting PDF processing for report_id: d05c3cac-fe1f-46f2-b648-f68503af473a (cm_reportform_pdf)
+2025-11-18 02:19:08,364 - __main__ - INFO - [STATUS UPDATE] d05c3cac-fe1f-46f2-b648-f68503af473a -> PROCESSING - PDF generation started
+2025-11-18 02:19:08,366 - __main__ - INFO - [MQTT] Published to topic: controltower/cm_reportform_pdf_status/d05c3cac-fe1f-46f2-b648-f68503af473a
+2025-11-18 02:19:08,366 - __main__ - INFO - 
+2025-11-18 02:19:08,367 - __main__ - INFO - [STEP 3] Initializing database manager...
+2025-11-18 02:19:08,368 - __main__ - INFO - 
+2025-11-18 02:19:08,368 - __main__ - INFO - [STEP 4] Initializing CM PDF generator...
+2025-11-18 02:19:08,373 - __main__ - INFO - 
+2025-11-18 02:19:08,374 - __main__ - INFO - [STEP 5] Calling API endpoint /api/ReportForm/CMReportForm/d05c3cac-fe1f-46f2-b648-f68503af473a
+2025-11-18 02:19:08,374 - __main__ - INFO - 
+2025-11-18 02:19:08,375 - __main__ - INFO - [API] URL: https://localhost:7145/api/ReportForm/CMReportForm/d05c3cac-fe1f-46f2-b648-f68503af473a
+2025-11-18 02:19:08,486 - __main__ - INFO - 
+2025-11-18 02:19:08,487 - __main__ - INFO - [API] Making authenticated HTTP GET request...
+2025-11-18 02:19:08,487 - __main__ - INFO - [API] Request timeout: 10 seconds
+2025-11-18 02:19:08,488 - __main__ - INFO - [API] SSL verification disabled for localhost
+2025-11-18 02:19:08,647 - __main__ - INFO - 
+2025-11-18 02:19:08,648 - __main__ - INFO - [API] Response Status: 200
+2025-11-18 02:19:08,649 - __main__ - INFO - 
+2025-11-18 02:19:08,649 - __main__ - INFO - [API SUCCESS] Data retrieved successfully (Size: 5863 chars)
+2025-11-18 02:19:08,650 - __main__ - INFO - [API] Response Keys: ['id', 'reportFormTypeID', 'reportFormTypeName', 'jobNo', 'systemNameWarehouseID', 'systemNameWarehouseName', 'stationNameWarehouseID', 'stationNameWarehouseName', 'uploadStatus', 'uploadHostname', 'uploadIPAddress', 'formStatus', 'createdDate', 'updatedDate', 'createdBy', 'createdByUserName', 'updatedBy', 'updatedByUserName', 'cmReportForm', 'materialUsed', 'beforeIssueImages', 'afterActionImages', 'materialUsedOldSerialImages', 'materialUsedNewSerialImages']
+2025-11-18 02:19:08,653 - __main__ - INFO - 
+2025-11-18 02:19:08,653 - __main__ - INFO - [STEP 6] Transforming API data for report type cm_reportform_pdf...
+2025-11-18 02:19:08,654 - __main__ - INFO - 
+2025-11-18 02:19:08,654 - __main__ - INFO - [STEP 7] Using job number: 8401L0069
+2025-11-18 02:19:08,655 - __main__ - INFO - 
+2025-11-18 02:19:08,656 - __main__ - INFO - [STEP 8] Generating PDF output...
+2025-11-18 02:19:10,941 - cm_pdf_generator - INFO - [CM PDF] Generated CM report at PDF_File\CM_Report_8401L0069_20251118_021908.pdf
+2025-11-18 02:19:10,943 - __main__ - INFO - 
+2025-11-18 02:19:10,944 - __main__ - INFO - [STEP 8 SUCCESS] PDF generated successfully at: PDF_File\CM_Report_8401L0069_20251118_021908.pdf
+2025-11-18 02:19:10,946 - __main__ - INFO - [STATUS UPDATE] d05c3cac-fe1f-46f2-b648-f68503af473a -> COMPLETED - PDF generated successfully: CM_Report_8401L0069_20251118_021908.pdf
+2025-11-18 02:19:10,946 - __main__ - INFO - [MQTT] Published to topic: controltower/cm_reportform_pdf_status/d05c3cac-fe1f-46f2-b648-f68503af473a
+2025-11-18 02:23:57,576 - __main__ - INFO - 
+2025-11-18 02:23:57,577 - __main__ - INFO - Press 'r' + Enter at any time to refresh the PDF service.
+2025-11-18 02:23:57,578 - __main__ - INFO - 
+2025-11-18 02:23:57,578 - __main__ - INFO - Starting Server PM PDF Service...
+2025-11-18 02:23:57,578 - __main__ - INFO - PDF output directory: C:\Users\thanthtet.myet\Documents\01_Willowglen\B_001_Workplace\ControlTower\ControlTower_Python\PDF_Generator\Server_PM_ReportForm_PDF\PDF_File
+2025-11-18 02:23:57,578 - __main__ - INFO - Authenticating with API...
+2025-11-18 02:23:57,578 - __main__ - INFO - 
+2025-11-18 02:23:57,579 - __main__ - INFO - [AUTH] Authenticating with API...
+2025-11-18 02:23:57,599 - __main__ - INFO - [AUTH] POST https://localhost:7145/api/Auth/signin
+2025-11-18 02:23:57,599 - __main__ - INFO - [AUTH] Email: system@gmail.com
+2025-11-18 02:23:57,971 - __main__ - INFO - 
+2025-11-18 02:23:57,971 - __main__ - INFO - [AUTH] Response Status: 200
+2025-11-18 02:23:57,972 - __main__ - INFO - 
+2025-11-18 02:23:57,972 - __main__ - INFO - [AUTH] Authentication successful
+2025-11-18 02:23:57,972 - __main__ - INFO - [AUTH] Token expires at: 2025-11-18T18:23:57.9690115Z
+2025-11-18 02:23:57,974 - __main__ - INFO - Connecting to MQTT broker: localhost:1883
+2025-11-18 02:23:57,978 - __main__ - INFO - 
+2025-11-18 02:23:57,979 - __main__ - INFO - Server PM PDF Service started successfully
+2025-11-18 02:23:57,979 - __main__ - INFO - Waiting for MQTT messages...
+2025-11-18 02:23:57,979 - __main__ - INFO - 
+2025-11-18 02:23:57,979 - __main__ - INFO - Connected to MQTT broker successfully
+2025-11-18 02:23:57,979 - __main__ - INFO - Subscribed to topic: controltower/server_pm_reportform_pdf/+
+2025-11-18 02:23:57,979 - __main__ - INFO - Subscribed to topic: controltower/cm_reportform_pdf/+
+2025-11-18 02:24:01,890 - __main__ - INFO - 
+2025-11-18 02:24:01,890 - __main__ - INFO - 
+2025-11-18 02:24:01,890 - __main__ - INFO - Cleaning up resources...
+2025-11-18 02:24:01,891 - __main__ - INFO - Cleaning up resources...
+2025-11-18 02:24:02,118 - __main__ - INFO - MQTT client disconnected
+2025-11-18 02:24:02,119 - __main__ - INFO - 
+2025-11-18 02:24:02,120 - __main__ - INFO - Cleanup completed
+2025-11-18 02:27:14,689 - __main__ - INFO - 
+2025-11-18 02:27:14,690 - __main__ - INFO - Press 'r' + Enter at any time to refresh the PDF service.
+2025-11-18 02:27:14,691 - __main__ - INFO - 
+2025-11-18 02:27:14,692 - __main__ - INFO - Starting Server PM PDF Service...
+2025-11-18 02:27:14,692 - __main__ - INFO - PDF output directory: C:\Users\thanthtet.myet\Documents\01_Willowglen\B_001_Workplace\ControlTower\ControlTower_Python\PDF_Generator\Server_PM_ReportForm_PDF\PDF_File
+2025-11-18 02:27:14,692 - __main__ - INFO - Authenticating with API...
+2025-11-18 02:27:14,692 - __main__ - INFO - 
+2025-11-18 02:27:14,693 - __main__ - INFO - [AUTH] Authenticating with API...
+2025-11-18 02:27:14,715 - __main__ - INFO - [AUTH] POST https://localhost:7145/api/Auth/signin
+2025-11-18 02:27:14,715 - __main__ - INFO - [AUTH] Email: system@gmail.com
+2025-11-18 02:27:15,058 - __main__ - INFO - 
+2025-11-18 02:27:15,058 - __main__ - INFO - [AUTH] Response Status: 200
+2025-11-18 02:27:15,059 - __main__ - INFO - 
+2025-11-18 02:27:15,060 - __main__ - INFO - [AUTH] Authentication successful
+2025-11-18 02:27:15,060 - __main__ - INFO - [AUTH] Token expires at: 2025-11-18T18:27:15.0571887Z
+2025-11-18 02:27:15,062 - __main__ - INFO - Connecting to MQTT broker: localhost:1883
+2025-11-18 02:27:15,088 - __main__ - INFO - 
+2025-11-18 02:27:15,088 - __main__ - INFO - 
+2025-11-18 02:27:15,089 - __main__ - INFO - Connected to MQTT broker successfully
+2025-11-18 02:27:15,089 - __main__ - INFO - Server PM PDF Service started successfully
+2025-11-18 02:27:15,090 - __main__ - INFO - Waiting for MQTT messages...
+2025-11-18 02:27:15,090 - __main__ - INFO - Subscribed to topic: controltower/server_pm_reportform_pdf/+
+2025-11-18 02:27:15,090 - __main__ - INFO - Subscribed to topic: controltower/cm_reportform_pdf/+
+2025-11-18 02:27:27,822 - __main__ - INFO - 
+2025-11-18 02:27:27,823 - __main__ - INFO - [STEP 1] Received MQTT message for report_id: d05c3cac-fe1f-46f2-b648-f68503af473a
+2025-11-18 02:27:27,824 - __main__ - INFO - [DATA] Message data: {'report_id': 'd05c3cac-fe1f-46f2-b648-f68503af473a', 'requested_by': '11111111-1111-1111-1111-111111111111', 'timestamp': '2025-11-17T18:27:27.8207944Z'}
+2025-11-18 02:27:27,827 - __main__ - INFO - 
+2025-11-18 02:27:27,828 - __main__ - INFO - [STEP 2] Starting PDF processing for report_id: d05c3cac-fe1f-46f2-b648-f68503af473a (cm_reportform_pdf)
+2025-11-18 02:27:27,829 - __main__ - INFO - [STATUS UPDATE] d05c3cac-fe1f-46f2-b648-f68503af473a -> PROCESSING - PDF generation started
+2025-11-18 02:27:27,829 - __main__ - INFO - [MQTT] Published to topic: controltower/cm_reportform_pdf_status/d05c3cac-fe1f-46f2-b648-f68503af473a
+2025-11-18 02:27:27,830 - __main__ - INFO - 
+2025-11-18 02:27:27,830 - __main__ - INFO - [STEP 3] Initializing database manager...
+2025-11-18 02:27:27,831 - __main__ - INFO - 
+2025-11-18 02:27:27,833 - __main__ - INFO - [STEP 4] Initializing CM PDF generator...
+2025-11-18 02:27:27,837 - __main__ - INFO - 
+2025-11-18 02:27:27,838 - __main__ - INFO - [STEP 5] Calling API endpoint /api/ReportForm/CMReportForm/d05c3cac-fe1f-46f2-b648-f68503af473a
+2025-11-18 02:27:27,839 - __main__ - INFO - 
+2025-11-18 02:27:27,840 - __main__ - INFO - [API] URL: https://localhost:7145/api/ReportForm/CMReportForm/d05c3cac-fe1f-46f2-b648-f68503af473a
+2025-11-18 02:27:27,930 - __main__ - INFO - 
+2025-11-18 02:27:27,930 - __main__ - INFO - [API] Making authenticated HTTP GET request...
+2025-11-18 02:27:27,931 - __main__ - INFO - [API] Request timeout: 10 seconds
+2025-11-18 02:27:27,932 - __main__ - INFO - [API] SSL verification disabled for localhost
+2025-11-18 02:27:28,025 - __main__ - INFO - 
+2025-11-18 02:27:28,026 - __main__ - INFO - [API] Response Status: 200
+2025-11-18 02:27:28,027 - __main__ - INFO - 
+2025-11-18 02:27:28,028 - __main__ - INFO - [API SUCCESS] Data retrieved successfully (Size: 5863 chars)
+2025-11-18 02:27:28,028 - __main__ - INFO - [API] Response Keys: ['id', 'reportFormTypeID', 'reportFormTypeName', 'jobNo', 'systemNameWarehouseID', 'systemNameWarehouseName', 'stationNameWarehouseID', 'stationNameWarehouseName', 'uploadStatus', 'uploadHostname', 'uploadIPAddress', 'formStatus', 'createdDate', 'updatedDate', 'createdBy', 'createdByUserName', 'updatedBy', 'updatedByUserName', 'cmReportForm', 'materialUsed', 'beforeIssueImages', 'afterActionImages', 'materialUsedOldSerialImages', 'materialUsedNewSerialImages']
+2025-11-18 02:27:28,031 - __main__ - INFO - 
+2025-11-18 02:27:28,031 - __main__ - INFO - [STEP 6] Transforming API data for report type cm_reportform_pdf...
+2025-11-18 02:27:28,033 - __main__ - INFO - 
+2025-11-18 02:27:28,034 - __main__ - INFO - [STEP 7] Using job number: 8401L0069
+2025-11-18 02:27:28,035 - __main__ - INFO - 
+2025-11-18 02:27:28,036 - __main__ - INFO - [STEP 8] Generating PDF output...
+2025-11-18 02:27:30,294 - cm_pdf_generator - INFO - [CM PDF] Generated CM report at PDF_File\CM_Report_8401L0069_20251118_022728.pdf
+2025-11-18 02:27:30,296 - __main__ - INFO - 
+2025-11-18 02:27:30,296 - __main__ - INFO - [STEP 8 SUCCESS] PDF generated successfully at: PDF_File\CM_Report_8401L0069_20251118_022728.pdf
+2025-11-18 02:27:30,297 - __main__ - INFO - [STATUS UPDATE] d05c3cac-fe1f-46f2-b648-f68503af473a -> COMPLETED - PDF generated successfully: CM_Report_8401L0069_20251118_022728.pdf
+2025-11-18 02:27:30,298 - __main__ - INFO - [MQTT] Published to topic: controltower/cm_reportform_pdf_status/d05c3cac-fe1f-46f2-b648-f68503af473a
+2025-11-18 02:38:17,992 - __main__ - INFO - 
+2025-11-18 02:38:17,992 - __main__ - INFO - Cleaning up resources...
+2025-11-18 02:38:18,105 - __main__ - INFO - MQTT client disconnected
+2025-11-18 02:38:18,106 - __main__ - INFO - 
+2025-11-18 02:38:18,106 - __main__ - INFO - Cleanup completed
+2025-11-18 02:38:21,528 - __main__ - INFO - 
+2025-11-18 02:38:21,529 - __main__ - INFO - Press 'r' + Enter at any time to refresh the PDF service.
+2025-11-18 02:38:21,530 - __main__ - INFO - 
+2025-11-18 02:38:21,530 - __main__ - INFO - Starting Server PM PDF Service...
+2025-11-18 02:38:21,531 - __main__ - INFO - PDF output directory: C:\Users\thanthtet.myet\Documents\01_Willowglen\B_001_Workplace\ControlTower\ControlTower_Python\PDF_Generator\Server_PM_ReportForm_PDF\PDF_File
+2025-11-18 02:38:21,531 - __main__ - INFO - Authenticating with API...
+2025-11-18 02:38:21,531 - __main__ - INFO - 
+2025-11-18 02:38:21,531 - __main__ - INFO - [AUTH] Authenticating with API...
+2025-11-18 02:38:21,553 - __main__ - INFO - [AUTH] POST https://localhost:7145/api/Auth/signin
+2025-11-18 02:38:21,554 - __main__ - INFO - [AUTH] Email: system@gmail.com
+2025-11-18 02:38:21,925 - __main__ - INFO - 
+2025-11-18 02:38:21,925 - __main__ - INFO - [AUTH] Response Status: 200
+2025-11-18 02:38:21,926 - __main__ - INFO - 
+2025-11-18 02:38:21,926 - __main__ - INFO - [AUTH] Authentication successful
+2025-11-18 02:38:21,926 - __main__ - INFO - [AUTH] Token expires at: 2025-11-18T18:38:21.9234735Z
+2025-11-18 02:38:21,927 - __main__ - INFO - Connecting to MQTT broker: localhost:1883
+2025-11-18 02:38:21,930 - __main__ - INFO - 
+2025-11-18 02:38:21,930 - __main__ - INFO - 
+2025-11-18 02:38:21,930 - __main__ - INFO - Server PM PDF Service started successfully
+2025-11-18 02:38:21,930 - __main__ - INFO - Connected to MQTT broker successfully
+2025-11-18 02:38:21,930 - __main__ - INFO - Waiting for MQTT messages...
+2025-11-18 02:38:21,931 - __main__ - INFO - Subscribed to topic: controltower/server_pm_reportform_pdf/+
+2025-11-18 02:38:21,931 - __main__ - INFO - Subscribed to topic: controltower/cm_reportform_pdf/+
+2025-11-18 02:38:38,644 - __main__ - INFO - 
+2025-11-18 02:38:38,645 - __main__ - INFO - [STEP 1] Received MQTT message for report_id: d05c3cac-fe1f-46f2-b648-f68503af473a
+2025-11-18 02:38:38,645 - __main__ - INFO - [DATA] Message data: {'report_id': 'd05c3cac-fe1f-46f2-b648-f68503af473a', 'requested_by': '11111111-1111-1111-1111-111111111111', 'timestamp': '2025-11-17T18:38:38.6417151Z'}
+2025-11-18 02:38:38,649 - __main__ - INFO - 
+2025-11-18 02:38:38,650 - __main__ - INFO - [STEP 2] Starting PDF processing for report_id: d05c3cac-fe1f-46f2-b648-f68503af473a (cm_reportform_pdf)
+2025-11-18 02:38:38,651 - __main__ - INFO - [STATUS UPDATE] d05c3cac-fe1f-46f2-b648-f68503af473a -> PROCESSING - PDF generation started
+2025-11-18 02:38:38,651 - __main__ - INFO - [MQTT] Published to topic: controltower/cm_reportform_pdf_status/d05c3cac-fe1f-46f2-b648-f68503af473a
+2025-11-18 02:38:38,652 - __main__ - INFO - 
+2025-11-18 02:38:38,653 - __main__ - INFO - [STEP 3] Initializing database manager...
+2025-11-18 02:38:38,653 - __main__ - INFO - 
+2025-11-18 02:38:38,654 - __main__ - INFO - [STEP 4] Initializing CM PDF generator...
+2025-11-18 02:38:38,659 - __main__ - INFO - 
+2025-11-18 02:38:38,660 - __main__ - INFO - [STEP 5] Calling API endpoint /api/ReportForm/CMReportForm/d05c3cac-fe1f-46f2-b648-f68503af473a
+2025-11-18 02:38:38,660 - __main__ - INFO - 
+2025-11-18 02:38:38,661 - __main__ - INFO - [API] URL: https://localhost:7145/api/ReportForm/CMReportForm/d05c3cac-fe1f-46f2-b648-f68503af473a
+2025-11-18 02:38:38,754 - __main__ - INFO - 
+2025-11-18 02:38:38,754 - __main__ - INFO - [API] Making authenticated HTTP GET request...
+2025-11-18 02:38:38,755 - __main__ - INFO - [API] Request timeout: 10 seconds
+2025-11-18 02:38:38,757 - __main__ - INFO - [API] SSL verification disabled for localhost
+2025-11-18 02:38:38,846 - __main__ - INFO - 
+2025-11-18 02:38:38,846 - __main__ - INFO - [API] Response Status: 200
+2025-11-18 02:38:38,847 - __main__ - INFO - 
+2025-11-18 02:38:38,848 - __main__ - INFO - [API SUCCESS] Data retrieved successfully (Size: 5863 chars)
+2025-11-18 02:38:38,848 - __main__ - INFO - [API] Response Keys: ['id', 'reportFormTypeID', 'reportFormTypeName', 'jobNo', 'systemNameWarehouseID', 'systemNameWarehouseName', 'stationNameWarehouseID', 'stationNameWarehouseName', 'uploadStatus', 'uploadHostname', 'uploadIPAddress', 'formStatus', 'createdDate', 'updatedDate', 'createdBy', 'createdByUserName', 'updatedBy', 'updatedByUserName', 'cmReportForm', 'materialUsed', 'beforeIssueImages', 'afterActionImages', 'materialUsedOldSerialImages', 'materialUsedNewSerialImages']
+2025-11-18 02:38:38,851 - __main__ - INFO - 
+2025-11-18 02:38:38,851 - __main__ - INFO - [STEP 6] Transforming API data for report type cm_reportform_pdf...
+2025-11-18 02:38:38,852 - __main__ - INFO - 
+2025-11-18 02:38:38,852 - __main__ - INFO - [STEP 7] Using job number: 8401L0069
+2025-11-18 02:38:38,853 - __main__ - INFO - 
+2025-11-18 02:38:38,853 - __main__ - INFO - [STEP 8] Generating PDF output...
+2025-11-18 02:38:41,158 - cm_pdf_generator - INFO - [CM PDF] Generated CM report at PDF_File\CM_Report_8401L0069_20251118_023838.pdf
+2025-11-18 02:38:41,159 - __main__ - INFO - 
+2025-11-18 02:38:41,159 - __main__ - INFO - [STEP 8 SUCCESS] PDF generated successfully at: PDF_File\CM_Report_8401L0069_20251118_023838.pdf
+2025-11-18 02:38:41,160 - __main__ - INFO - [STATUS UPDATE] d05c3cac-fe1f-46f2-b648-f68503af473a -> COMPLETED - PDF generated successfully: CM_Report_8401L0069_20251118_023838.pdf
+2025-11-18 02:38:41,161 - __main__ - INFO - [MQTT] Published to topic: controltower/cm_reportform_pdf_status/d05c3cac-fe1f-46f2-b648-f68503af473a
+2025-11-18 02:41:02,511 - __main__ - INFO - 
+2025-11-18 02:41:02,512 - __main__ - INFO - Cleaning up resources...
+2025-11-18 02:41:06,483 - __main__ - INFO - 
+2025-11-18 02:41:06,484 - __main__ - INFO - Press 'r' + Enter at any time to refresh the PDF service.
+2025-11-18 02:41:06,485 - __main__ - INFO - 
+2025-11-18 02:41:06,486 - __main__ - INFO - Starting Server PM PDF Service...
+2025-11-18 02:41:06,486 - __main__ - INFO - PDF output directory: C:\Users\thanthtet.myet\Documents\01_Willowglen\B_001_Workplace\ControlTower\ControlTower_Python\PDF_Generator\Server_PM_ReportForm_PDF\PDF_File
+2025-11-18 02:41:06,486 - __main__ - INFO - Authenticating with API...
+2025-11-18 02:41:06,487 - __main__ - INFO - 
+2025-11-18 02:41:06,487 - __main__ - INFO - [AUTH] Authenticating with API...
+2025-11-18 02:41:06,516 - __main__ - INFO - [AUTH] POST https://localhost:7145/api/Auth/signin
+2025-11-18 02:41:06,517 - __main__ - INFO - [AUTH] Email: system@gmail.com
+2025-11-18 02:41:06,945 - __main__ - INFO - 
+2025-11-18 02:41:06,946 - __main__ - INFO - [AUTH] Response Status: 200
+2025-11-18 02:41:06,948 - __main__ - INFO - 
+2025-11-18 02:41:06,949 - __main__ - INFO - [AUTH] Authentication successful
+2025-11-18 02:41:06,949 - __main__ - INFO - [AUTH] Token expires at: 2025-11-18T18:41:06.9436211Z
+2025-11-18 02:41:06,953 - __main__ - INFO - Connecting to MQTT broker: localhost:1883
+2025-11-18 02:41:06,963 - __main__ - INFO - 
+2025-11-18 02:41:06,964 - __main__ - INFO - 
+2025-11-18 02:41:06,964 - __main__ - INFO - Server PM PDF Service started successfully
+2025-11-18 02:41:06,965 - __main__ - INFO - Connected to MQTT broker successfully
+2025-11-18 02:41:06,966 - __main__ - INFO - Waiting for MQTT messages...
+2025-11-18 02:41:06,967 - __main__ - INFO - Subscribed to topic: controltower/server_pm_reportform_pdf/+
+2025-11-18 02:41:06,968 - __main__ - INFO - Subscribed to topic: controltower/cm_reportform_pdf/+
+2025-11-18 02:41:24,500 - __main__ - INFO - 
+2025-11-18 02:41:24,501 - __main__ - INFO - [STEP 1] Received MQTT message for report_id: d05c3cac-fe1f-46f2-b648-f68503af473a
+2025-11-18 02:41:24,501 - __main__ - INFO - [DATA] Message data: {'report_id': 'd05c3cac-fe1f-46f2-b648-f68503af473a', 'requested_by': '11111111-1111-1111-1111-111111111111', 'timestamp': '2025-11-17T18:41:24.4972908Z'}
+2025-11-18 02:41:24,508 - __main__ - INFO - 
+2025-11-18 02:41:24,509 - __main__ - INFO - [STEP 2] Starting PDF processing for report_id: d05c3cac-fe1f-46f2-b648-f68503af473a (cm_reportform_pdf)
+2025-11-18 02:41:24,512 - __main__ - INFO - [STATUS UPDATE] d05c3cac-fe1f-46f2-b648-f68503af473a -> PROCESSING - PDF generation started
+2025-11-18 02:41:24,512 - __main__ - INFO - [MQTT] Published to topic: controltower/cm_reportform_pdf_status/d05c3cac-fe1f-46f2-b648-f68503af473a
+2025-11-18 02:41:24,513 - __main__ - INFO - 
+2025-11-18 02:41:24,514 - __main__ - INFO - [STEP 3] Initializing database manager...
+2025-11-18 02:41:24,515 - __main__ - INFO - 
+2025-11-18 02:41:24,515 - __main__ - INFO - [STEP 4] Initializing CM PDF generator...
+2025-11-18 02:41:24,523 - __main__ - INFO - 
+2025-11-18 02:41:24,524 - __main__ - INFO - [STEP 5] Calling API endpoint /api/ReportForm/CMReportForm/d05c3cac-fe1f-46f2-b648-f68503af473a
+2025-11-18 02:41:24,524 - __main__ - INFO - 
+2025-11-18 02:41:24,525 - __main__ - INFO - [API] URL: https://localhost:7145/api/ReportForm/CMReportForm/d05c3cac-fe1f-46f2-b648-f68503af473a
+2025-11-18 02:41:24,611 - __main__ - INFO - 
+2025-11-18 02:41:24,612 - __main__ - INFO - [API] Making authenticated HTTP GET request...
+2025-11-18 02:41:24,612 - __main__ - INFO - [API] Request timeout: 10 seconds
+2025-11-18 02:41:24,613 - __main__ - INFO - [API] SSL verification disabled for localhost
+2025-11-18 02:41:24,766 - __main__ - INFO - 
+2025-11-18 02:41:24,766 - __main__ - INFO - [API] Response Status: 200
+2025-11-18 02:41:24,767 - __main__ - INFO - 
+2025-11-18 02:41:24,768 - __main__ - INFO - [API SUCCESS] Data retrieved successfully (Size: 5863 chars)
+2025-11-18 02:41:24,769 - __main__ - INFO - [API] Response Keys: ['id', 'reportFormTypeID', 'reportFormTypeName', 'jobNo', 'systemNameWarehouseID', 'systemNameWarehouseName', 'stationNameWarehouseID', 'stationNameWarehouseName', 'uploadStatus', 'uploadHostname', 'uploadIPAddress', 'formStatus', 'createdDate', 'updatedDate', 'createdBy', 'createdByUserName', 'updatedBy', 'updatedByUserName', 'cmReportForm', 'materialUsed', 'beforeIssueImages', 'afterActionImages', 'materialUsedOldSerialImages', 'materialUsedNewSerialImages']
+2025-11-18 02:41:24,771 - __main__ - INFO - 
+2025-11-18 02:41:24,772 - __main__ - INFO - [STEP 6] Transforming API data for report type cm_reportform_pdf...
+2025-11-18 02:41:24,773 - __main__ - INFO - 
+2025-11-18 02:41:24,773 - __main__ - INFO - [STEP 7] Using job number: 8401L0069
+2025-11-18 02:41:24,774 - __main__ - INFO - 
+2025-11-18 02:41:24,774 - __main__ - INFO - [STEP 8] Generating PDF output...
+2025-11-18 02:41:26,978 - cm_pdf_generator - INFO - [CM PDF] Generated CM report at PDF_File\CM_Report_8401L0069_20251118_024124.pdf
+2025-11-18 02:41:26,979 - __main__ - INFO - 
+2025-11-18 02:41:26,979 - __main__ - INFO - [STEP 8 SUCCESS] PDF generated successfully at: PDF_File\CM_Report_8401L0069_20251118_024124.pdf
+2025-11-18 02:41:26,980 - __main__ - INFO - [STATUS UPDATE] d05c3cac-fe1f-46f2-b648-f68503af473a -> COMPLETED - PDF generated successfully: CM_Report_8401L0069_20251118_024124.pdf
+2025-11-18 02:41:26,981 - __main__ - INFO - [MQTT] Published to topic: controltower/cm_reportform_pdf_status/d05c3cac-fe1f-46f2-b648-f68503af473a
+2025-11-18 02:42:58,632 - __main__ - INFO - 
+2025-11-18 02:42:58,633 - __main__ - INFO - Cleaning up resources...
+2025-11-18 02:43:03,039 - __main__ - INFO - 
+2025-11-18 02:43:03,040 - __main__ - INFO - Press 'r' + Enter at any time to refresh the PDF service.
+2025-11-18 02:43:03,042 - __main__ - INFO - 
+2025-11-18 02:43:03,042 - __main__ - INFO - Starting Server PM PDF Service...
+2025-11-18 02:43:03,043 - __main__ - INFO - PDF output directory: C:\Users\thanthtet.myet\Documents\01_Willowglen\B_001_Workplace\ControlTower\ControlTower_Python\PDF_Generator\Server_PM_ReportForm_PDF\PDF_File
+2025-11-18 02:43:03,043 - __main__ - INFO - Authenticating with API...
+2025-11-18 02:43:03,043 - __main__ - INFO - 
+2025-11-18 02:43:03,043 - __main__ - INFO - [AUTH] Authenticating with API...
+2025-11-18 02:43:03,093 - __main__ - INFO - [AUTH] POST https://localhost:7145/api/Auth/signin
+2025-11-18 02:43:03,093 - __main__ - INFO - [AUTH] Email: system@gmail.com
+2025-11-18 02:43:03,473 - __main__ - INFO - 
+2025-11-18 02:43:03,474 - __main__ - INFO - [AUTH] Response Status: 200
+2025-11-18 02:43:03,474 - __main__ - INFO - 
+2025-11-18 02:43:03,475 - __main__ - INFO - [AUTH] Authentication successful
+2025-11-18 02:43:03,475 - __main__ - INFO - [AUTH] Token expires at: 2025-11-18T18:43:03.4729679Z
+2025-11-18 02:43:03,476 - __main__ - INFO - Connecting to MQTT broker: localhost:1883
+2025-11-18 02:43:03,482 - __main__ - INFO - 
+2025-11-18 02:43:03,482 - __main__ - INFO - 
+2025-11-18 02:43:03,483 - __main__ - INFO - Connected to MQTT broker successfully
+2025-11-18 02:43:03,483 - __main__ - INFO - Server PM PDF Service started successfully
+2025-11-18 02:43:03,483 - __main__ - INFO - Waiting for MQTT messages...
+2025-11-18 02:43:03,483 - __main__ - INFO - Subscribed to topic: controltower/server_pm_reportform_pdf/+
+2025-11-18 02:43:03,484 - __main__ - INFO - Subscribed to topic: controltower/cm_reportform_pdf/+
+2025-11-18 02:43:15,764 - __main__ - INFO - 
+2025-11-18 02:43:15,765 - __main__ - INFO - [STEP 1] Received MQTT message for report_id: d05c3cac-fe1f-46f2-b648-f68503af473a
+2025-11-18 02:43:15,766 - __main__ - INFO - [DATA] Message data: {'report_id': 'd05c3cac-fe1f-46f2-b648-f68503af473a', 'requested_by': '11111111-1111-1111-1111-111111111111', 'timestamp': '2025-11-17T18:43:15.7628936Z'}
+2025-11-18 02:43:15,770 - __main__ - INFO - 
+2025-11-18 02:43:15,771 - __main__ - INFO - [STEP 2] Starting PDF processing for report_id: d05c3cac-fe1f-46f2-b648-f68503af473a (cm_reportform_pdf)
+2025-11-18 02:43:15,772 - __main__ - INFO - [STATUS UPDATE] d05c3cac-fe1f-46f2-b648-f68503af473a -> PROCESSING - PDF generation started
+2025-11-18 02:43:15,773 - __main__ - INFO - [MQTT] Published to topic: controltower/cm_reportform_pdf_status/d05c3cac-fe1f-46f2-b648-f68503af473a
+2025-11-18 02:43:15,774 - __main__ - INFO - 
+2025-11-18 02:43:15,774 - __main__ - INFO - [STEP 3] Initializing database manager...
+2025-11-18 02:43:15,775 - __main__ - INFO - 
+2025-11-18 02:43:15,776 - __main__ - INFO - [STEP 4] Initializing CM PDF generator...
+2025-11-18 02:43:15,779 - __main__ - INFO - 
+2025-11-18 02:43:15,779 - __main__ - INFO - [STEP 5] Calling API endpoint /api/ReportForm/CMReportForm/d05c3cac-fe1f-46f2-b648-f68503af473a
+2025-11-18 02:43:15,781 - __main__ - INFO - 
+2025-11-18 02:43:15,785 - __main__ - INFO - [API] URL: https://localhost:7145/api/ReportForm/CMReportForm/d05c3cac-fe1f-46f2-b648-f68503af473a
+2025-11-18 02:43:15,869 - __main__ - INFO - 
+2025-11-18 02:43:15,870 - __main__ - INFO - [API] Making authenticated HTTP GET request...
+2025-11-18 02:43:15,870 - __main__ - INFO - [API] Request timeout: 10 seconds
+2025-11-18 02:43:15,871 - __main__ - INFO - [API] SSL verification disabled for localhost
+2025-11-18 02:43:15,968 - __main__ - INFO - 
+2025-11-18 02:43:15,968 - __main__ - INFO - [API] Response Status: 200
+2025-11-18 02:43:15,970 - __main__ - INFO - 
+2025-11-18 02:43:15,970 - __main__ - INFO - [API SUCCESS] Data retrieved successfully (Size: 5863 chars)
+2025-11-18 02:43:15,971 - __main__ - INFO - [API] Response Keys: ['id', 'reportFormTypeID', 'reportFormTypeName', 'jobNo', 'systemNameWarehouseID', 'systemNameWarehouseName', 'stationNameWarehouseID', 'stationNameWarehouseName', 'uploadStatus', 'uploadHostname', 'uploadIPAddress', 'formStatus', 'createdDate', 'updatedDate', 'createdBy', 'createdByUserName', 'updatedBy', 'updatedByUserName', 'cmReportForm', 'materialUsed', 'beforeIssueImages', 'afterActionImages', 'materialUsedOldSerialImages', 'materialUsedNewSerialImages']
+2025-11-18 02:43:15,973 - __main__ - INFO - 
+2025-11-18 02:43:15,974 - __main__ - INFO - [STEP 6] Transforming API data for report type cm_reportform_pdf...
+2025-11-18 02:43:15,975 - __main__ - INFO - 
+2025-11-18 02:43:15,975 - __main__ - INFO - [STEP 7] Using job number: 8401L0069
+2025-11-18 02:43:15,975 - __main__ - INFO - 
+2025-11-18 02:43:15,976 - __main__ - INFO - [STEP 8] Generating PDF output...
+2025-11-18 02:43:18,194 - cm_pdf_generator - INFO - [CM PDF] Generated CM report at PDF_File\CM_Report_8401L0069_20251118_024315.pdf
+2025-11-18 02:43:18,195 - __main__ - INFO - 
+2025-11-18 02:43:18,196 - __main__ - INFO - [STEP 8 SUCCESS] PDF generated successfully at: PDF_File\CM_Report_8401L0069_20251118_024315.pdf
+2025-11-18 02:43:18,196 - __main__ - INFO - [STATUS UPDATE] d05c3cac-fe1f-46f2-b648-f68503af473a -> COMPLETED - PDF generated successfully: CM_Report_8401L0069_20251118_024315.pdf
+2025-11-18 02:43:18,198 - __main__ - INFO - [MQTT] Published to topic: controltower/cm_reportform_pdf_status/d05c3cac-fe1f-46f2-b648-f68503af473a
+2025-11-18 02:43:45,602 - __main__ - INFO - 
+2025-11-18 02:43:45,602 - __main__ - INFO - [STEP 1] Received MQTT message for report_id: db052ee8-601d-4771-a2e2-0beaf50f3589
+2025-11-18 02:43:45,603 - __main__ - INFO - [DATA] Message data: {'report_id': 'db052ee8-601d-4771-a2e2-0beaf50f3589', 'requested_by': '11111111-1111-1111-1111-111111111111', 'timestamp': '2025-11-17T18:43:45.6005106Z'}
+2025-11-18 02:43:45,606 - __main__ - INFO - 
+2025-11-18 02:43:45,608 - __main__ - INFO - [STEP 2] Starting PDF processing for report_id: db052ee8-601d-4771-a2e2-0beaf50f3589 (server_pm_reportform_pdf)
+2025-11-18 02:43:45,609 - __main__ - INFO - [STATUS UPDATE] db052ee8-601d-4771-a2e2-0beaf50f3589 -> PROCESSING - PDF generation started
+2025-11-18 02:43:45,611 - __main__ - INFO - [MQTT] Published to topic: controltower/server_pm_reportform_pdf_status/db052ee8-601d-4771-a2e2-0beaf50f3589
+2025-11-18 02:43:45,612 - __main__ - INFO - 
+2025-11-18 02:43:45,612 - __main__ - INFO - [STEP 4] Initializing Server PM PDF generator...
+2025-11-18 02:43:45,616 - __main__ - INFO - 
+2025-11-18 02:43:45,617 - __main__ - INFO - [STEP 5] Calling API endpoint /api/PMReportFormServer/db052ee8-601d-4771-a2e2-0beaf50f3589
+2025-11-18 02:43:45,619 - __main__ - INFO - 
+2025-11-18 02:43:45,620 - __main__ - INFO - [API] URL: https://localhost:7145/api/PMReportFormServer/db052ee8-601d-4771-a2e2-0beaf50f3589
+2025-11-18 02:43:45,721 - __main__ - INFO - 
+2025-11-18 02:43:45,722 - __main__ - INFO - [API] Making authenticated HTTP GET request...
+2025-11-18 02:43:45,722 - __main__ - INFO - [API] Request timeout: 10 seconds
+2025-11-18 02:43:45,723 - __main__ - INFO - [API] SSL verification disabled for localhost
+2025-11-18 02:43:45,881 - __main__ - INFO - 
+2025-11-18 02:43:45,881 - __main__ - INFO - [API] Response Status: 200
+2025-11-18 02:43:45,883 - __main__ - INFO - 
+2025-11-18 02:43:45,884 - __main__ - INFO - [API SUCCESS] Data retrieved successfully (Size: 27045 chars)
+2025-11-18 02:43:45,884 - __main__ - INFO - [API] Response Keys: ['reportForm', 'pmReportFormServer', 'pmServerHealths', 'pmServerHardDriveHealths', 'pmServerDiskUsageHealths', 'pmServerCPUAndMemoryUsages', 'pmServerNetworkHealths', 'pmServerWillowlynxProcessStatuses', 'pmServerWillowlynxNetworkStatuses', 'pmServerWillowlynxRTUStatuses', 'pmServerWillowlynxHistoricalTrends', 'pmServerWillowlynxHistoricalReports', 'pmServerWillowlynxCCTVCameras', 'pmServerMonthlyDatabaseCreations', 'pmServerDatabaseBackups', 'pmServerTimeSyncs', 'pmServerHotFixes', 'pmServerFailOvers', 'pmServerASAFirewalls', 'pmServerSoftwarePatchSummaries']
+2025-11-18 02:43:45,886 - __main__ - INFO - 
+2025-11-18 02:43:45,886 - __main__ - INFO - [STEP 6] Transforming API data for report type server_pm_reportform_pdf...
+2025-11-18 02:43:45,887 - __main__ - INFO - 
+2025-11-18 02:43:45,887 - __main__ - INFO - [STEP 7] Using job number: 8401L0067
+2025-11-18 02:43:45,888 - __main__ - INFO - 
+2025-11-18 02:43:45,888 - __main__ - INFO - [STEP 8] Generating PDF output...
+2025-11-18 02:43:45,888 - pdf_generator - INFO - Converting API response data to JSON format...
+2025-11-18 02:43:45,889 - pdf_generator - INFO - Parsing JSON data for PDF generation...
+2025-11-18 02:43:45,890 - pdf_generator - INFO - JSON conversion and parsing completed successfully
+2025-11-18 02:43:46,866 - pdf_generator - INFO - PDF generated successfully: PDF_File\Server_PM_Report_8401L0067_20251118_024345.pdf
+2025-11-18 02:43:46,867 - __main__ - INFO - 
+2025-11-18 02:43:46,868 - __main__ - INFO - [STEP 8 SUCCESS] PDF generated successfully at: PDF_File\Server_PM_Report_8401L0067_20251118_024345.pdf
+2025-11-18 02:43:46,869 - __main__ - INFO - [STATUS UPDATE] db052ee8-601d-4771-a2e2-0beaf50f3589 -> COMPLETED - PDF generated successfully: Server_PM_Report_8401L0067_20251118_024345.pdf
+2025-11-18 02:43:46,869 - __main__ - INFO - [MQTT] Published to topic: controltower/server_pm_reportform_pdf_status/db052ee8-601d-4771-a2e2-0beaf50f3589
+2025-11-18 02:44:32,008 - __main__ - INFO - 
+2025-11-18 02:44:32,009 - __main__ - INFO - Cleaning up resources...
+2025-11-18 02:44:32,186 - __main__ - INFO - MQTT client disconnected
+2025-11-18 02:44:32,188 - __main__ - INFO - 
+2025-11-18 02:44:32,188 - __main__ - INFO - Cleanup completed
+2025-11-18 02:44:38,373 - __main__ - INFO - 
+2025-11-18 02:44:38,374 - __main__ - INFO - Press 'r' + Enter at any time to refresh the PDF service.
+2025-11-18 02:44:38,375 - __main__ - INFO - 
+2025-11-18 02:44:38,375 - __main__ - INFO - Starting Server PM PDF Service...
+2025-11-18 02:44:38,376 - __main__ - INFO - PDF output directory: C:\Users\thanthtet.myet\Documents\01_Willowglen\B_001_Workplace\ControlTower\ControlTower_Python\PDF_Generator\Server_PM_ReportForm_PDF\PDF_File
+2025-11-18 02:44:38,376 - __main__ - INFO - Authenticating with API...
+2025-11-18 02:44:38,376 - __main__ - INFO - 
+2025-11-18 02:44:38,377 - __main__ - INFO - [AUTH] Authenticating with API...
+2025-11-18 02:44:38,403 - __main__ - INFO - [AUTH] POST https://localhost:7145/api/Auth/signin
+2025-11-18 02:44:38,403 - __main__ - INFO - [AUTH] Email: system@gmail.com
+2025-11-18 02:44:38,761 - __main__ - INFO - 
+2025-11-18 02:44:38,761 - __main__ - INFO - [AUTH] Response Status: 200
+2025-11-18 02:44:38,762 - __main__ - INFO - 
+2025-11-18 02:44:38,762 - __main__ - INFO - [AUTH] Authentication successful
+2025-11-18 02:44:38,763 - __main__ - INFO - [AUTH] Token expires at: 2025-11-18T18:44:38.7598813Z
+2025-11-18 02:44:38,764 - __main__ - INFO - Connecting to MQTT broker: localhost:1883
+2025-11-18 02:44:38,770 - __main__ - INFO - 
+2025-11-18 02:44:38,771 - __main__ - INFO - 
+2025-11-18 02:44:38,771 - __main__ - INFO - Server PM PDF Service started successfully
+2025-11-18 02:44:38,772 - __main__ - INFO - Connected to MQTT broker successfully
+2025-11-18 02:44:38,772 - __main__ - INFO - Waiting for MQTT messages...
+2025-11-18 02:44:38,773 - __main__ - INFO - Subscribed to topic: controltower/server_pm_reportform_pdf/+
+2025-11-18 02:44:38,775 - __main__ - INFO - Subscribed to topic: controltower/cm_reportform_pdf/+
+2025-11-18 02:44:40,972 - __main__ - INFO - 
+2025-11-18 02:44:40,973 - __main__ - INFO - [STEP 1] Received MQTT message for report_id: db052ee8-601d-4771-a2e2-0beaf50f3589
+2025-11-18 02:44:40,974 - __main__ - INFO - [DATA] Message data: {'report_id': 'db052ee8-601d-4771-a2e2-0beaf50f3589', 'requested_by': '11111111-1111-1111-1111-111111111111', 'timestamp': '2025-11-17T18:44:40.9712442Z'}
+2025-11-18 02:44:40,978 - __main__ - INFO - 
+2025-11-18 02:44:40,979 - __main__ - INFO - [STEP 2] Starting PDF processing for report_id: db052ee8-601d-4771-a2e2-0beaf50f3589 (server_pm_reportform_pdf)
+2025-11-18 02:44:40,982 - __main__ - INFO - [STATUS UPDATE] db052ee8-601d-4771-a2e2-0beaf50f3589 -> PROCESSING - PDF generation started
+2025-11-18 02:44:40,983 - __main__ - INFO - [MQTT] Published to topic: controltower/server_pm_reportform_pdf_status/db052ee8-601d-4771-a2e2-0beaf50f3589
+2025-11-18 02:44:40,984 - __main__ - INFO - 
+2025-11-18 02:44:40,985 - __main__ - INFO - [STEP 3] Initializing database manager...
+2025-11-18 02:44:40,986 - __main__ - INFO - 
+2025-11-18 02:44:40,988 - __main__ - INFO - [STEP 4] Initializing Server PM PDF generator...
+2025-11-18 02:44:40,993 - __main__ - INFO - 
+2025-11-18 02:44:40,994 - __main__ - INFO - [STEP 5] Calling API endpoint /api/PMReportFormServer/db052ee8-601d-4771-a2e2-0beaf50f3589
+2025-11-18 02:44:40,995 - __main__ - INFO - 
+2025-11-18 02:44:40,995 - __main__ - INFO - [API] URL: https://localhost:7145/api/PMReportFormServer/db052ee8-601d-4771-a2e2-0beaf50f3589
+2025-11-18 02:44:41,078 - __main__ - INFO - 
+2025-11-18 02:44:41,079 - __main__ - INFO - [API] Making authenticated HTTP GET request...
+2025-11-18 02:44:41,079 - __main__ - INFO - [API] Request timeout: 10 seconds
+2025-11-18 02:44:41,081 - __main__ - INFO - [API] SSL verification disabled for localhost
+2025-11-18 02:44:41,723 - __main__ - INFO - 
+2025-11-18 02:44:41,723 - __main__ - INFO - [API] Response Status: 200
+2025-11-18 02:44:41,725 - __main__ - INFO - 
+2025-11-18 02:44:41,726 - __main__ - INFO - [API SUCCESS] Data retrieved successfully (Size: 27045 chars)
+2025-11-18 02:44:41,726 - __main__ - INFO - [API] Response Keys: ['reportForm', 'pmReportFormServer', 'pmServerHealths', 'pmServerHardDriveHealths', 'pmServerDiskUsageHealths', 'pmServerCPUAndMemoryUsages', 'pmServerNetworkHealths', 'pmServerWillowlynxProcessStatuses', 'pmServerWillowlynxNetworkStatuses', 'pmServerWillowlynxRTUStatuses', 'pmServerWillowlynxHistoricalTrends', 'pmServerWillowlynxHistoricalReports', 'pmServerWillowlynxCCTVCameras', 'pmServerMonthlyDatabaseCreations', 'pmServerDatabaseBackups', 'pmServerTimeSyncs', 'pmServerHotFixes', 'pmServerFailOvers', 'pmServerASAFirewalls', 'pmServerSoftwarePatchSummaries']
+2025-11-18 02:44:41,728 - __main__ - INFO - 
+2025-11-18 02:44:41,730 - __main__ - INFO - [STEP 6] Transforming API data for report type server_pm_reportform_pdf...
+2025-11-18 02:44:41,732 - __main__ - INFO - 
+2025-11-18 02:44:41,733 - __main__ - INFO - [STEP 7] Using job number: 8401L0067
+2025-11-18 02:44:41,733 - __main__ - INFO - 
+2025-11-18 02:44:41,734 - __main__ - INFO - [STEP 8] Generating PDF output...
+2025-11-18 02:44:41,734 - pdf_generator - INFO - Converting API response data to JSON format...
+2025-11-18 02:44:41,736 - pdf_generator - INFO - Parsing JSON data for PDF generation...
+2025-11-18 02:44:41,737 - pdf_generator - INFO - JSON conversion and parsing completed successfully
+2025-11-18 02:44:42,201 - pdf_generator - INFO - PDF generated successfully: PDF_File\Server_PM_Report_8401L0067_20251118_024441.pdf
+2025-11-18 02:44:42,202 - __main__ - INFO - 
+2025-11-18 02:44:42,202 - __main__ - INFO - [STEP 8 SUCCESS] PDF generated successfully at: PDF_File\Server_PM_Report_8401L0067_20251118_024441.pdf
+2025-11-18 02:44:42,203 - __main__ - INFO - [STATUS UPDATE] db052ee8-601d-4771-a2e2-0beaf50f3589 -> COMPLETED - PDF generated successfully: Server_PM_Report_8401L0067_20251118_024441.pdf
+2025-11-18 02:44:42,203 - __main__ - INFO - [MQTT] Published to topic: controltower/server_pm_reportform_pdf_status/db052ee8-601d-4771-a2e2-0beaf50f3589
+2025-11-18 02:44:57,121 - __main__ - INFO - 
+2025-11-18 02:44:57,122 - __main__ - INFO - [STEP 1] Received MQTT message for report_id: db052ee8-601d-4771-a2e2-0beaf50f3589
+2025-11-18 02:44:57,123 - __main__ - INFO - [DATA] Message data: {'report_id': 'db052ee8-601d-4771-a2e2-0beaf50f3589', 'requested_by': '11111111-1111-1111-1111-111111111111', 'timestamp': '2025-11-17T18:44:57.1203732Z'}
+2025-11-18 02:44:57,126 - __main__ - INFO - 
+2025-11-18 02:44:57,127 - __main__ - INFO - [STEP 2] Starting PDF processing for report_id: db052ee8-601d-4771-a2e2-0beaf50f3589 (server_pm_reportform_pdf)
+2025-11-18 02:44:57,128 - __main__ - INFO - [STATUS UPDATE] db052ee8-601d-4771-a2e2-0beaf50f3589 -> PROCESSING - PDF generation started
+2025-11-18 02:44:57,129 - __main__ - INFO - [MQTT] Published to topic: controltower/server_pm_reportform_pdf_status/db052ee8-601d-4771-a2e2-0beaf50f3589
+2025-11-18 02:44:57,129 - __main__ - INFO - 
+2025-11-18 02:44:57,130 - __main__ - INFO - [STEP 5] Calling API endpoint /api/PMReportFormServer/db052ee8-601d-4771-a2e2-0beaf50f3589
+2025-11-18 02:44:57,131 - __main__ - INFO - 
+2025-11-18 02:44:57,131 - __main__ - INFO - [API] URL: https://localhost:7145/api/PMReportFormServer/db052ee8-601d-4771-a2e2-0beaf50f3589
+2025-11-18 02:44:57,240 - __main__ - INFO - 
+2025-11-18 02:44:57,241 - __main__ - INFO - [API] Making authenticated HTTP GET request...
+2025-11-18 02:44:57,241 - __main__ - INFO - [API] Request timeout: 10 seconds
+2025-11-18 02:44:57,242 - __main__ - INFO - [API] SSL verification disabled for localhost
+2025-11-18 02:44:57,420 - __main__ - INFO - 
+2025-11-18 02:44:57,420 - __main__ - INFO - [API] Response Status: 200
+2025-11-18 02:44:57,421 - __main__ - INFO - 
+2025-11-18 02:44:57,422 - __main__ - INFO - [API SUCCESS] Data retrieved successfully (Size: 27045 chars)
+2025-11-18 02:44:57,423 - __main__ - INFO - [API] Response Keys: ['reportForm', 'pmReportFormServer', 'pmServerHealths', 'pmServerHardDriveHealths', 'pmServerDiskUsageHealths', 'pmServerCPUAndMemoryUsages', 'pmServerNetworkHealths', 'pmServerWillowlynxProcessStatuses', 'pmServerWillowlynxNetworkStatuses', 'pmServerWillowlynxRTUStatuses', 'pmServerWillowlynxHistoricalTrends', 'pmServerWillowlynxHistoricalReports', 'pmServerWillowlynxCCTVCameras', 'pmServerMonthlyDatabaseCreations', 'pmServerDatabaseBackups', 'pmServerTimeSyncs', 'pmServerHotFixes', 'pmServerFailOvers', 'pmServerASAFirewalls', 'pmServerSoftwarePatchSummaries']
+2025-11-18 02:44:57,425 - __main__ - INFO - 
+2025-11-18 02:44:57,426 - __main__ - INFO - [STEP 6] Transforming API data for report type server_pm_reportform_pdf...
+2025-11-18 02:44:57,426 - __main__ - INFO - 
+2025-11-18 02:44:57,427 - __main__ - INFO - [STEP 7] Using job number: 8401L0067
+2025-11-18 02:44:57,428 - __main__ - INFO - 
+2025-11-18 02:44:57,428 - __main__ - INFO - [STEP 8] Generating PDF output...
+2025-11-18 02:44:57,429 - pdf_generator - INFO - Converting API response data to JSON format...
+2025-11-18 02:44:57,430 - pdf_generator - INFO - Parsing JSON data for PDF generation...
+2025-11-18 02:44:57,434 - pdf_generator - INFO - JSON conversion and parsing completed successfully
+2025-11-18 02:44:58,409 - pdf_generator - INFO - PDF generated successfully: PDF_File\Server_PM_Report_8401L0067_20251118_024457.pdf
+2025-11-18 02:44:58,410 - __main__ - INFO - 
+2025-11-18 02:44:58,410 - __main__ - INFO - [STEP 8 SUCCESS] PDF generated successfully at: PDF_File\Server_PM_Report_8401L0067_20251118_024457.pdf
+2025-11-18 02:44:58,411 - __main__ - INFO - [STATUS UPDATE] db052ee8-601d-4771-a2e2-0beaf50f3589 -> COMPLETED - PDF generated successfully: Server_PM_Report_8401L0067_20251118_024457.pdf
+2025-11-18 02:44:58,412 - __main__ - INFO - [MQTT] Published to topic: controltower/server_pm_reportform_pdf_status/db052ee8-601d-4771-a2e2-0beaf50f3589
+2025-11-18 02:45:10,247 - __main__ - INFO - 
+2025-11-18 02:45:10,248 - __main__ - INFO - [STEP 1] Received MQTT message for report_id: d05c3cac-fe1f-46f2-b648-f68503af473a
+2025-11-18 02:45:10,248 - __main__ - INFO - [DATA] Message data: {'report_id': 'd05c3cac-fe1f-46f2-b648-f68503af473a', 'requested_by': '11111111-1111-1111-1111-111111111111', 'timestamp': '2025-11-17T18:45:10.2459176Z'}
+2025-11-18 02:45:10,252 - __main__ - INFO - 
+2025-11-18 02:45:10,253 - __main__ - INFO - [STEP 2] Starting PDF processing for report_id: d05c3cac-fe1f-46f2-b648-f68503af473a (cm_reportform_pdf)
+2025-11-18 02:45:10,254 - __main__ - INFO - [STATUS UPDATE] d05c3cac-fe1f-46f2-b648-f68503af473a -> PROCESSING - PDF generation started
+2025-11-18 02:45:10,254 - __main__ - INFO - [MQTT] Published to topic: controltower/cm_reportform_pdf_status/d05c3cac-fe1f-46f2-b648-f68503af473a
+2025-11-18 02:45:10,255 - __main__ - INFO - 
+2025-11-18 02:45:10,256 - __main__ - INFO - [STEP 4] Initializing CM PDF generator...
+2025-11-18 02:45:10,260 - __main__ - INFO - 
+2025-11-18 02:45:10,261 - __main__ - INFO - [STEP 5] Calling API endpoint /api/ReportForm/CMReportForm/d05c3cac-fe1f-46f2-b648-f68503af473a
+2025-11-18 02:45:10,262 - __main__ - INFO - 
+2025-11-18 02:45:10,262 - __main__ - INFO - [API] URL: https://localhost:7145/api/ReportForm/CMReportForm/d05c3cac-fe1f-46f2-b648-f68503af473a
+2025-11-18 02:45:10,360 - __main__ - INFO - 
+2025-11-18 02:45:10,361 - __main__ - INFO - [API] Making authenticated HTTP GET request...
+2025-11-18 02:45:10,361 - __main__ - INFO - [API] Request timeout: 10 seconds
+2025-11-18 02:45:10,362 - __main__ - INFO - [API] SSL verification disabled for localhost
+2025-11-18 02:45:10,438 - __main__ - INFO - 
+2025-11-18 02:45:10,438 - __main__ - INFO - [API] Response Status: 200
+2025-11-18 02:45:10,439 - __main__ - INFO - 
+2025-11-18 02:45:10,440 - __main__ - INFO - [API SUCCESS] Data retrieved successfully (Size: 5863 chars)
+2025-11-18 02:45:10,441 - __main__ - INFO - [API] Response Keys: ['id', 'reportFormTypeID', 'reportFormTypeName', 'jobNo', 'systemNameWarehouseID', 'systemNameWarehouseName', 'stationNameWarehouseID', 'stationNameWarehouseName', 'uploadStatus', 'uploadHostname', 'uploadIPAddress', 'formStatus', 'createdDate', 'updatedDate', 'createdBy', 'createdByUserName', 'updatedBy', 'updatedByUserName', 'cmReportForm', 'materialUsed', 'beforeIssueImages', 'afterActionImages', 'materialUsedOldSerialImages', 'materialUsedNewSerialImages']
+2025-11-18 02:45:10,444 - __main__ - INFO - 
+2025-11-18 02:45:10,445 - __main__ - INFO - [STEP 6] Transforming API data for report type cm_reportform_pdf...
+2025-11-18 02:45:10,446 - __main__ - INFO - 
+2025-11-18 02:45:10,446 - __main__ - INFO - [STEP 7] Using job number: 8401L0069
+2025-11-18 02:45:10,446 - __main__ - INFO - 
+2025-11-18 02:45:10,447 - __main__ - INFO - [STEP 8] Generating PDF output...
+2025-11-18 02:45:12,719 - cm_pdf_generator - INFO - [CM PDF] Generated CM report at PDF_File\CM_Report_8401L0069_20251118_024510.pdf
+2025-11-18 02:45:12,720 - __main__ - INFO - 
+2025-11-18 02:45:12,720 - __main__ - INFO - [STEP 8 SUCCESS] PDF generated successfully at: PDF_File\CM_Report_8401L0069_20251118_024510.pdf
+2025-11-18 02:45:12,721 - __main__ - INFO - [STATUS UPDATE] d05c3cac-fe1f-46f2-b648-f68503af473a -> COMPLETED - PDF generated successfully: CM_Report_8401L0069_20251118_024510.pdf
+2025-11-18 02:45:12,722 - __main__ - INFO - [MQTT] Published to topic: controltower/cm_reportform_pdf_status/d05c3cac-fe1f-46f2-b648-f68503af473a
+2025-11-18 02:48:09,448 - __main__ - INFO - 
+2025-11-18 02:48:09,448 - __main__ - INFO - Cleaning up resources...
+2025-11-18 02:48:13,168 - __main__ - INFO - 
+2025-11-18 02:48:13,168 - __main__ - INFO - Press 'r' + Enter at any time to refresh the PDF service.
+2025-11-18 02:48:13,170 - __main__ - INFO - 
+2025-11-18 02:48:13,171 - __main__ - INFO - Starting Server PM PDF Service...
+2025-11-18 02:48:13,171 - __main__ - INFO - PDF output directory: C:\Users\thanthtet.myet\Documents\01_Willowglen\B_001_Workplace\ControlTower\ControlTower_Python\PDF_Generator\Server_PM_ReportForm_PDF\PDF_File
+2025-11-18 02:48:13,171 - __main__ - INFO - Authenticating with API...
+2025-11-18 02:48:13,171 - __main__ - INFO - 
+2025-11-18 02:48:13,171 - __main__ - INFO - [AUTH] Authenticating with API...
+2025-11-18 02:48:13,193 - __main__ - INFO - [AUTH] POST https://localhost:7145/api/Auth/signin
+2025-11-18 02:48:13,194 - __main__ - INFO - [AUTH] Email: system@gmail.com
+2025-11-18 02:48:13,553 - __main__ - INFO - 
+2025-11-18 02:48:13,553 - __main__ - INFO - [AUTH] Response Status: 200
+2025-11-18 02:48:13,554 - __main__ - INFO - 
+2025-11-18 02:48:13,554 - __main__ - INFO - [AUTH] Authentication successful
+2025-11-18 02:48:13,554 - __main__ - INFO - [AUTH] Token expires at: 2025-11-18T18:48:13.5513461Z
+2025-11-18 02:48:13,555 - __main__ - INFO - Connecting to MQTT broker: localhost:1883
+2025-11-18 02:48:13,558 - __main__ - INFO - 
+2025-11-18 02:48:13,558 - __main__ - INFO - 
+2025-11-18 02:48:13,558 - __main__ - INFO - Server PM PDF Service started successfully
+2025-11-18 02:48:13,558 - __main__ - INFO - Connected to MQTT broker successfully
+2025-11-18 02:48:13,559 - __main__ - INFO - Waiting for MQTT messages...
+2025-11-18 02:48:13,561 - __main__ - INFO - Subscribed to topic: controltower/server_pm_reportform_pdf/+
+2025-11-18 02:48:13,563 - __main__ - INFO - Subscribed to topic: controltower/cm_reportform_pdf/+
+2025-11-18 02:48:18,610 - __main__ - INFO - 
+2025-11-18 02:48:18,610 - __main__ - INFO - [STEP 1] Received MQTT message for report_id: d05c3cac-fe1f-46f2-b648-f68503af473a
+2025-11-18 02:48:18,611 - __main__ - INFO - [DATA] Message data: {'report_id': 'd05c3cac-fe1f-46f2-b648-f68503af473a', 'requested_by': '11111111-1111-1111-1111-111111111111', 'timestamp': '2025-11-17T18:48:18.6081440Z'}
+2025-11-18 02:48:18,615 - __main__ - INFO - 
+2025-11-18 02:48:18,616 - __main__ - INFO - [STEP 2] Starting PDF processing for report_id: d05c3cac-fe1f-46f2-b648-f68503af473a (cm_reportform_pdf)
+2025-11-18 02:48:18,617 - __main__ - INFO - [STATUS UPDATE] d05c3cac-fe1f-46f2-b648-f68503af473a -> PROCESSING - PDF generation started
+2025-11-18 02:48:18,618 - __main__ - INFO - [MQTT] Published to topic: controltower/cm_reportform_pdf_status/d05c3cac-fe1f-46f2-b648-f68503af473a
+2025-11-18 02:48:18,619 - __main__ - INFO - 
+2025-11-18 02:48:18,619 - __main__ - INFO - [STEP 3] Initializing database manager...
+2025-11-18 02:48:18,620 - __main__ - INFO - 
+2025-11-18 02:48:18,620 - __main__ - INFO - [STEP 4] Initializing CM PDF generator...
+2025-11-18 02:48:18,624 - __main__ - INFO - 
+2025-11-18 02:48:18,625 - __main__ - INFO - [STEP 5] Calling API endpoint /api/ReportForm/CMReportForm/d05c3cac-fe1f-46f2-b648-f68503af473a
+2025-11-18 02:48:18,626 - __main__ - INFO - 
+2025-11-18 02:48:18,627 - __main__ - INFO - [API] URL: https://localhost:7145/api/ReportForm/CMReportForm/d05c3cac-fe1f-46f2-b648-f68503af473a
+2025-11-18 02:48:18,713 - __main__ - INFO - 
+2025-11-18 02:48:18,714 - __main__ - INFO - [API] Making authenticated HTTP GET request...
+2025-11-18 02:48:18,714 - __main__ - INFO - [API] Request timeout: 10 seconds
+2025-11-18 02:48:18,715 - __main__ - INFO - [API] SSL verification disabled for localhost
+2025-11-18 02:48:18,885 - __main__ - INFO - 
+2025-11-18 02:48:18,886 - __main__ - INFO - [API] Response Status: 200
+2025-11-18 02:48:18,887 - __main__ - INFO - 
+2025-11-18 02:48:18,888 - __main__ - INFO - [API SUCCESS] Data retrieved successfully (Size: 5863 chars)
+2025-11-18 02:48:18,889 - __main__ - INFO - [API] Response Keys: ['id', 'reportFormTypeID', 'reportFormTypeName', 'jobNo', 'systemNameWarehouseID', 'systemNameWarehouseName', 'stationNameWarehouseID', 'stationNameWarehouseName', 'uploadStatus', 'uploadHostname', 'uploadIPAddress', 'formStatus', 'createdDate', 'updatedDate', 'createdBy', 'createdByUserName', 'updatedBy', 'updatedByUserName', 'cmReportForm', 'materialUsed', 'beforeIssueImages', 'afterActionImages', 'materialUsedOldSerialImages', 'materialUsedNewSerialImages']
+2025-11-18 02:48:18,891 - __main__ - INFO - 
+2025-11-18 02:48:18,891 - __main__ - INFO - [STEP 6] Transforming API data for report type cm_reportform_pdf...
+2025-11-18 02:48:18,892 - __main__ - INFO - 
+2025-11-18 02:48:18,892 - __main__ - INFO - [STEP 7] Using job number: 8401L0069
+2025-11-18 02:48:18,893 - __main__ - INFO - 
+2025-11-18 02:48:18,893 - __main__ - INFO - [STEP 8] Generating PDF output...
+2025-11-18 02:48:21,162 - cm_pdf_generator - INFO - [CM PDF] Generated CM report at PDF_File\CM_Report_8401L0069_20251118_024818.pdf
+2025-11-18 02:48:21,163 - __main__ - INFO - 
+2025-11-18 02:48:21,164 - __main__ - INFO - [STEP 8 SUCCESS] PDF generated successfully at: PDF_File\CM_Report_8401L0069_20251118_024818.pdf
+2025-11-18 02:48:21,165 - __main__ - INFO - [STATUS UPDATE] d05c3cac-fe1f-46f2-b648-f68503af473a -> COMPLETED - PDF generated successfully: CM_Report_8401L0069_20251118_024818.pdf
+2025-11-18 02:48:21,165 - __main__ - INFO - [MQTT] Published to topic: controltower/cm_reportform_pdf_status/d05c3cac-fe1f-46f2-b648-f68503af473a
+2025-11-18 02:48:58,062 - __main__ - INFO - 
+2025-11-18 02:48:58,063 - __main__ - INFO - Cleaning up resources...

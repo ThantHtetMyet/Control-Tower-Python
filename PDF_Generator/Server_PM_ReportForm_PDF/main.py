@@ -23,6 +23,7 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 from config import Config
 from database_manager import DatabaseManager
 from pdf_generator import ServerPMPDFGenerator
+from cm_pdf_generator import CMReportPDFGenerator
 
 # Configure logging
 logging.basicConfig(
@@ -36,6 +37,9 @@ logging.basicConfig(
 
 logger = logging.getLogger(__name__)
 
+SERVER_REPORT_TOPIC = "server_pm_reportform_pdf"
+CM_REPORT_TOPIC = "cm_reportform_pdf"
+
 class ServerPMPDFService:
     """Main service class for Server PM Report PDF generation via MQTT"""
     
@@ -44,6 +48,7 @@ class ServerPMPDFService:
         self.mqtt_client = None
         self.db_manager = None
         self.pdf_generator = None
+        self.cm_pdf_generator = None
         self.session = None
         self.jwt_token = None  # Store JWT token for API authentication
         self.token_expires_at = None  # Track token expiration
@@ -147,10 +152,13 @@ class ServerPMPDFService:
         if reason_code == 0:
             logger.info("")
             logger.info("Connected to MQTT broker successfully")
-            # Subscribe to the PDF generation topic
-            topic = "controltower/server_pm_reportform_pdf/+"
+            topic = f"controltower/{SERVER_REPORT_TOPIC}/+"
             client.subscribe(topic)
             logger.info(f"Subscribed to topic: {topic}")
+
+            cm_topic = f"controltower/{CM_REPORT_TOPIC}/+"
+            client.subscribe(cm_topic)
+            logger.info(f"Subscribed to topic: {cm_topic}")
         else:
             logger.info("")
             logger.error(f"Failed to connect to MQTT broker. Return code: {reason_code}")
@@ -168,6 +176,7 @@ class ServerPMPDFService:
             # Extract report_id from topic
             topic_parts = msg.topic.split('/')
             if len(topic_parts) >= 3:
+                report_type_key = topic_parts[-2]
                 report_id = topic_parts[-1]  # Last part of the topic
             else:
                 logger.info("")
@@ -193,7 +202,7 @@ class ServerPMPDFService:
             import threading
             thread = threading.Thread(
                 target=self._run_async_process,
-                args=(report_id, requested_by, timestamp, message_data)
+                args=(report_id, requested_by, timestamp, message_data, report_type_key)
             )
             thread.daemon = True
             thread.start()
@@ -203,83 +212,99 @@ class ServerPMPDFService:
             logger.error(f"Error processing MQTT message: {str(e)}")
             
     def _run_async_process(self, report_id: str, requested_by: str, 
-                          timestamp: str, message_data: Dict[str, Any]):
+                          timestamp: str, message_data: Dict[str, Any], report_topic_key: str):
         """Helper method to run async process in a new event loop"""
         try:
-            asyncio.run(self.process_pdf_request(report_id, requested_by, timestamp, message_data))
+            asyncio.run(self.process_pdf_request(report_id, requested_by, timestamp, message_data, report_topic_key))
         except Exception as e:
             logger.error(f"Error in async process: {str(e)}")
-            
-    async def process_pdf_request(self, report_id: str, requested_by: str, 
-                          timestamp: str, message_data: Dict[str, Any]):
+
+    async def process_pdf_request(self, report_id: str, requested_by: str,
+                          timestamp: str, message_data: Dict[str, Any], report_topic_key: str):
         """Process PDF generation request"""
         try:
+            topic_key = (report_topic_key or SERVER_REPORT_TOPIC).lower()
             logger.info("")
-            logger.info(f"[STEP 2] Starting PDF processing for report_id: {report_id}")
-            
-            # Send initial status update
-            await self.send_status_update(report_id, "processing", "PDF generation started")
-            
-            # Initialize database manager if not already done
+            logger.info(f"[STEP 2] Starting PDF processing for report_id: {report_id} ({topic_key})")
+
+            if topic_key not in (SERVER_REPORT_TOPIC, CM_REPORT_TOPIC):
+                await self.send_status_update(report_id, "failed", f"Unsupported report type: {topic_key}", topic_key=topic_key)
+                return
+
+            await self.send_status_update(report_id, "processing", "PDF generation started", topic_key=topic_key)
+
             if not self.db_manager:
                 logger.info("")
                 logger.info(f"[STEP 3] Initializing database manager...")
                 self.db_manager = DatabaseManager(self.config.DATABASE_CONFIG)
-                
-            # Initialize PDF generator if not already done
-            if not self.pdf_generator:
+
+            if topic_key == SERVER_REPORT_TOPIC and not self.pdf_generator:
                 logger.info("")
-                logger.info(f"[STEP 4] Initializing PDF generator...")
+                logger.info(f"[STEP 4] Initializing Server PM PDF generator...")
                 self.pdf_generator = ServerPMPDFGenerator()
-                
-            # Retrieve data from API
-            logger.info("")
-            logger.info(f"[STEP 5] Calling API endpoint /api/PMReportFormServer/{report_id}")
-            api_data = await self.retrieve_data_from_api(report_id)
-            if not api_data:
+            elif topic_key == CM_REPORT_TOPIC and not self.cm_pdf_generator:
                 logger.info("")
-                logger.error(f"[STEP 5 FAILED] No data received from API")
-                await self.send_status_update(report_id, "failed", "Failed to retrieve data from API")
-                return
+                logger.info(f"[STEP 4] Initializing CM PDF generator...")
+                self.cm_pdf_generator = CMReportPDFGenerator()
+
+            if topic_key == SERVER_REPORT_TOPIC:
+                api_path = f"/api/PMReportFormServer/{report_id}"
             else:
-                logger.info("")
-                logger.info(f"[STEP 5 SUCCESS] API data retrieved successfully")
-                
-            # Transform API data for PDF generation
+                api_path = f"/api/ReportForm/CMReportForm/{report_id}"
+
             logger.info("")
-            logger.info(f"[STEP 6] Transforming API data for PDF generation...")
-            report_data = self.transform_api_data(api_data)
-            logger.info(f"[STEP 6 SUCCESS] Data transformation completed")
-            
-            # Extract job number for PDF filename
-            job_no = report_data.get('reportForm', {}).get('jobNo', report_id)
+            logger.info(f"[STEP 5] Calling API endpoint {api_path}")
+            api_data = await self.retrieve_data_from_api(api_path)
+            if not api_data:
+                logger.error("[STEP 5 FAILED] No data received from API")
+                await self.send_status_update(report_id, "failed", "Failed to retrieve data from API", topic_key=topic_key)
+                return
+
+            logger.info("")
+            logger.info(f"[STEP 6] Transforming API data for report type {topic_key}...")
+            if topic_key == SERVER_REPORT_TOPIC:
+                report_data = self.transform_api_data(api_data)
+            else:
+                report_data = self.transform_cm_api_data(api_data)
+
+            job_no = (
+                report_data.get('reportForm', {}).get('jobNo')
+                or report_data.get('reportForm', {}).get('JobNo')
+                or report_id
+            )
             logger.info("")
             logger.info(f"[STEP 7] Using job number: {job_no}")
-            
-            # Generate PDF
+
             logger.info("")
-            logger.info(f"[STEP 8] Generating comprehensive PDF...")
-            pdf_path = self.pdf_generator.generate_comprehensive_pdf(
-                report_data, job_no, "Server_PM"
-            )
-            
+            logger.info(f"[STEP 8] Generating PDF output...")
+            if topic_key == SERVER_REPORT_TOPIC:
+                pdf_path = self.pdf_generator.generate_comprehensive_pdf(
+                    report_data, job_no, "Server_PM"
+                )
+            else:
+                pdf_path = self.cm_pdf_generator.generate_pdf(
+                    report_data, job_no, "CM"
+                )
+
             if pdf_path and os.path.exists(pdf_path):
                 logger.info("")
                 logger.info(f"[STEP 8 SUCCESS] PDF generated successfully at: {pdf_path}")
                 await self.send_status_update(
-                    report_id, "completed", 
-                    f"PDF generated successfully: {os.path.basename(pdf_path)}"
+                    report_id,
+                    "completed",
+                    f"PDF generated successfully: {os.path.basename(pdf_path)}",
+                    file_name=os.path.basename(pdf_path),
+                    topic_key=topic_key,
                 )
             else:
-                logger.info("")
-                logger.error(f"[STEP 8 FAILED] PDF generation failed")
-                await self.send_status_update(report_id, "failed", "PDF generation failed")
-                
+                logger.error("[STEP 8 FAILED] PDF generation failed")
+                await self.send_status_update(report_id, "failed", "PDF generation failed", topic_key=topic_key)
+
         except Exception as e:
             logger.error(f"Error processing PDF request for {report_id}: {str(e)}")
-            await self.send_status_update(report_id, "failed", f"Error: {str(e)}")
+            await self.send_status_update(report_id, "failed", f"Error: {str(e)}", topic_key=topic_key)
             
-    async def retrieve_data_from_api(self, report_id: str) -> Optional[Dict[str, Any]]:
+    async def retrieve_data_from_api(self, api_path: str) -> Optional[Dict[str, Any]]:
         """Retrieve data from API endpoint with JWT authentication"""
         try:
             # Ensure we have a valid token
@@ -291,7 +316,7 @@ class ServerPMPDFService:
                     logger.error("[API] Failed to authenticate")
                     return None
             
-            api_url = f"{self.config.API_BASE_URL}/api/PMReportFormServer/{report_id}"
+            api_url = f"{self.config.API_BASE_URL}{api_path}"
             logger.info("")
             logger.info(f"[API] URL: {api_url}")
             
@@ -409,17 +434,90 @@ class ServerPMPDFService:
         except Exception as e:
             logger.error(f"Error transforming API data: {str(e)}")
             return api_data  # Return original data if transformation fails
+
+    def _get_value(self, data: Any, *keys):
+        """Safely fetch a value from a dict regardless of casing"""
+        if not isinstance(data, dict):
+            return None
+        for key in keys:
+            if not key:
+                continue
+            variations = {
+                key,
+                key.lower(),
+                key.upper(),
+                key[:1].lower() + key[1:] if len(key) > 1 else key.lower(),
+                key[:1].upper() + key[1:] if len(key) > 1 else key.upper(),
+            }
+            for variant in variations:
+                if variant in data:
+                    return data[variant]
+        return None
+
+    def transform_cm_api_data(self, api_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Normalize CM API response for PDF generation"""
+        try:
+            cm_form_raw = self._get_value(api_data, 'cmReportForm', 'CMReportForm') or {}
+            report_form = {
+                'jobNo': self._get_value(api_data, 'jobNo', 'JobNo'),
+                'customer': self._get_value(cm_form_raw, 'customer', 'Customer'),
+                'projectNo': self._get_value(cm_form_raw, 'projectNo', 'ProjectNo'),
+                'systemName': self._get_value(api_data, 'systemNameWarehouseName', 'SystemNameWarehouseName'),
+                'stationName': self._get_value(api_data, 'stationNameWarehouseName', 'StationNameWarehouseName'),
+                'reportFormTypeName': self._get_value(api_data, 'reportFormTypeName', 'ReportFormTypeName'),
+            }
+
+            cm_form = {
+                'customer': self._get_value(cm_form_raw, 'customer', 'Customer'),
+                'projectNo': self._get_value(cm_form_raw, 'projectNo', 'ProjectNo'),
+                'reportTitle': self._get_value(cm_form_raw, 'reportTitle', 'ReportTitle'),
+                'issueReportedDescription': self._get_value(cm_form_raw, 'issueReportedDescription', 'IssueReportedDescription'),
+                'issueFoundDescription': self._get_value(cm_form_raw, 'issueFoundDescription', 'IssueFoundDescription'),
+                'actionTakenDescription': self._get_value(cm_form_raw, 'actionTakenDescription', 'ActionTakenDescription'),
+                'failureDetectedDate': self._get_value(cm_form_raw, 'failureDetectedDate', 'FailureDetectedDate'),
+                'responseDate': self._get_value(cm_form_raw, 'responseDate', 'ResponseDate'),
+                'arrivalDate': self._get_value(cm_form_raw, 'arrivalDate', 'ArrivalDate'),
+                'completionDate': self._get_value(cm_form_raw, 'completionDate', 'CompletionDate'),
+                'attendedBy': self._get_value(cm_form_raw, 'attendedBy', 'AttendedBy'),
+                'approvedBy': self._get_value(cm_form_raw, 'approvedBy', 'ApprovedBy'),
+                'remark': self._get_value(cm_form_raw, 'remark', 'Remark'),
+                'furtherActionTakenName': self._get_value(cm_form_raw, 'furtherActionTakenName', 'FurtherActionTakenName'),
+                'formStatusName': self._get_value(cm_form_raw, 'formStatusName', 'FormStatusName'),
+            }
+
+            return {
+                'reportForm': report_form,
+                'cmReportForm': cm_form,
+                'materialUsed': self._get_value(api_data, 'materialUsed', 'MaterialUsed') or [],
+                'beforeIssueImages': self._get_value(api_data, 'beforeIssueImages', 'BeforeIssueImages') or [],
+                'afterActionImages': self._get_value(api_data, 'afterActionImages', 'AfterActionImages') or [],
+                'materialUsedOldSerialImages': self._get_value(api_data, 'materialUsedOldSerialImages', 'MaterialUsedOldSerialImages') or [],
+                'materialUsedNewSerialImages': self._get_value(api_data, 'materialUsedNewSerialImages', 'MaterialUsedNewSerialImages') or [],
+            }
+
+        except Exception as e:
+            logger.error(f"Error transforming CM API data: {str(e)}")
+            return api_data
             
-    async def send_status_update(self, report_id: str, status: str, message: str):
+    async def send_status_update(self, report_id: str, status: str, message: str,
+                                 file_name: Optional[str] = None, topic_key: str = SERVER_REPORT_TOPIC):
         """Send status update via MQTT"""
         try:
-            status_topic = f"controltower/server_pm_reportform_pdf_status/{report_id}"
+            if topic_key == SERVER_REPORT_TOPIC:
+                topic_prefix = SERVER_REPORT_TOPIC
+            elif topic_key == CM_REPORT_TOPIC:
+                topic_prefix = CM_REPORT_TOPIC
+            else:
+                topic_prefix = SERVER_REPORT_TOPIC
+            status_topic = f"controltower/{topic_prefix}_status/{report_id}"
             status_message = {
                 'report_id': report_id,
                 'status': status,
                 'message': message,
                 'timestamp': datetime.now().isoformat()
             }
+            if file_name:
+                status_message['file_name'] = file_name
             
             if self.mqtt_client and self.mqtt_client.is_connected():
                 self.mqtt_client.publish(
@@ -517,6 +615,23 @@ async def main():
         logger.error(f"Fatal error: {str(e)}")
         sys.exit(1)
 
+def start_refresh_listener():
+    """Listen for keyboard input to refresh the service"""
+    def _listener():
+        logger.info("")
+        logger.info("Press 'r' + Enter at any time to refresh the PDF service.")
+        for line in sys.stdin:
+            if line.strip().lower() == 'r':
+                logger.info("")
+                logger.info("[REFRESH] Refresh command received. Restarting service...")
+                try:
+                    os.execv(sys.executable, [sys.executable] + sys.argv)
+                except Exception as exc:
+                    logger.error(f"Failed to restart service: {exc}")
+    thread = threading.Thread(target=_listener, daemon=True)
+    thread.start()
+
 if __name__ == "__main__":
     # Run the service
+    start_refresh_listener()
     asyncio.run(main())
