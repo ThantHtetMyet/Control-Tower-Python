@@ -8205,3 +8205,5 @@ paragraph text '<para>Check Instructions:</b><br/> Check Server Front Panel LED 
 2025-11-19 23:38:07,168 - __main__ - INFO - [STEP 8 SUCCESS] PDF generated successfully at: PDF_File\CM_Report_8401L0069_20251119_233804.pdf
 2025-11-19 23:38:07,169 - __main__ - INFO - [STATUS UPDATE] d05c3cac-fe1f-46f2-b648-f68503af473a -> COMPLETED - PDF generated successfully: CM_Report_8401L0069_20251119_233804.pdf
 2025-11-19 23:38:07,169 - __main__ - INFO - [MQTT] Published to topic: controltower/cm_reportform_pdf_status/d05c3cac-fe1f-46f2-b648-f68503af473a
+2025-11-19 23:47:13,965 - __main__ - INFO - 
+2025-11-19 23:47:13,965 - __main__ - INFO - Cleaning up resources...
