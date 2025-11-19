@@ -24,6 +24,7 @@ from config import Config
 from database_manager import DatabaseManager
 from pdf_generator import ServerPMPDFGenerator
 from cm_pdf_generator import CMReportPDFGenerator
+from rtu_pdf_generator import RTUPMPDFGenerator
 
 # Configure logging
 logging.basicConfig(
@@ -39,6 +40,7 @@ logger = logging.getLogger(__name__)
 
 SERVER_REPORT_TOPIC = "server_pm_reportform_pdf"
 CM_REPORT_TOPIC = "cm_reportform_pdf"
+RTU_REPORT_TOPIC = "rtu_pm_reportform_pdf"
 
 class ServerPMPDFService:
     """Main service class for Server PM Report PDF generation via MQTT"""
@@ -49,6 +51,7 @@ class ServerPMPDFService:
         self.db_manager = None
         self.pdf_generator = None
         self.cm_pdf_generator = None
+        self.rtu_pdf_generator = None
         self.session = None
         self.jwt_token = None  # Store JWT token for API authentication
         self.token_expires_at = None  # Track token expiration
@@ -159,6 +162,10 @@ class ServerPMPDFService:
             cm_topic = f"controltower/{CM_REPORT_TOPIC}/+"
             client.subscribe(cm_topic)
             logger.info(f"Subscribed to topic: {cm_topic}")
+
+            rtu_topic = f"controltower/{RTU_REPORT_TOPIC}/+"
+            client.subscribe(rtu_topic)
+            logger.info(f"Subscribed to topic: {rtu_topic}")
         else:
             logger.info("")
             logger.error(f"Failed to connect to MQTT broker. Return code: {reason_code}")
@@ -227,7 +234,7 @@ class ServerPMPDFService:
             logger.info("")
             logger.info(f"[STEP 2] Starting PDF processing for report_id: {report_id} ({topic_key})")
 
-            if topic_key not in (SERVER_REPORT_TOPIC, CM_REPORT_TOPIC):
+            if topic_key not in (SERVER_REPORT_TOPIC, CM_REPORT_TOPIC, RTU_REPORT_TOPIC):
                 await self.send_status_update(report_id, "failed", f"Unsupported report type: {topic_key}", topic_key=topic_key)
                 return
 
@@ -246,11 +253,17 @@ class ServerPMPDFService:
                 logger.info("")
                 logger.info(f"[STEP 4] Initializing CM PDF generator...")
                 self.cm_pdf_generator = CMReportPDFGenerator()
+            elif topic_key == RTU_REPORT_TOPIC and not self.rtu_pdf_generator:
+                logger.info("")
+                logger.info(f"[STEP 4] Initializing RTU PM PDF generator...")
+                self.rtu_pdf_generator = RTUPMPDFGenerator()
 
             if topic_key == SERVER_REPORT_TOPIC:
                 api_path = f"/api/PMReportFormServer/{report_id}"
-            else:
+            elif topic_key == CM_REPORT_TOPIC:
                 api_path = f"/api/ReportForm/CMReportForm/{report_id}"
+            else:
+                api_path = f"/api/ReportForm/RTUPMReportForm/{report_id}"
 
             logger.info("")
             logger.info(f"[STEP 5] Calling API endpoint {api_path}")
@@ -264,8 +277,10 @@ class ServerPMPDFService:
             logger.info(f"[STEP 6] Transforming API data for report type {topic_key}...")
             if topic_key == SERVER_REPORT_TOPIC:
                 report_data = self.transform_api_data(api_data)
-            else:
+            elif topic_key == CM_REPORT_TOPIC:
                 report_data = self.transform_cm_api_data(api_data)
+            else:
+                report_data = self.transform_rtu_api_data(api_data)
 
             job_no = (
                 report_data.get('reportForm', {}).get('jobNo')
@@ -281,9 +296,13 @@ class ServerPMPDFService:
                 pdf_path = self.pdf_generator.generate_comprehensive_pdf(
                     report_data, job_no, "Server_PM"
                 )
-            else:
+            elif topic_key == CM_REPORT_TOPIC:
                 pdf_path = self.cm_pdf_generator.generate_pdf(
                     report_data, job_no, "CM"
+                )
+            else:
+                pdf_path = self.rtu_pdf_generator.generate_pdf(
+                    report_data, job_no, "RTU_PM"
                 )
 
             if pdf_path and os.path.exists(pdf_path):
@@ -498,6 +517,58 @@ class ServerPMPDFService:
         except Exception as e:
             logger.error(f"Error transforming CM API data: {str(e)}")
             return api_data
+
+    def transform_rtu_api_data(self, api_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Normalize RTU PM API response for PDF generation"""
+        try:
+            report_form = {
+                'jobNo': self._get_value(api_data, 'jobNo', 'JobNo'),
+                'stationName': self._get_value(api_data, 'stationNameWarehouseName', 'StationNameWarehouseName'),
+                'systemName': self._get_value(api_data, 'systemNameWarehouseName', 'SystemNameWarehouseName'),
+                'reportFormTypeName': self._get_value(api_data, 'reportFormTypeName', 'ReportFormTypeName'),
+            }
+
+            rtu_form = self._get_value(api_data, 'pmReportFormRTU', 'PMReportFormRTU') or {}
+
+            def _list_value(key: str):
+                return (
+                    self._get_value(api_data, key)
+                    or self._get_value(api_data, key[:1].upper() + key[1:] if key else key)
+                    or []
+                )
+
+            images = {
+                'mainCabinet': (
+                    self._get_value(api_data, 'pmMainRtuCabinetImages', 'PMMainRtuCabinetImages')
+                    or []
+                ),
+                'chamber': (
+                    self._get_value(api_data, 'pmChamberMagneticContactImages', 'PMChamberMagneticContactImages')
+                    or []
+                ),
+                'cooling': (
+                    self._get_value(api_data, 'pmrtuCabinetCoolingImages', 'PMRTUCabinetCoolingImages')
+                    or []
+                ),
+                'dvr': (
+                    self._get_value(api_data, 'pmdvrEquipmentImages', 'PMDVREquipmentImages')
+                    or []
+                ),
+            }
+
+            return {
+                'reportForm': report_form,
+                'pmReportFormRTU': rtu_form,
+                'pmMainRtuCabinet': _list_value('pmMainRtuCabinet'),
+                'pmChamberMagneticContact': _list_value('pmChamberMagneticContact'),
+                'pmRTUCabinetCooling': _list_value('pmrtuCabinetCooling'),
+                'pmDVREquipment': _list_value('pmdvrEquipment'),
+                'images': images,
+            }
+
+        except Exception as e:
+            logger.error(f"Error transforming RTU API data: {str(e)}")
+            return api_data
             
     async def send_status_update(self, report_id: str, status: str, message: str,
                                  file_name: Optional[str] = None, topic_key: str = SERVER_REPORT_TOPIC):
@@ -507,6 +578,8 @@ class ServerPMPDFService:
                 topic_prefix = SERVER_REPORT_TOPIC
             elif topic_key == CM_REPORT_TOPIC:
                 topic_prefix = CM_REPORT_TOPIC
+            elif topic_key == RTU_REPORT_TOPIC:
+                topic_prefix = RTU_REPORT_TOPIC
             else:
                 topic_prefix = SERVER_REPORT_TOPIC
             status_topic = f"controltower/{topic_prefix}_status/{report_id}"
