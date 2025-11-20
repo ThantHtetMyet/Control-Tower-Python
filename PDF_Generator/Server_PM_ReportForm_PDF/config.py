@@ -8,6 +8,7 @@ class Config:
     def __init__(self):
         # API Configuration - same as web application
         self.API_BASE_URL = os.getenv('API_BASE_URL', 'https://localhost:7145')
+        #self.API_BASE_URL = os.getenv('API_BASE_URL', 'https://192.3.62.144:7145')
         self.API_TIMEOUT = int(os.getenv('API_TIMEOUT', 10))  # Reduced timeout for faster debugging
         
         # API Authentication Configuration
@@ -32,8 +33,9 @@ class Config:
         }
         
         # PDF Output Configuration
-        self.PDF_OUTPUT_DIR = Path(os.getenv('PDF_OUTPUT_DIR', './PDF_File'))
-        self.PDF_OUTPUT_DIR.mkdir(exist_ok=True)
+        default_pdf_path = r"C:\Users\thanthtet.myet\Documents\01_Willowglen\B_001_Workplace\ControlTower\ControlTower_Python\PDF_Generator\Server_PM_ReportForm_PDF\PDF_File"
+        self.PDF_OUTPUT_DIR = Path(os.getenv('PDF_OUTPUT_DIR', default_pdf_path))
+        self.PDF_OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
         
         # Template Configuration
         self.TEMPLATE_DIR = Path(os.getenv('TEMPLATE_DIR', './templates'))

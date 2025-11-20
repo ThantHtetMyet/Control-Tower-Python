@@ -413,10 +413,11 @@ class CMReportPDFGenerator:
         return table
 
     def _build_signature_block(self, label: str, name: Optional[str]):
+        name_text = (name or "").strip()
         block = Table(
             [
                 [""],
-                [""],
+                [Paragraph(name_text if name_text else "&nbsp;", self.card_value_style)],
                 [Paragraph(label, self.card_label_style)],
             ],
             colWidths=[2.8 * inch],
@@ -425,11 +426,12 @@ class CMReportPDFGenerator:
             TableStyle(
                 [
                     ("TOPPADDING", (0, 0), (-1, 0), 60),
-                    ("BOTTOMPADDING", (0, 0), (-1, 0), 0),
                     ("LINEABOVE", (0, 1), (-1, 1), 0.8, colors.HexColor("#9aa4b1")),
-                    ("TOPPADDING", (0, 1), (-1, 1), 6),
+                    ("ALIGN", (0, 1), (-1, 1), "CENTER"),
+                    ("TOPPADDING", (0, 1), (-1, 1), 8),
                     ("BOTTOMPADDING", (0, 1), (-1, 1), 6),
                     ("ALIGN", (0, 2), (-1, 2), "CENTER"),
+                    ("TOPPADDING", (0, 2), (-1, 2), 6),
                 ]
             )
         )
