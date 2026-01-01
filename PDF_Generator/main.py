@@ -20,11 +20,11 @@ from urllib3.util.retry import Retry
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # Import local modules
-from config import Config
+from config import config
 from database_manager import DatabaseManager
-from pdf_generator import ServerPMPDFGenerator
-from cm_pdf_generator import CMReportPDFGenerator
-from rtu_pdf_generator import RTUPMPDFGenerator
+from Server_PM_Report.server_pm_pdf_generator import ServerPMPDFGenerator
+from CM_Report.cm_pdf_generator import CMReportPDFGenerator
+from RTU_PM_Report.rtu_pdf_generator import RTUPMPDFGenerator
 
 # Configure logging
 logging.basicConfig(
@@ -38,15 +38,21 @@ logging.basicConfig(
 
 logger = logging.getLogger(__name__)
 
-SERVER_REPORT_TOPIC = "server_pm_reportform_pdf"
-CM_REPORT_TOPIC = "cm_reportform_pdf"
-RTU_REPORT_TOPIC = "rtu_pm_reportform_pdf"
+# MQTT Topics are now managed in config.py
+SERVER_REPORT_TOPIC = config.TOPIC_SERVER_PM_REPORT
+CM_REPORT_TOPIC = config.TOPIC_CM_REPORT
+RTU_REPORT_TOPIC = config.TOPIC_RTU_PM_REPORT
+
+# Signature-based final report topics (for CLOSE status with signatures)
+CM_SIGNATURE_REPORT_TOPIC = config.TOPIC_CM_SIGNATURE
+SERVER_SIGNATURE_REPORT_TOPIC = config.TOPIC_SERVER_PM_SIGNATURE
+RTU_SIGNATURE_REPORT_TOPIC = config.TOPIC_RTU_PM_SIGNATURE
 
 class ServerPMPDFService:
     """Main service class for Server PM Report PDF generation via MQTT"""
     
     def __init__(self):
-        self.config = Config()
+        self.config = config  # Use global config instance
         self.mqtt_client = None
         self.db_manager = None
         self.pdf_generator = None
@@ -155,6 +161,8 @@ class ServerPMPDFService:
         if reason_code == 0:
             logger.info("")
             logger.info("Connected to MQTT broker successfully")
+            
+            # Subscribe to regular report PDF topics (for editing/downloading)
             topic = f"controltower/{SERVER_REPORT_TOPIC}/+"
             client.subscribe(topic)
             logger.info(f"Subscribed to topic: {topic}")
@@ -166,6 +174,19 @@ class ServerPMPDFService:
             rtu_topic = f"controltower/{RTU_REPORT_TOPIC}/+"
             client.subscribe(rtu_topic)
             logger.info(f"Subscribed to topic: {rtu_topic}")
+            
+            # Subscribe to signature-based final report PDF topics (for CLOSE status)
+            cm_sig_topic = f"controltower/{CM_SIGNATURE_REPORT_TOPIC}/+"
+            client.subscribe(cm_sig_topic)
+            logger.info(f"Subscribed to signature topic: {cm_sig_topic}")
+            
+            server_sig_topic = f"controltower/{SERVER_SIGNATURE_REPORT_TOPIC}/+"
+            client.subscribe(server_sig_topic)
+            logger.info(f"Subscribed to signature topic: {server_sig_topic}")
+            
+            rtu_sig_topic = f"controltower/{RTU_SIGNATURE_REPORT_TOPIC}/+"
+            client.subscribe(rtu_sig_topic)
+            logger.info(f"Subscribed to signature topic: {rtu_sig_topic}")
         else:
             logger.info("")
             logger.error(f"Failed to connect to MQTT broker. Return code: {reason_code}")
@@ -233,8 +254,18 @@ class ServerPMPDFService:
             topic_key = (report_topic_key or SERVER_REPORT_TOPIC).lower()
             logger.info("")
             logger.info(f"[STEP 2] Starting PDF processing for report_id: {report_id} ({topic_key})")
+            
+            # Check if this is a signature-based final report request
+            is_signature_report = 'signature' in topic_key
+            if is_signature_report:
+                logger.info(f"[SIGNATURE] This is a signature-based final report request")
 
-            if topic_key not in (SERVER_REPORT_TOPIC, CM_REPORT_TOPIC, RTU_REPORT_TOPIC):
+            # Validate topic key
+            all_topics = (
+                SERVER_REPORT_TOPIC, CM_REPORT_TOPIC, RTU_REPORT_TOPIC,
+                CM_SIGNATURE_REPORT_TOPIC, SERVER_SIGNATURE_REPORT_TOPIC, RTU_SIGNATURE_REPORT_TOPIC
+            )
+            if topic_key not in all_topics:
                 await self.send_status_update(report_id, "failed", f"Unsupported report type: {topic_key}", topic_key=topic_key)
                 return
 
@@ -245,22 +276,26 @@ class ServerPMPDFService:
                 logger.info(f"[STEP 3] Initializing database manager...")
                 self.db_manager = DatabaseManager(self.config.DATABASE_CONFIG)
 
-            if topic_key == SERVER_REPORT_TOPIC and not self.pdf_generator:
+            # Determine base report type (remove '_signature' if present)
+            base_topic = topic_key.replace('_signature', '')
+            
+            if base_topic == SERVER_REPORT_TOPIC and not self.pdf_generator:
                 logger.info("")
                 logger.info(f"[STEP 4] Initializing Server PM PDF generator...")
                 self.pdf_generator = ServerPMPDFGenerator()
-            elif topic_key == CM_REPORT_TOPIC and not self.cm_pdf_generator:
+            elif base_topic == CM_REPORT_TOPIC and not self.cm_pdf_generator:
                 logger.info("")
                 logger.info(f"[STEP 4] Initializing CM PDF generator...")
                 self.cm_pdf_generator = CMReportPDFGenerator()
-            elif topic_key == RTU_REPORT_TOPIC and not self.rtu_pdf_generator:
+            elif base_topic == RTU_REPORT_TOPIC and not self.rtu_pdf_generator:
                 logger.info("")
                 logger.info(f"[STEP 4] Initializing RTU PM PDF generator...")
                 self.rtu_pdf_generator = RTUPMPDFGenerator()
 
-            if topic_key == SERVER_REPORT_TOPIC:
+            # Determine API path based on report type
+            if base_topic == SERVER_REPORT_TOPIC:
                 api_path = f"/api/PMReportFormServer/{report_id}"
-            elif topic_key == CM_REPORT_TOPIC:
+            elif base_topic == CM_REPORT_TOPIC:
                 api_path = f"/api/ReportForm/CMReportForm/{report_id}"
             else:
                 api_path = f"/api/ReportForm/RTUPMReportForm/{report_id}"
@@ -274,13 +309,21 @@ class ServerPMPDFService:
                 return
 
             logger.info("")
-            logger.info(f"[STEP 6] Transforming API data for report type {topic_key}...")
-            if topic_key == SERVER_REPORT_TOPIC:
+            logger.info(f"[STEP 6] Transforming API data for report type {base_topic}...")
+            if base_topic == SERVER_REPORT_TOPIC:
                 report_data = self.transform_api_data(api_data)
-            elif topic_key == CM_REPORT_TOPIC:
+            elif base_topic == CM_REPORT_TOPIC:
                 report_data = self.transform_cm_api_data(api_data)
             else:
                 report_data = self.transform_rtu_api_data(api_data)
+            
+            # If this is a signature report, fetch signature images
+            if is_signature_report:
+                logger.info("")
+                logger.info(f"[STEP 6.5] Fetching signature images for final report...")
+                signature_images = await self.fetch_signature_images(report_id)
+                report_data['signatureImages'] = signature_images
+                logger.info(f"[SIGNATURE] Found {len(signature_images)} signature images")
 
             job_no = (
                 report_data.get('reportForm', {}).get('jobNo')
@@ -292,17 +335,19 @@ class ServerPMPDFService:
 
             logger.info("")
             logger.info(f"[STEP 8] Generating PDF output...")
-            if topic_key == SERVER_REPORT_TOPIC:
+            pdf_type_suffix = "_FinalReport" if is_signature_report else ""
+            
+            if base_topic == SERVER_REPORT_TOPIC:
                 pdf_path = self.pdf_generator.generate_comprehensive_pdf(
-                    report_data, job_no, "Server_PM"
+                    report_data, job_no, f"Server_PM{pdf_type_suffix}"
                 )
-            elif topic_key == CM_REPORT_TOPIC:
+            elif base_topic == CM_REPORT_TOPIC:
                 pdf_path = self.cm_pdf_generator.generate_pdf(
-                    report_data, job_no, "CM"
+                    report_data, job_no, f"CM{pdf_type_suffix}"
                 )
             else:
                 pdf_path = self.rtu_pdf_generator.generate_pdf(
-                    report_data, job_no, "RTU_PM"
+                    report_data, job_no, f"RTU_PM{pdf_type_suffix}"
                 )
 
             if pdf_path and os.path.exists(pdf_path):
@@ -323,6 +368,98 @@ class ServerPMPDFService:
             logger.error(f"Error processing PDF request for {report_id}: {str(e)}")
             await self.send_status_update(report_id, "failed", f"Error: {str(e)}", topic_key=topic_key)
             
+    async def fetch_signature_images(self, report_id: str) -> Dict[str, str]:
+        """
+        Fetch signature images from database for final report generation.
+        
+        Returns:
+            Dict with signature types as keys and file paths as values
+            e.g. {'AttendedBySignature': '/path/to/image.png', 'ApprovedBySignature': '/path/to/image2.png'}
+        """
+        try:
+            if not self.db_manager:
+                self.db_manager = DatabaseManager(self.config.DATABASE_CONFIG)
+            
+            # Query to fetch signature images
+            query = """
+            SELECT 
+                rfi.ImageName,
+                rfi.StoredDirectory,
+                rit.ImageTypeName
+            FROM ReportFormImages rfi
+            INNER JOIN ReportFormImageTypes rit ON rfi.ReportImageTypeID = rit.ID
+            WHERE rfi.ReportFormID = ?
+              AND rfi.IsDeleted = 0
+              AND rit.ImageTypeName IN ('AttendedBySignature', 'ApprovedBySignature')
+            ORDER BY rit.ImageTypeName
+            """
+            
+            # Execute query using database manager
+            import pyodbc
+            
+            # Build connection string based on config
+            server = self.config.DB_SERVER
+            database = self.config.DB_NAME
+            username = self.config.DB_USERNAME
+            password = self.config.DB_PASSWORD
+            driver = self.config.DB_DRIVER
+            
+            if username and password:
+                # Use SQL Server authentication
+                connection_string = (
+                    f"DRIVER={{{driver}}};"
+                    f"SERVER={server};"
+                    f"DATABASE={database};"
+                    f"UID={username};"
+                    f"PWD={password}"
+                )
+            else:
+                # Use Windows authentication
+                connection_string = (
+                    f"DRIVER={{{driver}}};"
+                    f"SERVER={server};"
+                    f"DATABASE={database};"
+                    f"Trusted_Connection=yes"
+                )
+            
+            logger.info(f"[DB] Connecting to: {server}/{database}")
+            connection = pyodbc.connect(connection_string)
+            
+            cursor = connection.cursor()
+            cursor.execute(query, report_id)
+            
+            signature_images = {}
+            base_path = self.config.IMAGE_BASE_PATH
+            
+            for row in cursor.fetchall():
+                image_name = row.ImageName
+                stored_directory = row.StoredDirectory
+                image_type = row.ImageTypeName
+                
+                # Construct full path
+                import os
+                if stored_directory:
+                    # If stored_directory is relative, combine with base path
+                    if not os.path.isabs(stored_directory):
+                        full_path = os.path.join(base_path, stored_directory, image_name)
+                    else:
+                        full_path = os.path.join(stored_directory, image_name)
+                else:
+                    # Fallback path
+                    full_path = os.path.join(base_path, report_id, "Signatures", image_name)
+                
+                signature_images[image_type] = full_path
+                logger.info(f"[SIGNATURE] Found {image_type}: {full_path}")
+            
+            cursor.close()
+            connection.close()
+            
+            return signature_images
+            
+        except Exception as e:
+            logger.error(f"Error fetching signature images: {str(e)}")
+            return {}
+    
     async def retrieve_data_from_api(self, api_path: str) -> Optional[Dict[str, Any]]:
         """Retrieve data from API endpoint with JWT authentication"""
         try:
@@ -574,12 +711,19 @@ class ServerPMPDFService:
                                  file_name: Optional[str] = None, topic_key: str = SERVER_REPORT_TOPIC):
         """Send status update via MQTT"""
         try:
+            # Handle both regular and signature topics
             if topic_key == SERVER_REPORT_TOPIC:
                 topic_prefix = SERVER_REPORT_TOPIC
             elif topic_key == CM_REPORT_TOPIC:
                 topic_prefix = CM_REPORT_TOPIC
             elif topic_key == RTU_REPORT_TOPIC:
                 topic_prefix = RTU_REPORT_TOPIC
+            elif topic_key == CM_SIGNATURE_REPORT_TOPIC:
+                topic_prefix = CM_SIGNATURE_REPORT_TOPIC
+            elif topic_key == SERVER_SIGNATURE_REPORT_TOPIC:
+                topic_prefix = SERVER_SIGNATURE_REPORT_TOPIC
+            elif topic_key == RTU_SIGNATURE_REPORT_TOPIC:
+                topic_prefix = RTU_SIGNATURE_REPORT_TOPIC
             else:
                 topic_prefix = SERVER_REPORT_TOPIC
             status_topic = f"controltower/{topic_prefix}_status/{report_id}"
@@ -593,13 +737,22 @@ class ServerPMPDFService:
                 status_message['file_name'] = file_name
             
             if self.mqtt_client and self.mqtt_client.is_connected():
-                self.mqtt_client.publish(
+                logger.info(f"[MQTT] Publishing status to topic: {status_topic}")
+                logger.info(f"[MQTT] Status message: {json.dumps(status_message, indent=2)}")
+                
+                result = self.mqtt_client.publish(
                     status_topic, 
                     json.dumps(status_message),
                     qos=1
                 )
+                
                 logger.info(f"[STATUS UPDATE] {report_id} -> {status.upper()} - {message}")
-                logger.info(f"[MQTT] Published to topic: {status_topic}")
+                logger.info(f"[MQTT] Publish result: rc={result.rc}, mid={result.mid}")
+                
+                if result.rc == 0:
+                    logger.info(f"[MQTT] SUCCESS - Status published successfully to: {status_topic}")
+                else:
+                    logger.error(f"[MQTT] FAILED - Failed to publish status, error code: {result.rc}")
             else:
                 logger.info("")
                 logger.warning("[WARNING] MQTT client not connected, cannot send status update")
@@ -618,6 +771,7 @@ class ServerPMPDFService:
             pdf_dir = Path(self.config.PDF_OUTPUT_DIR)
             pdf_dir.mkdir(parents=True, exist_ok=True)
             logger.info(f"PDF output directory: {pdf_dir.absolute()}")
+            logger.info(f"Image base path: {self.config.IMAGE_BASE_PATH}")
             
             # Authenticate with API first
             logger.info("Authenticating with API...")

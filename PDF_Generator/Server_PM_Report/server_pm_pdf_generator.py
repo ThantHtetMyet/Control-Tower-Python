@@ -13,7 +13,10 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, Tabl
 from reportlab.platypus.flowables import HRFlowable
 from reportlab.lib.enums import TA_CENTER, TA_LEFT, TA_RIGHT
 
-from config import Config
+import sys
+from pathlib import Path
+sys.path.append(str(Path(__file__).parent.parent))
+from config import config
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -22,12 +25,12 @@ class ServerPMPDFGenerator:
     """PDF Generator for Server PM Reports with each component on separate pages"""
     
     def __init__(self):
-        self.config = Config()
+        self.config = config  # Use global config instance
         self.styles = getSampleStyleSheet()
         self.setup_custom_styles()
         
-        # Set up header image path
-        self.header_image_path = os.path.join(os.path.dirname(__file__), 'resources', 'willowglen_letterhead.png')
+        # Set up header image path (use shared resources)
+        self.header_image_path = os.path.join(os.path.dirname(__file__), '..', 'resources', 'willowglen_letterhead.png')
         # Known Yes/No GUID fallbacks from API responses
         self.yes_no_guid_map = {
             'b1b20965-91d2-428f-8cc0-292fec170515': 'Yes',
@@ -223,8 +226,21 @@ class ServerPMPDFGenerator:
             # Add page break before sign-off page
             story.append(PageBreak())
             
-            # Add sign-off information page
-            story.extend(self._create_signoff_page(processed_data))
+            # Check for signature images (for final reports)
+            signature_images = processed_data.get("signatureImages", {})
+            # Check if signature_images is a dict with actual values (not empty)
+            has_signatures = bool(signature_images and isinstance(signature_images, dict) and len(signature_images) > 0)
+            
+            # Debug logging
+            logger.info(f"[Server PM PDF] Signature detection - has_signatures: {has_signatures}")
+            logger.info(f"[Server PM PDF] Signature images type: {type(signature_images)}, length: {len(signature_images) if isinstance(signature_images, dict) else 0}")
+            if signature_images:
+                logger.info(f"[Server PM PDF] Signature image keys: {list(signature_images.keys()) if isinstance(signature_images, dict) else 'N/A'}")
+                logger.info(f"[Server PM PDF] Signature image values: {list(signature_images.values()) if isinstance(signature_images, dict) else 'N/A'}")
+            
+            # Add sign-off information page (with conditional signature rendering)
+            logger.info(f"[Server PM PDF] Calling _create_signoff_page with has_signatures={has_signatures}, signature_images length={len(signature_images) if isinstance(signature_images, dict) else 0}")
+            story.extend(self._create_signoff_page(processed_data, signature_images, has_signatures))
             
             # Component sequence matching API response structure
             components = [
@@ -261,7 +277,9 @@ class ServerPMPDFGenerator:
             return str(pdf_path)
             
         except Exception as e:
+            import traceback
             logger.error(f"Error generating PDF: {str(e)}")
+            logger.error(f"Traceback: {traceback.format_exc()}")
             return None
 
     def _create_first_page(self, report_data):
@@ -319,9 +337,19 @@ class ServerPMPDFGenerator:
 
         return story
 
-    def _create_signoff_page(self, report_data):
+    def _create_signoff_page(self, report_data, signature_images=None, has_signatures=False):
         """Create sign-off information page matching the screenshot layout"""
         story = []
+        
+        # Default signature_images if not provided - MUST be done first
+        if signature_images is None:
+            signature_images = {}
+        
+        # Always recalculate has_signatures from signature_images FIRST to ensure it's always defined
+        # This is a defensive measure to prevent "name 'has_signatures' is not defined" errors
+        # We recalculate it here instead of relying on the parameter to ensure it's always correct
+        has_signatures = bool(signature_images and isinstance(signature_images, dict) and len(signature_images) > 0)
+        logger.info(f"[Server PM PDF] _create_signoff_page - Recalculated has_signatures: {has_signatures}, signature_images length: {len(signature_images) if isinstance(signature_images, dict) else 0}")
         
         # Get sign-off data from the API response structure
         # The actual sign-off data is nested inside pmReportFormServer
@@ -466,7 +494,24 @@ class ServerPMPDFGenerator:
             ]))
             
             story.append(remarks_container)
-        story.append(Spacer(1, 60))
+        
+        # Add signature section if signatures are provided (for final reports)
+        # Double-check that we actually have signature images, regardless of the parameter
+        actual_has_signatures = bool(signature_images and isinstance(signature_images, dict) and len(signature_images) > 0)
+        logger.info(f"[Server PM PDF] has_signatures param: {has_signatures}, actual_has_signatures: {actual_has_signatures}")
+        logger.info(f"[Server PM PDF] signature_images: {signature_images}, length: {len(signature_images) if isinstance(signature_images, dict) else 0}")
+        
+        if actual_has_signatures:
+            logger.info("[Server PM PDF] Adding signature images section to final report")
+            # Add smaller spacer to keep signatures on the same page as remarks
+            story.append(Spacer(1, 24))
+            story.extend(self._build_signature_section(signoff_data, signature_images))
+        else:
+            # Keep existing signature placeholders (attended_by and witnessed_by tables already have underlines)
+            logger.info("[Server PM PDF] No signatures found, using placeholder signatures only")
+            # Only add spacer if no signatures (to maintain spacing)
+            story.append(Spacer(1, 60))
+            pass
 
         return story
 
@@ -2401,6 +2446,122 @@ class ServerPMPDFGenerator:
         ]))
         story.append(remarks_box)
         story.append(Spacer(1, 12))
+
+        return story
+
+    def _build_signature_section(self, signoff_data: dict, signature_images: dict):
+        """Build signature section with actual signature images for final reports - side by side layout"""
+        import os
+        section = []
+        
+        # Debug logging
+        logger.info(f"[Server PM PDF] Building signature section with {len(signature_images)} signature images")
+        logger.info(f"[Server PM PDF] Signature image keys: {list(signature_images.keys())}")
+        
+        # Get signature info
+        attended_by_name = signoff_data.get("attendedBy", "") or ""
+        witnessed_by_name = signoff_data.get("witnessedBy", "") or ""
+        attended_by_sig = signature_images.get("AttendedBySignature")
+        witnessed_by_sig = signature_images.get("ApprovedBySignature")  # Server PM uses "Witnessed By" but signature key might be "ApprovedBySignature"
+        
+        # Debug logging for signature paths
+        logger.info(f"[Server PM PDF] AttendedBySignature path: {attended_by_sig}")
+        logger.info(f"[Server PM PDF] ApprovedBySignature path: {witnessed_by_sig}")
+        if attended_by_sig:
+            logger.info(f"[Server PM PDF] AttendedBySignature exists: {os.path.exists(attended_by_sig) if attended_by_sig else False}")
+        if witnessed_by_sig:
+            logger.info(f"[Server PM PDF] ApprovedBySignature exists: {os.path.exists(witnessed_by_sig) if witnessed_by_sig else False}")
+        
+        # Build attended by signature block
+        attended_block = self._build_signature_card(
+            attended_by_sig, 
+            attended_by_name, 
+            "Attended By Signature"
+        )
+        
+        # Build witnessed by signature block
+        witnessed_block = self._build_signature_card(
+            witnessed_by_sig, 
+            witnessed_by_name, 
+            "Witnessed By Signature"
+        )
+        
+        # Create side-by-side layout
+        signature_row = Table(
+            [[attended_block, Spacer(0.5*inch, 0), witnessed_block]],
+            colWidths=[2.8*inch, 0.5*inch, 2.8*inch]
+        )
+        signature_row.setStyle(TableStyle([
+            ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+            ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+        ]))
+        
+        section.append(signature_row)
+        
+        return section
+    
+    def _build_signature_card(self, signature_path: str, name: str, label: str):
+        """Build a single signature card with image, name, and label"""
+        import os
+        
+        # Styles for signature card
+        name_style = ParagraphStyle(
+            'ServerPMSignatureName',
+            parent=self.styles['Normal'],
+            fontSize=11,
+            alignment=TA_CENTER,
+            fontName='Helvetica-Bold'
+        )
+        label_style = ParagraphStyle(
+            'ServerPMSignatureLabel',
+            parent=self.styles['Normal'],
+            fontSize=9,
+            alignment=TA_CENTER,
+            textColor=colors.HexColor("#1976d2")
+        )
+        
+        card_data = []
+        
+        # Row 1: Signature image
+        if signature_path:
+            if os.path.exists(signature_path):
+                try:
+                    sig_img = Image(signature_path, width=2.0*inch, height=1.2*inch)
+                    card_data.append([sig_img])
+                    logger.info(f"[Server PM PDF] Successfully loaded signature image: {signature_path}")
+                except Exception as e:
+                    logger.error(f"[Server PM PDF] Error loading signature image {signature_path}: {e}")
+                    card_data.append([Spacer(2.0*inch, 1.2*inch)])
+            else:
+                logger.warning(f"[Server PM PDF] Signature image path does not exist: {signature_path}")
+                card_data.append([Spacer(2.0*inch, 1.2*inch)])
+        else:
+            logger.warning(f"[Server PM PDF] No signature path provided for {label}")
+            card_data.append([Spacer(2.0*inch, 1.2*inch)])
+        
+        # Row 2: Horizontal line
+        line = Table([['']], colWidths=[2.2*inch], rowHeights=[1])
+        line.setStyle(TableStyle([
+            ('LINEABOVE', (0, 0), (-1, 0), 1, colors.HexColor("#333333")),
+        ]))
+        card_data.append([line])
+        
+        # Row 3: Name
+        card_data.append([Paragraph(name if name else "&nbsp;", name_style)])
+        
+        # Row 4: Label
+        card_data.append([Paragraph(label, label_style)])
+        
+        # Create the card table
+        card = Table(card_data, colWidths=[2.5*inch])
+        card.setStyle(TableStyle([
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+            ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+            ('TOPPADDING', (0, 0), (-1, -1), 4),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
+        ]))
+        
+        return card
 
     def _build_backup_table(self, details, status_header):
         """Build a backup verification table used by database backups"""

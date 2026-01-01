@@ -11,7 +11,10 @@ from reportlab.lib.units import inch
 from reportlab.platypus import Paragraph, Spacer, Table, TableStyle, Image, BaseDocTemplate, PageTemplate, Frame, PageBreak
 from reportlab.lib.utils import ImageReader
 
-from config import Config
+import sys
+from pathlib import Path
+sys.path.append(str(Path(__file__).parent.parent))
+from config import config
 
 logger = logging.getLogger(__name__)
 
@@ -20,7 +23,7 @@ class CMReportPDFGenerator:
     """PDF generator for Corrective Maintenance report forms."""
 
     def __init__(self) -> None:
-        self.config = Config()
+        self.config = config  # Use global config instance
         self.styles = getSampleStyleSheet()
         self.title_style = ParagraphStyle(
             "CMTitle",
@@ -31,7 +34,7 @@ class CMReportPDFGenerator:
             fontName="Helvetica-Bold",
             spaceAfter=18,
         )
-        self.header_image_path = Path(__file__).parent / "resources" / "willowglen_letterhead.png"
+        self.header_image_path = Path(__file__).parent.parent / "resources" / "willowglen_letterhead.png"
         self.section_header = ParagraphStyle(
             "CMSectionHeader",
             parent=self.styles["Heading2"],
@@ -216,7 +219,19 @@ class CMReportPDFGenerator:
         story.append(PageBreak())
 
         story.extend(self._build_status_section(cm_form))
-        story.extend(self._build_attendance_section(cm_form))
+        
+        # Check if we have signature images for final report
+        signature_images = report_data.get("signatureImages", {})
+        has_signatures = bool(signature_images)
+        
+        # Build attendance section (skip placeholder signatures if we have real ones)
+        story.extend(self._build_attendance_section(cm_form, skip_signature_row=has_signatures))
+        
+        # Add signature images section if available (for final reports)
+        if has_signatures:
+            logger.info("[CM PDF] Adding signature images section to final report")
+            story.append(Spacer(1, 24))
+            story.extend(self._build_signature_section(cm_form, signature_images))
 
         doc.build(story)
         logger.info("[CM PDF] Generated CM report at %s", pdf_path)
@@ -322,7 +337,7 @@ class CMReportPDFGenerator:
         )
         return [Paragraph("Timeline Information", self.section_header), table, Spacer(1, 14)]
 
-    def _build_attendance_section(self, cm_form: dict):
+    def _build_attendance_section(self, cm_form: dict, skip_signature_row: bool = False):
         items = [
             ("Attended By", cm_form.get("attendedBy") or "Not specified"),
             ("Approved By", cm_form.get("approvedBy") or "Not specified"),
@@ -334,10 +349,110 @@ class CMReportPDFGenerator:
             Paragraph("Approval Information", self.section_header),
             self._build_label_value_table(items),
         ]
-        section.append(Spacer(1, 18))
-        section.append(self._build_signature_row(cm_form))
-        section.append(Spacer(1, 12))
+        
+        # Only add placeholder signature row if we don't have real signatures
+        if not skip_signature_row:
+            section.append(Spacer(1, 18))
+            section.append(self._build_signature_row(cm_form))
+            section.append(Spacer(1, 12))
+        
         return section
+    
+    def _build_signature_section(self, cm_form: dict, signature_images: dict):
+        """Build signature section with actual signature images for final reports - side by side layout"""
+        import os
+        section = []
+        
+        # Get signature info
+        attended_by_name = cm_form.get("attendedBy") or ""
+        approved_by_name = cm_form.get("approvedBy") or ""
+        attended_by_sig = signature_images.get("AttendedBySignature")
+        approved_by_sig = signature_images.get("ApprovedBySignature")
+        
+        # Build attended by signature block
+        attended_block = self._build_signature_card(
+            attended_by_sig, 
+            attended_by_name, 
+            "Attended By Signature"
+        )
+        
+        # Build approved by signature block
+        approved_block = self._build_signature_card(
+            approved_by_sig, 
+            approved_by_name, 
+            "Approved By Signature"
+        )
+        
+        # Create side-by-side layout
+        signature_row = Table(
+            [[attended_block, Spacer(0.5*inch, 0), approved_block]],
+            colWidths=[2.8*inch, 0.5*inch, 2.8*inch]
+        )
+        signature_row.setStyle(TableStyle([
+            ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+            ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+        ]))
+        
+        section.append(signature_row)
+        
+        return section
+    
+    def _build_signature_card(self, signature_path: str, name: str, label: str):
+        """Build a single signature card with image, name, and label"""
+        import os
+        
+        # Styles for signature card
+        name_style = ParagraphStyle(
+            'SignatureName',
+            parent=self.value_style,
+            fontSize=11,
+            alignment=1,  # Center
+            fontName='Helvetica-Bold'
+        )
+        label_style = ParagraphStyle(
+            'SignatureLabel',
+            parent=self.value_style,
+            fontSize=9,
+            alignment=1,  # Center
+            textColor=colors.HexColor("#1976d2")
+        )
+        
+        card_data = []
+        
+        # Row 1: Signature image
+        if signature_path and os.path.exists(signature_path):
+            try:
+                sig_img = Image(signature_path, width=2.0*inch, height=1.2*inch)
+                card_data.append([sig_img])
+            except Exception as e:
+                logger.error(f"Error loading signature image: {e}")
+                card_data.append([Spacer(2.0*inch, 1.2*inch)])
+        else:
+            card_data.append([Spacer(2.0*inch, 1.2*inch)])
+        
+        # Row 2: Horizontal line
+        line = Table([['']], colWidths=[2.2*inch], rowHeights=[1])
+        line.setStyle(TableStyle([
+            ('LINEABOVE', (0, 0), (-1, 0), 1, colors.HexColor("#333333")),
+        ]))
+        card_data.append([line])
+        
+        # Row 3: Name
+        card_data.append([Paragraph(name if name else "&nbsp;", name_style)])
+        
+        # Row 4: Label
+        card_data.append([Paragraph(label, label_style)])
+        
+        # Create the card table
+        card = Table(card_data, colWidths=[2.5*inch])
+        card.setStyle(TableStyle([
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+            ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+            ('TOPPADDING', (0, 0), (-1, -1), 4),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
+        ]))
+        
+        return card
 
     def _build_material_section(self, materials: list, old_serial_images: list, new_serial_images: list):
         section = [Paragraph("Material Used Information", self.section_header)]

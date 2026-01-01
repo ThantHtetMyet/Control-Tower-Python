@@ -21,7 +21,10 @@ from reportlab.platypus import (
 )
 from reportlab.lib.utils import ImageReader
 
-from config import Config
+import sys
+from pathlib import Path as PathLib
+sys.path.append(str(PathLib(__file__).parent.parent))
+from config import config
 
 logger = logging.getLogger(__name__)
 
@@ -30,7 +33,7 @@ class RTUPMPDFGenerator:
     """PDF generator for RTU Preventative Maintenance report forms."""
 
     def __init__(self) -> None:
-        self.config = Config()
+        self.config = config  # Use global config instance
         self.styles = getSampleStyleSheet()
 
         self.title_style = ParagraphStyle(
@@ -109,7 +112,7 @@ class RTUPMPDFGenerator:
             alignment=TA_CENTER,
             textColor=colors.HexColor("#37474f"),
         )
-        self.header_image_path = Path(__file__).parent / "resources" / "willowglen_letterhead.png"
+        self.header_image_path = PathLib(__file__).parent.parent / "resources" / "willowglen_letterhead.png"
 
     def generate_pdf(self, report_data: dict, job_no: str, report_type: str = "RTU_PM") -> Path:
         pdf_path = self.config.get_pdf_path(job_no, report_type)
@@ -119,13 +122,15 @@ class RTUPMPDFGenerator:
         rtu_form = report_data.get("pmReportFormRTU") or {}
         raw_title = self._safe_get(rtu_form, "reportTitle")
         title = raw_title if raw_title else "RTU Preventative Maintenance Report"
+        
+        # Check for signature images (for final reports)
+        signature_images = report_data.get("signatureImages", {})
+        has_signatures = bool(signature_images)
 
         story.extend(self._build_cover_page(report_data, title))
         story.append(PageBreak())
 
-        story.extend(self._build_summary_page(rtu_form))
-        story.append(PageBreak())
-
+        # Add all technical sections first
         story.extend(
             self._build_main_cabinet_section(
                 report_data.get("pmMainRtuCabinet", []),
@@ -153,6 +158,10 @@ class RTUPMPDFGenerator:
                 report_data.get("images", {}).get("dvr", []),
             )
         )
+
+        # Add combined summary and signature page at the end (last page)
+        story.append(PageBreak())
+        story.extend(self._build_final_summary_page(rtu_form, signature_images, has_signatures))
 
         doc.build(story)
         logger.info("[RTU PDF] Generated RTU PM report at %s", pdf_path)
@@ -268,12 +277,31 @@ class RTUPMPDFGenerator:
         )
         return [table, Spacer(1, 18)]
 
-    def _build_summary_page(self, rtu_form: dict):
+    def _build_summary_page(self, rtu_form: dict, has_signatures: bool = False):
         summary = self._build_summary_section(rtu_form)
         summary.append(Spacer(1, 40))
-        summary.append(self._build_signature_row(rtu_form))
+        # Only show placeholder signatures if we don't have real signature images
+        if not has_signatures:
+            summary.append(self._build_signature_row(rtu_form))
         summary.append(Spacer(1, 20))
         return summary
+
+    def _build_final_summary_page(self, rtu_form: dict, signature_images: dict, has_signatures: bool):
+        """Build combined summary and signature page for the last page of the PDF"""
+        page = []
+        
+        # Add summary section
+        page.extend(self._build_summary_section(rtu_form))
+        page.append(Spacer(1, 30))
+        
+        # Add signature section (either real images or placeholders)
+        if has_signatures:
+            logger.info("[RTU PDF] Adding signature images to final summary page")
+            page.extend(self._build_signature_section(rtu_form, signature_images))
+        else:
+            page.append(self._build_signature_row(rtu_form))
+        
+        return page
 
     def _build_summary_section(self, rtu_form: dict):
         rows = [
@@ -338,6 +366,102 @@ class RTUPMPDFGenerator:
             )
         )
         return block
+
+    def _build_signature_section(self, rtu_form: dict, signature_images: dict):
+        """Build signature section with actual signature images for final reports - side by side layout"""
+        import os
+        section = []
+        
+        # Get signature info
+        attended_by_name = rtu_form.get("attendedBy") or self._safe_get(rtu_form, "attendedBy") or ""
+        approved_by_name = rtu_form.get("approvedBy") or self._safe_get(rtu_form, "approvedBy") or ""
+        attended_by_sig = signature_images.get("AttendedBySignature")
+        approved_by_sig = signature_images.get("ApprovedBySignature")
+        
+        # Build attended by signature block
+        attended_block = self._build_signature_card(
+            attended_by_sig, 
+            attended_by_name, 
+            "Attended By Signature"
+        )
+        
+        # Build approved by signature block
+        approved_block = self._build_signature_card(
+            approved_by_sig, 
+            approved_by_name, 
+            "Approved By Signature"
+        )
+        
+        # Create side-by-side layout
+        signature_row = Table(
+            [[attended_block, Spacer(0.5*inch, 0), approved_block]],
+            colWidths=[2.8*inch, 0.5*inch, 2.8*inch]
+        )
+        signature_row.setStyle(TableStyle([
+            ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+            ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+        ]))
+        
+        section.append(signature_row)
+        
+        return section
+    
+    def _build_signature_card(self, signature_path: str, name: str, label: str):
+        """Build a single signature card with image, name, and label"""
+        import os
+        
+        # Styles for signature card
+        name_style = ParagraphStyle(
+            'RTUSignatureName',
+            parent=self.card_value_style,
+            fontSize=11,
+            alignment=TA_CENTER,
+            fontName='Helvetica-Bold'
+        )
+        label_style = ParagraphStyle(
+            'RTUSignatureLabel',
+            parent=self.card_label_style,
+            fontSize=9,
+            alignment=TA_CENTER,
+            textColor=colors.HexColor("#1976d2")
+        )
+        
+        card_data = []
+        
+        # Row 1: Signature image
+        if signature_path and os.path.exists(signature_path):
+            try:
+                sig_img = Image(signature_path, width=2.0*inch, height=1.2*inch)
+                card_data.append([sig_img])
+            except Exception as e:
+                logger.warning(f"Error loading RTU signature image: {e}")
+                card_data.append([Spacer(2.0*inch, 1.2*inch)])
+        else:
+            card_data.append([Spacer(2.0*inch, 1.2*inch)])
+        
+        # Row 2: Horizontal line
+        line = Table([['']], colWidths=[2.2*inch], rowHeights=[1])
+        line.setStyle(TableStyle([
+            ('LINEABOVE', (0, 0), (-1, 0), 1, colors.HexColor("#333333")),
+        ]))
+        card_data.append([line])
+        
+        # Row 3: Name
+        card_data.append([Paragraph(name if name else "&nbsp;", name_style)])
+        
+        # Row 4: Label
+        card_data.append([Paragraph(label, label_style)])
+        
+        # Create the card table
+        card = Table(card_data, colWidths=[2.5*inch])
+        card.setStyle(TableStyle([
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+            ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+            ('TOPPADDING', (0, 0), (-1, -1), 4),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
+        ]))
+        
+        return card
 
     def _build_main_cabinet_section(self, records: list, images: list):
         section = [Paragraph("Main RTU Cabinet Checks", self.section_header)]

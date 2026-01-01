@@ -1,8 +1,0 @@
-pyodbc==4.0.39
-pandas==2.0.3
-openpyxl==3.1.2
-xlrd==2.0.1
-paho-mqtt==1.6.1
-openpyxl
-
-pip install pyodbc==4.0.39 pandas==2.0.3 openpyxl==3.1.2 xlrd==2.0.1 paho-mqtt==1.6.1
