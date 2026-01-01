@@ -3056,3 +3056,33 @@ KeyboardInterrupt
 2025-12-31 10:27:07,188 - __main__ - INFO - [STATUS UPDATE] 63ec3c8b-e054-4491-a006-7ce133082396 -> COMPLETED - PDF generated successfully: Server_PM_FinalReport_Report_10010002_20251231_102706.pdf
 2025-12-31 10:27:07,188 - __main__ - INFO - [MQTT] Publish result: rc=0, mid=8
 2025-12-31 10:27:07,189 - __main__ - INFO - [MQTT] SUCCESS - Status published successfully to: controltower/server_pm_reportform_signature_pdf_status/63ec3c8b-e054-4491-a006-7ce133082396
+2026-01-01 18:23:04,084 - __main__ - INFO - 
+2026-01-01 18:23:04,084 - __main__ - INFO - Press 'r' + Enter at any time to refresh the PDF service.
+2026-01-01 18:23:04,086 - __main__ - INFO - 
+2026-01-01 18:23:04,086 - __main__ - INFO - Starting Server PM PDF Service...
+2026-01-01 18:23:04,086 - __main__ - INFO - PDF output directory: C:\Users\thanthtet.myet\Documents\01_Willowglen\B_001_Workplace\ControlTower\ControlTower_Python\PDF_Generator\PDF_File
+2026-01-01 18:23:04,086 - __main__ - INFO - Image base path: C:\Temp\ReportFormImages
+2026-01-01 18:23:04,087 - __main__ - INFO - Authenticating with API...
+2026-01-01 18:23:04,087 - __main__ - INFO - 
+2026-01-01 18:23:04,087 - __main__ - INFO - [AUTH] Authenticating with API...
+2026-01-01 18:23:04,123 - __main__ - INFO - [AUTH] POST https://localhost:7145/api/Auth/signin
+2026-01-01 18:23:04,123 - __main__ - INFO - [AUTH] Email: system@gmail.com
+2026-01-01 18:23:04,606 - __main__ - INFO - 
+2026-01-01 18:23:04,606 - __main__ - INFO - [AUTH] Response Status: 200
+2026-01-01 18:23:04,607 - __main__ - INFO - 
+2026-01-01 18:23:04,607 - __main__ - INFO - [AUTH] Authentication successful
+2026-01-01 18:23:04,608 - __main__ - INFO - [AUTH] Token expires at: 2026-01-02T10:23:04.6019514Z
+2026-01-01 18:23:04,609 - __main__ - INFO - Connecting to MQTT broker: localhost:1883
+2026-01-01 18:23:04,637 - __main__ - INFO - 
+2026-01-01 18:23:04,637 - __main__ - INFO - 
+2026-01-01 18:23:04,637 - __main__ - INFO - Connected to MQTT broker successfully
+2026-01-01 18:23:04,638 - __main__ - INFO - Server PM PDF Service started successfully
+2026-01-01 18:23:04,638 - __main__ - INFO - Waiting for MQTT messages...
+2026-01-01 18:23:04,639 - __main__ - INFO - Subscribed to topic: controltower/server_pm_reportform_pdf/+
+2026-01-01 18:23:04,640 - __main__ - INFO - Subscribed to topic: controltower/cm_reportform_pdf/+
+2026-01-01 18:23:04,640 - __main__ - INFO - Subscribed to topic: controltower/rtu_pm_reportform_pdf/+
+2026-01-01 18:23:04,641 - __main__ - INFO - Subscribed to signature topic: controltower/cm_reportform_signature_pdf/+
+2026-01-01 18:23:04,641 - __main__ - INFO - Subscribed to signature topic: controltower/server_pm_reportform_signature_pdf/+
+2026-01-01 18:23:04,642 - __main__ - INFO - Subscribed to signature topic: controltower/rtu_pm_reportform_signature_pdf/+
+2026-01-01 18:30:43,285 - __main__ - INFO - 
+2026-01-01 18:30:43,285 - __main__ - INFO - Cleaning up resources...
