@@ -36,6 +36,13 @@ class ServerPMPDFGenerator:
             'b1b20965-91d2-428f-8cc0-292fec170515': 'Yes',
             'd2a176eb-272f-43e1-85e0-23f8b60fcb92': 'No'
         }
+        # Initialize Willowlynx images dictionary
+        self.willowlynx_images = {
+            'processStatus': [],
+            'networkStatus': [],
+            'rtuStatus': [],
+            'sumpPitCCTV': []
+        }
         
     def _create_header_canvas(self, canvas, doc):
         """Draw header image on every page with white background and footer"""
@@ -219,6 +226,15 @@ class ServerPMPDFGenerator:
             story = []
             print ("******** API RESPONSE **************");
             print(processed_data);
+            
+            # Extract Willowlynx images if available
+            self.willowlynx_images = processed_data.get("willowlynxImages", {
+                'processStatus': [],
+                'networkStatus': [],
+                'rtuStatus': [],
+                'sumpPitCCTV': []
+            })
+            logger.info(f"[Server PM PDF] Willowlynx images loaded: {sum(len(v) for v in self.willowlynx_images.values())} total images")
             
             # Add first page with report information
             story.extend(self._create_first_page(processed_data))
@@ -1439,7 +1455,12 @@ class ServerPMPDFGenerator:
             self.styles['Normal']
         ))
         story.append(Spacer(1, 10))
-        self._add_reference_image(story, "WillowlynxProcessStatus.png")
+        # Use uploaded image if available, otherwise use placeholder
+        if hasattr(self, 'willowlynx_images') and self.willowlynx_images.get('processStatus'):
+            for img_path in self.willowlynx_images['processStatus']:
+                self._add_uploaded_image(story, img_path)
+        else:
+            self._add_reference_image(story, "WillowlynxProcessStatus.png")
 
         result_text = self._format_status_badge(
             record.get('yesNoStatusName') or record.get('resultStatusName') or record.get('result')
@@ -1496,7 +1517,12 @@ class ServerPMPDFGenerator:
             self.styles['Normal']
         ))
         story.append(Spacer(1, 10))
-        self._add_reference_image(story, "WillowlynxNetworkStatus.png")
+        # Use uploaded image if available, otherwise use placeholder
+        if hasattr(self, 'willowlynx_images') and self.willowlynx_images.get('networkStatus'):
+            for img_path in self.willowlynx_images['networkStatus']:
+                self._add_uploaded_image(story, img_path)
+        else:
+            self._add_reference_image(story, "WillowlynxNetworkStatus.png")
 
         status_text = self._format_status_badge(
             record.get('yesNoStatusName') or record.get('resultStatusName') or record.get('result')
@@ -1554,7 +1580,12 @@ class ServerPMPDFGenerator:
             ParagraphStyle('WillowlynxRTUInstruction', parent=self.styles['Normal'], leftIndent=12)
         ))
         story.append(Spacer(1, 10))
-        self._add_reference_image(story, "WillowlynxRTUStatus.png")
+        # Use uploaded image if available, otherwise use placeholder
+        if hasattr(self, 'willowlynx_images') and self.willowlynx_images.get('rtuStatus'):
+            for img_path in self.willowlynx_images['rtuStatus']:
+                self._add_uploaded_image(story, img_path)
+        else:
+            self._add_reference_image(story, "WillowlynxRTUStatus.png")
 
         status_text = self._format_status_badge(
             record.get('YesNoStatusName') or record.get('yesNoStatusName') or record.get('result')
@@ -1723,7 +1754,12 @@ class ServerPMPDFGenerator:
             self.styles['Normal']
         ))
         story.append(Spacer(1, 10))
-        self._add_reference_image(story, "WillowlynxSumpPitCCTVCamera.png")
+        # Use uploaded image if available, otherwise use placeholder
+        if hasattr(self, 'willowlynx_images') and self.willowlynx_images.get('sumpPitCCTV'):
+            for img_path in self.willowlynx_images['sumpPitCCTV']:
+                self._add_uploaded_image(story, img_path)
+        else:
+            self._add_reference_image(story, "WillowlynxSumpPitCCTVCamera.png")
 
         status_text = self._format_status_badge(
             record.get('yesNoStatusName')
@@ -2326,6 +2362,30 @@ class ServerPMPDFGenerator:
                 story.append(Spacer(1, 12))
             except Exception:
                 pass
+    
+    def _add_uploaded_image(self, story, image_path, width=4.5*inch, height=2.5*inch):
+        """Add an uploaded image from the database to the PDF"""
+        try:
+            import os
+            if os.path.exists(image_path):
+                img = Image(str(image_path), width=width, height=height)
+                img.hAlign = 'CENTER'
+                frame = Table([[img]], colWidths=[6*inch])
+                frame.setStyle(TableStyle([
+                    ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+                    ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+                    ('BACKGROUND', (0, 0), (-1, -1), colors.HexColor('#f8f9fa')),
+                    ('BOX', (0, 0), (-1, -1), 0.8, colors.HexColor('#e0e0e0')),
+                    ('TOPPADDING', (0, 0), (-1, -1), 12),
+                    ('BOTTOMPADDING', (0, 0), (-1, -1), 12),
+                ]))
+                story.append(frame)
+                story.append(Spacer(1, 12))
+                logger.info(f"[PDF] Added uploaded image: {image_path}")
+            else:
+                logger.warning(f"[PDF] Image file not found: {image_path}")
+        except Exception as e:
+            logger.error(f"[PDF] Error adding uploaded image {image_path}: {str(e)}")
 
     def _build_result_table(self, description, status_text):
         """Create a two row table for result description and status"""

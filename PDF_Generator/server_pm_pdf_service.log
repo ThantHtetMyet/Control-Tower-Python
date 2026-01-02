@@ -3086,3 +3086,208 @@ KeyboardInterrupt
 2026-01-01 18:23:04,642 - __main__ - INFO - Subscribed to signature topic: controltower/rtu_pm_reportform_signature_pdf/+
 2026-01-01 18:30:43,285 - __main__ - INFO - 
 2026-01-01 18:30:43,285 - __main__ - INFO - Cleaning up resources...
+2026-01-02 17:22:16,036 - __main__ - INFO - 
+2026-01-02 17:22:16,038 - __main__ - INFO - Press 'r' + Enter at any time to refresh the PDF service.
+2026-01-02 17:22:16,042 - __main__ - INFO - 
+2026-01-02 17:22:16,042 - __main__ - INFO - Starting Server PM PDF Service...
+2026-01-02 17:22:16,043 - __main__ - INFO - PDF output directory: C:\Users\thanthtet.myet\Documents\01_Willowglen\B_001_Workplace\ControlTower\ControlTower_Python\PDF_Generator\PDF_File
+2026-01-02 17:22:16,043 - __main__ - INFO - Image base path: C:\Temp\ReportFormImages
+2026-01-02 17:22:16,043 - __main__ - INFO - Authenticating with API...
+2026-01-02 17:22:16,043 - __main__ - INFO - 
+2026-01-02 17:22:16,043 - __main__ - INFO - [AUTH] Authenticating with API...
+2026-01-02 17:22:16,071 - __main__ - INFO - [AUTH] POST https://localhost:7145/api/Auth/signin
+2026-01-02 17:22:16,072 - __main__ - INFO - [AUTH] Email: system@gmail.com
+2026-01-02 17:22:17,044 - __main__ - INFO - 
+2026-01-02 17:22:17,044 - __main__ - INFO - [AUTH] Response Status: 200
+2026-01-02 17:22:17,045 - __main__ - INFO - 
+2026-01-02 17:22:17,045 - __main__ - INFO - [AUTH] Authentication successful
+2026-01-02 17:22:17,045 - __main__ - INFO - [AUTH] Token expires at: 2026-01-03T09:22:17.0332573Z
+2026-01-02 17:22:17,047 - __main__ - INFO - Connecting to MQTT broker: localhost:1883
+2026-01-02 17:22:17,062 - __main__ - INFO - 
+2026-01-02 17:22:17,062 - __main__ - INFO - 
+2026-01-02 17:22:17,062 - __main__ - INFO - Server PM PDF Service started successfully
+2026-01-02 17:22:17,063 - __main__ - INFO - Connected to MQTT broker successfully
+2026-01-02 17:22:17,063 - __main__ - INFO - Waiting for MQTT messages...
+2026-01-02 17:22:17,064 - __main__ - INFO - Subscribed to topic: controltower/server_pm_reportform_pdf/+
+2026-01-02 17:22:17,065 - __main__ - INFO - Subscribed to topic: controltower/cm_reportform_pdf/+
+2026-01-02 17:22:17,066 - __main__ - INFO - Subscribed to topic: controltower/rtu_pm_reportform_pdf/+
+2026-01-02 17:22:17,067 - __main__ - INFO - Subscribed to signature topic: controltower/cm_reportform_signature_pdf/+
+2026-01-02 17:22:17,069 - __main__ - INFO - Subscribed to signature topic: controltower/server_pm_reportform_signature_pdf/+
+2026-01-02 17:22:17,069 - __main__ - INFO - Subscribed to signature topic: controltower/rtu_pm_reportform_signature_pdf/+
+2026-01-02 17:22:42,023 - __main__ - INFO - 
+2026-01-02 17:22:42,024 - __main__ - INFO - [STEP 1] Received MQTT message for report_id: 051a2efd-854d-4d9f-83cd-930e6d4b6b33
+2026-01-02 17:22:42,024 - __main__ - INFO - [DATA] Message data: {'report_id': '051a2efd-854d-4d9f-83cd-930e6d4b6b33', 'requested_by': '11111111-1111-1111-1111-111111111111', 'timestamp': '2026-01-02T09:22:42.0064996Z'}
+2026-01-02 17:22:42,030 - __main__ - INFO - 
+2026-01-02 17:22:42,031 - __main__ - INFO - [STEP 2] Starting PDF processing for report_id: 051a2efd-854d-4d9f-83cd-930e6d4b6b33 (server_pm_reportform_pdf)
+2026-01-02 17:22:42,032 - __main__ - INFO - [MQTT] Publishing status to topic: controltower/server_pm_reportform_pdf_status/051a2efd-854d-4d9f-83cd-930e6d4b6b33
+2026-01-02 17:22:42,033 - __main__ - INFO - [MQTT] Status message: {
+  "report_id": "051a2efd-854d-4d9f-83cd-930e6d4b6b33",
+  "status": "processing",
+  "message": "PDF generation started",
+  "timestamp": "2026-01-02T17:22:42.032290"
+}
+2026-01-02 17:22:42,034 - __main__ - INFO - [STATUS UPDATE] 051a2efd-854d-4d9f-83cd-930e6d4b6b33 -> PROCESSING - PDF generation started
+2026-01-02 17:22:42,035 - __main__ - INFO - [MQTT] Publish result: rc=0, mid=7
+2026-01-02 17:22:42,036 - __main__ - INFO - [MQTT] SUCCESS - Status published successfully to: controltower/server_pm_reportform_pdf_status/051a2efd-854d-4d9f-83cd-930e6d4b6b33
+2026-01-02 17:22:42,037 - __main__ - INFO - 
+2026-01-02 17:22:42,038 - __main__ - INFO - [STEP 3] Initializing database manager...
+2026-01-02 17:22:42,038 - __main__ - INFO - 
+2026-01-02 17:22:42,040 - __main__ - INFO - [STEP 4] Initializing Server PM PDF generator...
+2026-01-02 17:22:42,042 - __main__ - INFO - 
+2026-01-02 17:22:42,043 - __main__ - INFO - [STEP 5] Calling API endpoint /api/PMReportFormServer/051a2efd-854d-4d9f-83cd-930e6d4b6b33
+2026-01-02 17:22:42,044 - __main__ - INFO - 
+2026-01-02 17:22:42,045 - __main__ - INFO - [API] URL: https://localhost:7145/api/PMReportFormServer/051a2efd-854d-4d9f-83cd-930e6d4b6b33
+2026-01-02 17:22:42,148 - __main__ - INFO - 
+2026-01-02 17:22:42,148 - __main__ - INFO - [API] Making authenticated HTTP GET request...
+2026-01-02 17:22:42,149 - __main__ - INFO - [API] Request timeout: 60 seconds
+2026-01-02 17:22:42,149 - __main__ - INFO - [API] SSL verification disabled for localhost
+2026-01-02 17:22:42,430 - __main__ - INFO - 
+2026-01-02 17:22:42,430 - __main__ - INFO - [API] Response Status: 200
+2026-01-02 17:22:42,431 - __main__ - INFO - 
+2026-01-02 17:22:42,433 - __main__ - INFO - [API SUCCESS] Data retrieved successfully (Size: 9562 chars)
+2026-01-02 17:22:42,434 - __main__ - INFO - [API] Response Keys: ['reportForm', 'pmReportFormServer', 'pmServerHealths', 'pmServerHardDriveHealths', 'pmServerDiskUsageHealths', 'pmServerCPUAndMemoryUsages', 'pmServerNetworkHealths', 'pmServerWillowlynxProcessStatuses', 'pmServerWillowlynxNetworkStatuses', 'pmServerWillowlynxRTUStatuses', 'pmServerWillowlynxHistoricalTrends', 'pmServerWillowlynxHistoricalReports', 'pmServerWillowlynxCCTVCameras', 'pmServerMonthlyDatabaseCreations', 'pmServerDatabaseBackups', 'pmServerTimeSyncs', 'pmServerHotFixes', 'pmServerFailOvers', 'pmServerASAFirewalls', 'pmServerSoftwarePatchSummaries']
+2026-01-02 17:22:42,438 - __main__ - INFO - 
+2026-01-02 17:22:42,438 - __main__ - INFO - [STEP 6] Transforming API data for report type server_pm_reportform_pdf...
+2026-01-02 17:22:42,439 - __main__ - INFO - 
+2026-01-02 17:22:42,440 - __main__ - INFO - [STEP 6.6] Fetching Willowlynx section images...
+2026-01-02 17:22:42,440 - __main__ - INFO - [DB] Fetching Willowlynx images from: WGN-009-530\SQLEXPRESS2022/ControlTowerDatabase
+2026-01-02 17:22:42,823 - __main__ - INFO - [WILLOWLYNX] Found WillowlynxNetworkStatus: C:\Users\thanthtet.myet\Documents\01_Willowglen\03_ServiceReportSystem\RMS_FileStorage\051a2efd-854d-4d9f-83cd-930e6d4b6b33\WillowlynxNetworkStatus\20260102_165923_2f87fff9140646528af777ca13e8ce3f.png
+2026-01-02 17:22:42,824 - __main__ - INFO - [WILLOWLYNX] Found WillowlynxProcessStatusCheck: C:\Users\thanthtet.myet\Documents\01_Willowglen\03_ServiceReportSystem\RMS_FileStorage\051a2efd-854d-4d9f-83cd-930e6d4b6b33\WillowlynxProcessStatus\20260102_165922_a2a8cb23862b4221a90b7a3e3451c93c.png
+2026-01-02 17:22:42,825 - __main__ - INFO - [WILLOWLYNX] Found WillowlynxRTUStatusCheck: C:\Users\thanthtet.myet\Documents\01_Willowglen\03_ServiceReportSystem\RMS_FileStorage\051a2efd-854d-4d9f-83cd-930e6d4b6b33\WillowlynxRTUStatus\20260102_165923_dfceb0804cb24db2ba75f559e5e3278d.png
+2026-01-02 17:22:42,825 - __main__ - INFO - [WILLOWLYNX] Found WillowlynxSumpPitCCTVCamera: C:\Users\thanthtet.myet\Documents\01_Willowglen\03_ServiceReportSystem\RMS_FileStorage\051a2efd-854d-4d9f-83cd-930e6d4b6b33\WillowlynxSumpPitCCTVCamera\20260102_165923_210748d2ef414c11bdcaf5665dc7d17c.png
+2026-01-02 17:22:42,828 - __main__ - INFO - [IMAGES] Found 4 Willowlynx images
+2026-01-02 17:22:42,828 - __main__ - INFO - 
+2026-01-02 17:22:42,829 - __main__ - INFO - [STEP 7] Using job number: 10010001
+2026-01-02 17:22:42,829 - __main__ - INFO - 
+2026-01-02 17:22:42,830 - __main__ - INFO - [STEP 8] Generating PDF output...
+2026-01-02 17:22:42,830 - Server_PM_Report.server_pm_pdf_generator - INFO - Converting API response data to JSON format...
+2026-01-02 17:22:42,832 - Server_PM_Report.server_pm_pdf_generator - INFO - Parsing JSON data for PDF generation...
+2026-01-02 17:22:42,832 - Server_PM_Report.server_pm_pdf_generator - INFO - JSON conversion and parsing completed successfully
+2026-01-02 17:22:42,839 - Server_PM_Report.server_pm_pdf_generator - INFO - [Server PM PDF] Signature detection - has_signatures: False
+2026-01-02 17:22:42,840 - Server_PM_Report.server_pm_pdf_generator - INFO - [Server PM PDF] Signature images type: <class 'dict'>, length: 0
+2026-01-02 17:22:42,841 - Server_PM_Report.server_pm_pdf_generator - INFO - [Server PM PDF] Calling _create_signoff_page with has_signatures=False, signature_images length=0
+2026-01-02 17:22:42,842 - Server_PM_Report.server_pm_pdf_generator - INFO - [Server PM PDF] _create_signoff_page - Recalculated has_signatures: False, signature_images length: 0
+2026-01-02 17:22:42,875 - Server_PM_Report.server_pm_pdf_generator - INFO - [Server PM PDF] has_signatures param: False, actual_has_signatures: False
+2026-01-02 17:22:42,876 - Server_PM_Report.server_pm_pdf_generator - INFO - [Server PM PDF] signature_images: {}, length: 0
+2026-01-02 17:22:42,877 - Server_PM_Report.server_pm_pdf_generator - INFO - [Server PM PDF] No signatures found, using placeholder signatures only
+2026-01-02 17:22:43,186 - Server_PM_Report.server_pm_pdf_generator - INFO - PDF generated successfully: C:\Users\thanthtet.myet\Documents\01_Willowglen\B_001_Workplace\ControlTower\ControlTower_Python\PDF_Generator\PDF_File\Server_PM_Report_10010001_20260102_172242.pdf
+2026-01-02 17:22:43,187 - __main__ - INFO - 
+2026-01-02 17:22:43,187 - __main__ - INFO - [STEP 8 SUCCESS] PDF generated successfully at: C:\Users\thanthtet.myet\Documents\01_Willowglen\B_001_Workplace\ControlTower\ControlTower_Python\PDF_Generator\PDF_File\Server_PM_Report_10010001_20260102_172242.pdf
+2026-01-02 17:22:43,187 - __main__ - INFO - [MQTT] Publishing status to topic: controltower/server_pm_reportform_pdf_status/051a2efd-854d-4d9f-83cd-930e6d4b6b33
+2026-01-02 17:22:43,188 - __main__ - INFO - [MQTT] Status message: {
+  "report_id": "051a2efd-854d-4d9f-83cd-930e6d4b6b33",
+  "status": "completed",
+  "message": "PDF generated successfully: Server_PM_Report_10010001_20260102_172242.pdf",
+  "timestamp": "2026-01-02T17:22:43.187932",
+  "file_name": "Server_PM_Report_10010001_20260102_172242.pdf"
+}
+2026-01-02 17:22:43,189 - __main__ - INFO - [STATUS UPDATE] 051a2efd-854d-4d9f-83cd-930e6d4b6b33 -> COMPLETED - PDF generated successfully: Server_PM_Report_10010001_20260102_172242.pdf
+2026-01-02 17:22:43,190 - __main__ - INFO - [MQTT] Publish result: rc=0, mid=8
+2026-01-02 17:22:43,191 - __main__ - INFO - [MQTT] SUCCESS - Status published successfully to: controltower/server_pm_reportform_pdf_status/051a2efd-854d-4d9f-83cd-930e6d4b6b33
+2026-01-02 17:23:54,389 - __main__ - INFO - 
+2026-01-02 17:23:54,389 - __main__ - INFO - Cleaning up resources...
+2026-01-02 17:23:58,541 - __main__ - INFO - 
+2026-01-02 17:23:58,542 - __main__ - INFO - Press 'r' + Enter at any time to refresh the PDF service.
+2026-01-02 17:23:58,543 - __main__ - INFO - 
+2026-01-02 17:23:58,543 - __main__ - INFO - Starting Server PM PDF Service...
+2026-01-02 17:23:58,544 - __main__ - INFO - PDF output directory: C:\Users\thanthtet.myet\Documents\01_Willowglen\B_001_Workplace\ControlTower\ControlTower_Python\PDF_Generator\PDF_File
+2026-01-02 17:23:58,544 - __main__ - INFO - Image base path: C:\Temp\ReportFormImages
+2026-01-02 17:23:58,544 - __main__ - INFO - Authenticating with API...
+2026-01-02 17:23:58,544 - __main__ - INFO - 
+2026-01-02 17:23:58,544 - __main__ - INFO - [AUTH] Authenticating with API...
+2026-01-02 17:23:58,574 - __main__ - INFO - [AUTH] POST https://localhost:7145/api/Auth/signin
+2026-01-02 17:23:58,575 - __main__ - INFO - [AUTH] Email: system@gmail.com
+2026-01-02 17:23:58,925 - __main__ - INFO - 
+2026-01-02 17:23:58,926 - __main__ - INFO - [AUTH] Response Status: 200
+2026-01-02 17:23:58,926 - __main__ - INFO - 
+2026-01-02 17:23:58,927 - __main__ - INFO - [AUTH] Authentication successful
+2026-01-02 17:23:58,927 - __main__ - INFO - [AUTH] Token expires at: 2026-01-03T09:23:58.9243859Z
+2026-01-02 17:23:58,928 - __main__ - INFO - Connecting to MQTT broker: localhost:1883
+2026-01-02 17:23:58,954 - __main__ - INFO - 
+2026-01-02 17:23:58,954 - __main__ - INFO - 
+2026-01-02 17:23:58,954 - __main__ - INFO - Server PM PDF Service started successfully
+2026-01-02 17:23:58,955 - __main__ - INFO - Connected to MQTT broker successfully
+2026-01-02 17:23:58,956 - __main__ - INFO - Waiting for MQTT messages...
+2026-01-02 17:23:58,957 - __main__ - INFO - Subscribed to topic: controltower/server_pm_reportform_pdf/+
+2026-01-02 17:23:58,959 - __main__ - INFO - Subscribed to topic: controltower/cm_reportform_pdf/+
+2026-01-02 17:23:58,960 - __main__ - INFO - Subscribed to topic: controltower/rtu_pm_reportform_pdf/+
+2026-01-02 17:23:58,962 - __main__ - INFO - Subscribed to signature topic: controltower/cm_reportform_signature_pdf/+
+2026-01-02 17:23:58,964 - __main__ - INFO - Subscribed to signature topic: controltower/server_pm_reportform_signature_pdf/+
+2026-01-02 17:23:58,966 - __main__ - INFO - Subscribed to signature topic: controltower/rtu_pm_reportform_signature_pdf/+
+2026-01-02 17:24:02,837 - __main__ - INFO - 
+2026-01-02 17:24:02,838 - __main__ - INFO - [STEP 1] Received MQTT message for report_id: 051a2efd-854d-4d9f-83cd-930e6d4b6b33
+2026-01-02 17:24:02,838 - __main__ - INFO - [DATA] Message data: {'report_id': '051a2efd-854d-4d9f-83cd-930e6d4b6b33', 'requested_by': '11111111-1111-1111-1111-111111111111', 'timestamp': '2026-01-02T09:24:02.8354042Z'}
+2026-01-02 17:24:02,842 - __main__ - INFO - 
+2026-01-02 17:24:02,843 - __main__ - INFO - [STEP 2] Starting PDF processing for report_id: 051a2efd-854d-4d9f-83cd-930e6d4b6b33 (server_pm_reportform_pdf)
+2026-01-02 17:24:02,843 - __main__ - INFO - [MQTT] Publishing status to topic: controltower/server_pm_reportform_pdf_status/051a2efd-854d-4d9f-83cd-930e6d4b6b33
+2026-01-02 17:24:02,844 - __main__ - INFO - [MQTT] Status message: {
+  "report_id": "051a2efd-854d-4d9f-83cd-930e6d4b6b33",
+  "status": "processing",
+  "message": "PDF generation started",
+  "timestamp": "2026-01-02T17:24:02.843671"
+}
+2026-01-02 17:24:02,845 - __main__ - INFO - [STATUS UPDATE] 051a2efd-854d-4d9f-83cd-930e6d4b6b33 -> PROCESSING - PDF generation started
+2026-01-02 17:24:02,846 - __main__ - INFO - [MQTT] Publish result: rc=0, mid=7
+2026-01-02 17:24:02,846 - __main__ - INFO - [MQTT] SUCCESS - Status published successfully to: controltower/server_pm_reportform_pdf_status/051a2efd-854d-4d9f-83cd-930e6d4b6b33
+2026-01-02 17:24:02,847 - __main__ - INFO - 
+2026-01-02 17:24:02,848 - __main__ - INFO - [STEP 3] Initializing database manager...
+2026-01-02 17:24:02,849 - __main__ - INFO - 
+2026-01-02 17:24:02,849 - __main__ - INFO - [STEP 4] Initializing Server PM PDF generator...
+2026-01-02 17:24:02,851 - __main__ - INFO - 
+2026-01-02 17:24:02,851 - __main__ - INFO - [STEP 5] Calling API endpoint /api/PMReportFormServer/051a2efd-854d-4d9f-83cd-930e6d4b6b33
+2026-01-02 17:24:02,852 - __main__ - INFO - 
+2026-01-02 17:24:02,853 - __main__ - INFO - [API] URL: https://localhost:7145/api/PMReportFormServer/051a2efd-854d-4d9f-83cd-930e6d4b6b33
+2026-01-02 17:24:02,955 - __main__ - INFO - 
+2026-01-02 17:24:02,955 - __main__ - INFO - [API] Making authenticated HTTP GET request...
+2026-01-02 17:24:02,956 - __main__ - INFO - [API] Request timeout: 60 seconds
+2026-01-02 17:24:02,956 - __main__ - INFO - [API] SSL verification disabled for localhost
+2026-01-02 17:24:03,712 - __main__ - INFO - 
+2026-01-02 17:24:03,713 - __main__ - INFO - [API] Response Status: 200
+2026-01-02 17:24:03,713 - __main__ - INFO - 
+2026-01-02 17:24:03,714 - __main__ - INFO - [API SUCCESS] Data retrieved successfully (Size: 9562 chars)
+2026-01-02 17:24:03,714 - __main__ - INFO - [API] Response Keys: ['reportForm', 'pmReportFormServer', 'pmServerHealths', 'pmServerHardDriveHealths', 'pmServerDiskUsageHealths', 'pmServerCPUAndMemoryUsages', 'pmServerNetworkHealths', 'pmServerWillowlynxProcessStatuses', 'pmServerWillowlynxNetworkStatuses', 'pmServerWillowlynxRTUStatuses', 'pmServerWillowlynxHistoricalTrends', 'pmServerWillowlynxHistoricalReports', 'pmServerWillowlynxCCTVCameras', 'pmServerMonthlyDatabaseCreations', 'pmServerDatabaseBackups', 'pmServerTimeSyncs', 'pmServerHotFixes', 'pmServerFailOvers', 'pmServerASAFirewalls', 'pmServerSoftwarePatchSummaries']
+2026-01-02 17:24:03,716 - __main__ - INFO - 
+2026-01-02 17:24:03,717 - __main__ - INFO - [STEP 6] Transforming API data for report type server_pm_reportform_pdf...
+2026-01-02 17:24:03,718 - __main__ - INFO - 
+2026-01-02 17:24:03,718 - __main__ - INFO - [STEP 6.6] Fetching Willowlynx section images...
+2026-01-02 17:24:03,720 - __main__ - INFO - [DB] Fetching Willowlynx images from: WGN-009-530\SQLEXPRESS2022/ControlTowerDatabase
+2026-01-02 17:24:03,940 - __main__ - INFO - [WILLOWLYNX] Found WillowlynxNetworkStatus: C:\Users\thanthtet.myet\Documents\01_Willowglen\03_ServiceReportSystem\RMS_FileStorage\051a2efd-854d-4d9f-83cd-930e6d4b6b33\WillowlynxNetworkStatus\20260102_165923_2f87fff9140646528af777ca13e8ce3f.png
+2026-01-02 17:24:03,941 - __main__ - INFO - [WILLOWLYNX] Found WillowlynxProcessStatusCheck: C:\Users\thanthtet.myet\Documents\01_Willowglen\03_ServiceReportSystem\RMS_FileStorage\051a2efd-854d-4d9f-83cd-930e6d4b6b33\WillowlynxProcessStatus\20260102_165922_a2a8cb23862b4221a90b7a3e3451c93c.png
+2026-01-02 17:24:03,942 - __main__ - INFO - [WILLOWLYNX] Found WillowlynxRTUStatusCheck: C:\Users\thanthtet.myet\Documents\01_Willowglen\03_ServiceReportSystem\RMS_FileStorage\051a2efd-854d-4d9f-83cd-930e6d4b6b33\WillowlynxRTUStatus\20260102_165923_dfceb0804cb24db2ba75f559e5e3278d.png
+2026-01-02 17:24:03,943 - __main__ - INFO - [WILLOWLYNX] Found WillowlynxSumpPitCCTVCamera: C:\Users\thanthtet.myet\Documents\01_Willowglen\03_ServiceReportSystem\RMS_FileStorage\051a2efd-854d-4d9f-83cd-930e6d4b6b33\WillowlynxSumpPitCCTVCamera\20260102_165923_210748d2ef414c11bdcaf5665dc7d17c.png
+2026-01-02 17:24:03,949 - __main__ - INFO - [IMAGES] Found 4 Willowlynx images
+2026-01-02 17:24:03,950 - __main__ - INFO - 
+2026-01-02 17:24:03,950 - __main__ - INFO - [STEP 7] Using job number: 10010001
+2026-01-02 17:24:03,952 - __main__ - INFO - 
+2026-01-02 17:24:03,952 - __main__ - INFO - [STEP 8] Generating PDF output...
+2026-01-02 17:24:03,953 - Server_PM_Report.server_pm_pdf_generator - INFO - Converting API response data to JSON format...
+2026-01-02 17:24:03,954 - Server_PM_Report.server_pm_pdf_generator - INFO - Parsing JSON data for PDF generation...
+2026-01-02 17:24:03,954 - Server_PM_Report.server_pm_pdf_generator - INFO - JSON conversion and parsing completed successfully
+2026-01-02 17:24:03,958 - Server_PM_Report.server_pm_pdf_generator - INFO - [Server PM PDF] Willowlynx images loaded: 4 total images
+2026-01-02 17:24:03,959 - Server_PM_Report.server_pm_pdf_generator - INFO - [Server PM PDF] Signature detection - has_signatures: False
+2026-01-02 17:24:03,959 - Server_PM_Report.server_pm_pdf_generator - INFO - [Server PM PDF] Signature images type: <class 'dict'>, length: 0
+2026-01-02 17:24:03,960 - Server_PM_Report.server_pm_pdf_generator - INFO - [Server PM PDF] Calling _create_signoff_page with has_signatures=False, signature_images length=0
+2026-01-02 17:24:03,960 - Server_PM_Report.server_pm_pdf_generator - INFO - [Server PM PDF] _create_signoff_page - Recalculated has_signatures: False, signature_images length: 0
+2026-01-02 17:24:03,971 - Server_PM_Report.server_pm_pdf_generator - INFO - [Server PM PDF] has_signatures param: False, actual_has_signatures: False
+2026-01-02 17:24:03,971 - Server_PM_Report.server_pm_pdf_generator - INFO - [Server PM PDF] signature_images: {}, length: 0
+2026-01-02 17:24:03,972 - Server_PM_Report.server_pm_pdf_generator - INFO - [Server PM PDF] No signatures found, using placeholder signatures only
+2026-01-02 17:24:03,977 - Server_PM_Report.server_pm_pdf_generator - INFO - [PDF] Added uploaded image: C:\Users\thanthtet.myet\Documents\01_Willowglen\03_ServiceReportSystem\RMS_FileStorage\051a2efd-854d-4d9f-83cd-930e6d4b6b33\WillowlynxProcessStatus\20260102_165922_a2a8cb23862b4221a90b7a3e3451c93c.png
+2026-01-02 17:24:03,979 - Server_PM_Report.server_pm_pdf_generator - INFO - [PDF] Added uploaded image: C:\Users\thanthtet.myet\Documents\01_Willowglen\03_ServiceReportSystem\RMS_FileStorage\051a2efd-854d-4d9f-83cd-930e6d4b6b33\WillowlynxNetworkStatus\20260102_165923_2f87fff9140646528af777ca13e8ce3f.png
+2026-01-02 17:24:03,982 - Server_PM_Report.server_pm_pdf_generator - INFO - [PDF] Added uploaded image: C:\Users\thanthtet.myet\Documents\01_Willowglen\03_ServiceReportSystem\RMS_FileStorage\051a2efd-854d-4d9f-83cd-930e6d4b6b33\WillowlynxRTUStatus\20260102_165923_dfceb0804cb24db2ba75f559e5e3278d.png
+2026-01-02 17:24:03,989 - Server_PM_Report.server_pm_pdf_generator - INFO - [PDF] Added uploaded image: C:\Users\thanthtet.myet\Documents\01_Willowglen\03_ServiceReportSystem\RMS_FileStorage\051a2efd-854d-4d9f-83cd-930e6d4b6b33\WillowlynxSumpPitCCTVCamera\20260102_165923_210748d2ef414c11bdcaf5665dc7d17c.png
+2026-01-02 17:24:10,883 - Server_PM_Report.server_pm_pdf_generator - INFO - PDF generated successfully: C:\Users\thanthtet.myet\Documents\01_Willowglen\B_001_Workplace\ControlTower\ControlTower_Python\PDF_Generator\PDF_File\Server_PM_Report_10010001_20260102_172403.pdf
+2026-01-02 17:24:10,883 - __main__ - INFO - 
+2026-01-02 17:24:10,884 - __main__ - INFO - [STEP 8 SUCCESS] PDF generated successfully at: C:\Users\thanthtet.myet\Documents\01_Willowglen\B_001_Workplace\ControlTower\ControlTower_Python\PDF_Generator\PDF_File\Server_PM_Report_10010001_20260102_172403.pdf
+2026-01-02 17:24:10,884 - __main__ - INFO - [MQTT] Publishing status to topic: controltower/server_pm_reportform_pdf_status/051a2efd-854d-4d9f-83cd-930e6d4b6b33
+2026-01-02 17:24:10,884 - __main__ - INFO - [MQTT] Status message: {
+  "report_id": "051a2efd-854d-4d9f-83cd-930e6d4b6b33",
+  "status": "completed",
+  "message": "PDF generated successfully: Server_PM_Report_10010001_20260102_172403.pdf",
+  "timestamp": "2026-01-02T17:24:10.884647",
+  "file_name": "Server_PM_Report_10010001_20260102_172403.pdf"
+}
+2026-01-02 17:24:10,886 - __main__ - INFO - [STATUS UPDATE] 051a2efd-854d-4d9f-83cd-930e6d4b6b33 -> COMPLETED - PDF generated successfully: Server_PM_Report_10010001_20260102_172403.pdf
+2026-01-02 17:24:10,886 - __main__ - INFO - [MQTT] Publish result: rc=0, mid=8
+2026-01-02 17:24:10,887 - __main__ - INFO - [MQTT] SUCCESS - Status published successfully to: controltower/server_pm_reportform_pdf_status/051a2efd-854d-4d9f-83cd-930e6d4b6b33
+2026-01-02 17:25:38,695 - __main__ - INFO - 
+2026-01-02 17:25:38,695 - __main__ - INFO - Cleaning up resources...

@@ -324,6 +324,14 @@ class ServerPMPDFService:
                 signature_images = await self.fetch_signature_images(report_id)
                 report_data['signatureImages'] = signature_images
                 logger.info(f"[SIGNATURE] Found {len(signature_images)} signature images")
+            
+            # Fetch Willowlynx section images for Server PM reports
+            if base_topic == SERVER_REPORT_TOPIC:
+                logger.info("")
+                logger.info(f"[STEP 6.6] Fetching Willowlynx section images...")
+                willowlynx_images = await self.fetch_willowlynx_images(report_id)
+                report_data['willowlynxImages'] = willowlynx_images
+                logger.info(f"[IMAGES] Found {sum(len(v) for v in willowlynx_images.values())} Willowlynx images")
 
             job_no = (
                 report_data.get('reportForm', {}).get('jobNo')
@@ -459,6 +467,123 @@ class ServerPMPDFService:
         except Exception as e:
             logger.error(f"Error fetching signature images: {str(e)}")
             return {}
+    
+    async def fetch_willowlynx_images(self, report_id: str) -> Dict[str, list]:
+        """
+        Fetch Willowlynx section images from database for PDF generation.
+        
+        Returns:
+            Dict with section names as keys and lists of image paths as values
+            e.g. {
+                'processStatus': ['/path/to/image1.png'], 
+                'networkStatus': ['/path/to/image2.png'],
+                'rtuStatus': ['/path/to/image3.png'],
+                'sumpPitCCTV': ['/path/to/image4.png']
+            }
+        """
+        try:
+            # Query to fetch Willowlynx images
+            query = """
+            SELECT 
+                rfi.ImageName,
+                rfi.StoredDirectory,
+                rit.ImageTypeName
+            FROM ReportFormImages rfi
+            INNER JOIN ReportFormImageTypes rit ON rfi.ReportImageTypeID = rit.ID
+            WHERE rfi.ReportFormID = ?
+              AND rfi.IsDeleted = 0
+              AND rit.ImageTypeName IN (
+                  'WillowlynxProcessStatusCheck',
+                  'WillowlynxNetworkStatus',
+                  'WillowlynxRTUStatusCheck',
+                  'WillowlynxSumpPitCCTVCamera'
+              )
+            ORDER BY rit.ImageTypeName
+            """
+            
+            import pyodbc
+            
+            # Build connection string
+            server = self.config.DB_SERVER
+            database = self.config.DB_NAME
+            username = self.config.DB_USERNAME
+            password = self.config.DB_PASSWORD
+            driver = self.config.DB_DRIVER
+            
+            if username and password:
+                connection_string = (
+                    f"DRIVER={{{driver}}};"
+                    f"SERVER={server};"
+                    f"DATABASE={database};"
+                    f"UID={username};"
+                    f"PWD={password}"
+                )
+            else:
+                connection_string = (
+                    f"DRIVER={{{driver}}};"
+                    f"SERVER={server};"
+                    f"DATABASE={database};"
+                    f"Trusted_Connection=yes"
+                )
+            
+            logger.info(f"[DB] Fetching Willowlynx images from: {server}/{database}")
+            connection = pyodbc.connect(connection_string)
+            
+            cursor = connection.cursor()
+            cursor.execute(query, report_id)
+            
+            # Initialize empty lists for each section
+            willowlynx_images = {
+                'processStatus': [],
+                'networkStatus': [],
+                'rtuStatus': [],
+                'sumpPitCCTV': []
+            }
+            
+            base_path = self.config.IMAGE_BASE_PATH
+            
+            # Map image type names to dictionary keys
+            type_map = {
+                'WillowlynxProcessStatusCheck': 'processStatus',
+                'WillowlynxNetworkStatus': 'networkStatus',
+                'WillowlynxRTUStatusCheck': 'rtuStatus',
+                'WillowlynxSumpPitCCTVCamera': 'sumpPitCCTV'
+            }
+            
+            for row in cursor.fetchall():
+                image_name = row.ImageName
+                stored_directory = row.StoredDirectory
+                image_type = row.ImageTypeName
+                
+                # Construct full path
+                import os
+                if stored_directory:
+                    if not os.path.isabs(stored_directory):
+                        full_path = os.path.join(base_path, stored_directory, image_name)
+                    else:
+                        full_path = os.path.join(stored_directory, image_name)
+                else:
+                    full_path = os.path.join(base_path, report_id, image_name)
+                
+                # Add to appropriate section list
+                section_key = type_map.get(image_type)
+                if section_key:
+                    willowlynx_images[section_key].append(full_path)
+                    logger.info(f"[WILLOWLYNX] Found {image_type}: {full_path}")
+            
+            cursor.close()
+            connection.close()
+            
+            return willowlynx_images
+            
+        except Exception as e:
+            logger.error(f"Error fetching Willowlynx images: {str(e)}")
+            return {
+                'processStatus': [],
+                'networkStatus': [],
+                'rtuStatus': [],
+                'sumpPitCCTV': []
+            }
     
     async def retrieve_data_from_api(self, api_path: str) -> Optional[Dict[str, Any]]:
         """Retrieve data from API endpoint with JWT authentication"""
