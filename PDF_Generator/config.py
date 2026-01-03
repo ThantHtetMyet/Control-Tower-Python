@@ -12,6 +12,7 @@ class Config:
     # API Configuration
     # ============================================
     API_BASE_URL = os.getenv('API_BASE_URL', 'https://localhost:7145')
+    #API_BASE_URL = os.getenv('API_BASE_URL', 'http://192.3.62.144:5001')
     API_TIMEOUT = int(os.getenv('API_TIMEOUT', '60'))
     API_AUTH_EMAIL = os.getenv('API_AUTH_EMAIL', 'system@gmail.com')
     API_AUTH_PASSWORD = os.getenv('API_AUTH_PASSWORD', '12345')
